@@ -5,7 +5,6 @@ import growthcraft.core.common.item.GrcItemFoodBase;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -26,15 +25,5 @@ public class ItemHoneyJar extends GrcItemFoodBase
 	{
 		super.onEaten(stack, world, player);
 		return new ItemStack(Items.flower_pot);
-	}
-
-	/************
-	 * TEXTURES
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg)
-	{
-		this.itemIcon = reg.registerIcon("grcbees:honeyjar");
 	}
 }

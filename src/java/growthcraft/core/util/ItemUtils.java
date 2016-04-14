@@ -5,8 +5,6 @@ import javax.annotation.Nonnull;
 
 import buildcraft.api.tools.IToolWrench;
 
-import cpw.mods.fml.common.Loader;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;

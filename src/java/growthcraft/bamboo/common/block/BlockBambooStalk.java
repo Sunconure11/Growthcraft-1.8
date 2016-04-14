@@ -13,13 +13,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.IBlockAccess;
@@ -28,10 +26,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockBambooStalk extends Block
 {
-	@SideOnly(Side.CLIENT)
-	public static IIcon[] tex;
-
-	//constants
 	private final int growth = GrowthCraftBamboo.getConfig().bambooStalkGrowthRate;
 
 	public BlockBambooStalk()
@@ -241,32 +235,6 @@ public class BlockBambooStalk extends Block
 	public int quantityDropped(Random par1Random)
 	{
 		return 1;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		tex = new IIcon[5];
-
-		tex[0] = reg.registerIcon("grcbamboo:plant_top");
-		tex[1] = reg.registerIcon("grcbamboo:plant_nocolor");
-		tex[2] = reg.registerIcon("grcbamboo:plant_color");
-		tex[3] = reg.registerIcon("grcbamboo:block");
-		tex[4] = reg.registerIcon("grcbamboo:fence");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		return side == 1 ? tex[0] : ( side == 0 ? tex[0] : (meta == 0 ? tex[1] : tex[2]));
-	}
-
-	@Override
-	public int getRenderType()
-	{
-		return RenderBamboo.id;
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package growthcraft.bees.common.block;
 import java.util.List;
 import java.util.Random;
 
-import growthcraft.bees.client.renderer.RenderBeeBox;
 import growthcraft.bees.common.tileentity.TileEntityBeeBox;
 import growthcraft.bees.GrowthCraftBees;
 import growthcraft.core.common.block.GrcBlockContainer;
@@ -14,7 +13,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +20,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -176,12 +173,6 @@ public class BlockBeeBox extends GrcBlockContainer
 		return ForgeDirection.UP == side;
 	}
 
-	@Override
-	public TileEntity createNewTileEntity(World world, int par2)
-	{
-		return new TileEntityBeeBox();
-	}
-
 	/************
 	 * DROPS
 	 ************/
@@ -201,92 +192,6 @@ public class BlockBeeBox extends GrcBlockContainer
 	public int quantityDropped(Random random)
 	{
 		return 1;
-	}
-
-	/************
-	 * TEXTURES
-	 ************/
-	@SideOnly(Side.CLIENT)
-	protected void registerBeeBoxIcons(IIconRegister reg, String basename, int offset)
-	{
-		icons[offset * 4] = reg.registerIcon(getTextureName() + basename + "bottom");
-		icons[offset * 4 + 1] = reg.registerIcon(getTextureName() + basename + "top");
-		icons[offset * 4 + 2] = reg.registerIcon(getTextureName() + basename + "side");
-		icons[offset * 4 + 3] = reg.registerIcon(getTextureName() + basename + "side_honey");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		this.icons = new IIcon[6 * 4];
-
-		for (EnumMinecraftWoodType woodType : EnumMinecraftWoodType.VALUES)
-		{
-			registerBeeBoxIcons(reg, String.format("/minecraft/%s/", woodType.name), woodType.meta);
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	protected int calculateIconOffset(int meta)
-	{
-		return MathHelper.clamp_int(meta, 0, icons.length / 4 - 1) * 4;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
-	{
-		final int meta = world.getBlockMetadata(x, y, z);
-		final int offset = calculateIconOffset(meta);
-		if (side == 0)
-		{
-			return icons[offset];
-		}
-		else if (side == 1)
-		{
-			return icons[offset + 1];
-		}
-		else
-		{
-			final TileEntityBeeBox te = (TileEntityBeeBox)world.getTileEntity(x, y, z);
-			if (te != null && te.isHoneyEnough(6))
-			{
-				return icons[offset + 3];
-			}
-		}
-		return icons[offset + 2];
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		final int offset = calculateIconOffset(meta);
-		if (side == 0)
-		{
-			return icons[offset];
-		}
-		else if (side == 1)
-		{
-			return icons[offset + 1];
-		}
-		return icons[offset + 2];
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon[] getIcons()
-	{
-		return icons;
-	}
-
-	/************
-	 * RENDERS
-	 ************/
-	@Override
-	public int getRenderType()
-	{
-		return RenderBeeBox.id;
 	}
 
 	@Override

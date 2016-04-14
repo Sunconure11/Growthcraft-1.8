@@ -30,11 +30,9 @@ import growthcraft.core.common.item.GrcItemBase;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 
 public class ItemBeesWax extends GrcItemBase
@@ -66,24 +64,6 @@ public class ItemBeesWax extends GrcItemBase
 			return super.getUnlocalizedName(stack) + "." + beesWax.basename;
 		}
 		return super.getUnlocalizedName(stack);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg)
-	{
-		this.icons = new IIcon[EnumBeesWax.VALUES.size()];
-		for (EnumBeesWax beesWax : EnumBeesWax.VALUES)
-		{
-			icons[beesWax.meta] = reg.registerIcon(getIconString() + "/" + beesWax.basename);
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int meta)
-	{
-		return icons[MathHelper.clamp_int(meta, 0, icons.length - 1)];
 	}
 
 	@Override

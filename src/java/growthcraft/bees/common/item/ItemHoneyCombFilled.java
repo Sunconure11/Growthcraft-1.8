@@ -8,7 +8,6 @@ public class ItemHoneyCombFilled extends GrcItemBase
 	public ItemHoneyCombFilled()
 	{
 		super();
-		setTextureName("grcbees:honeycomb_1");
 		setUnlocalizedName("grc.honeyComb.full");
 		setCreativeTab(GrowthCraftBees.tab);
 		setContainerItem(GrowthCraftBees.items.honeyCombEmpty.getItem());

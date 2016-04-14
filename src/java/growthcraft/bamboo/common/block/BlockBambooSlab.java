@@ -13,7 +13,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class BlockBambooSlab extends BlockSlab
@@ -74,15 +73,5 @@ public class BlockBambooSlab extends BlockSlab
 	protected ItemStack createStackedBlock(int par1)
 	{
 		return new ItemStack(GrowthCraftBamboo.blocks.bambooSingleSlab.getBlock(), 2, 0);
-	}
-
-	/************
-	 * TEXTURES
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		return GrowthCraftBamboo.blocks.bambooBlock.getBlock().getIcon(side, meta);
 	}
 }

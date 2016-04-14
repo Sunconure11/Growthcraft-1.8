@@ -2,11 +2,10 @@ package growthcraft.apples.common.block;
 
 import java.util.Random;
 
+import growthcraft.api.core.util.BlockFlags;
 import growthcraft.apples.GrowthCraftApples;
 import growthcraft.core.common.block.ICropDataProvider;
-import growthcraft.core.client.renderer.RenderBlockFruit;
 import growthcraft.core.integration.AppleCore;
-import growthcraft.api.core.util.BlockFlags;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
