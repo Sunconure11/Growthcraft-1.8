@@ -27,7 +27,7 @@ import growthcraft.bamboo.GrowthCraftBamboo;
 import growthcraft.core.integration.MFRModuleBase;
 import growthcraft.bamboo.integration.mfr.BambooFactoryHarvester;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 public class MFRModule extends MFRModuleBase
 {

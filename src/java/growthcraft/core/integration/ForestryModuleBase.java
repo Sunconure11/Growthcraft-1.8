@@ -38,7 +38,7 @@ import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
 import forestry.api.storage.BackpackManager;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 

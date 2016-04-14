@@ -29,7 +29,7 @@ import forestry.api.recipes.ICarpenterRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 @Optional.Interface(iface="forestry.api.recipes.ICarpenterManager", modid="ForestryAPI|recipes")
 public class CarpenterManagerShim extends AbstractManagerShim<ICarpenterRecipe> implements ICarpenterManager

@@ -44,8 +44,8 @@ import growthcraft.milk.common.tileentity.TileEntityHangingCurds;
 import growthcraft.milk.common.tileentity.TileEntityPancheon;
 import growthcraft.milk.GrowthCraftMilk;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ClientProxy extends CommonProxy

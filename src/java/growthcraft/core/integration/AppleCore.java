@@ -5,9 +5,9 @@ import java.util.Random;
 import growthcraft.core.GrowthCraftCore;
 import squeek.applecore.api.AppleCoreAPI;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 

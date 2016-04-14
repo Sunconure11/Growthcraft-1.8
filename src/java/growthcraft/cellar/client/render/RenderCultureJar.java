@@ -6,8 +6,8 @@ import growthcraft.cellar.common.tileentity.TileEntityCultureJar;
 import growthcraft.api.core.util.BBox;
 import growthcraft.api.core.util.ColorUtils;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;

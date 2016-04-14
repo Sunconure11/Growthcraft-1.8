@@ -23,7 +23,7 @@
  */
 package growthcraft.core.integration.botania;
 
-import cpw.mods.fml.common.Loader;
+import net.minecraftforge.fml.common.Loader;
 
 public class BotaniaPlatform
 {

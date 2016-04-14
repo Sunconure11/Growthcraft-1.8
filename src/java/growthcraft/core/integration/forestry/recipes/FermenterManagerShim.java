@@ -29,7 +29,7 @@ import forestry.api.recipes.IFermenterRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 @Optional.Interface(iface="forestry.api.recipes.IFermenterManager", modid="ForestryAPI|recipes")
 public class FermenterManagerShim extends AbstractManagerShim<IFermenterRecipe> implements IFermenterManager

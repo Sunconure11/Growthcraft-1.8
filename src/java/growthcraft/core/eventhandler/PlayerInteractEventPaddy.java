@@ -5,7 +5,7 @@ import java.util.Map;
 
 import growthcraft.api.core.util.BlockFlags;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSpade;

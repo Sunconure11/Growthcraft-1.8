@@ -29,7 +29,7 @@ import forestry.api.recipes.IFabricatorRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 @Optional.Interface(iface="forestry.api.recipes.IFabricatorManager", modid="ForestryAPI|recipes")
 public class FabricatorManagerShim extends AbstractManagerShim<IFabricatorRecipe> implements IFabricatorManager

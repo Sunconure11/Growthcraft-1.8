@@ -8,7 +8,7 @@ import growthcraft.core.util.BlockCheck;
 import growthcraft.api.core.util.BlockFlags;
 import growthcraft.grapes.util.GrapeBlockCheck;
 
-import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;

@@ -31,7 +31,7 @@ import forestry.api.recipes.ISqueezerRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 @Optional.Interface(iface="forestry.api.recipes.ISqueezerManager", modid="ForestryAPI|recipes")
 public class SqueezerManagerShim extends AbstractManagerShim<ISqueezerRecipe> implements ISqueezerManager

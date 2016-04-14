@@ -27,7 +27,7 @@ import growthcraft.core.integration.MFRModuleBase;
 import growthcraft.hops.GrowthCraftHops;
 import growthcraft.hops.integration.mfr.HopFactoryFruit;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 public class MFRModule extends MFRModuleBase
 {

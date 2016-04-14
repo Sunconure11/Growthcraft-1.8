@@ -8,7 +8,7 @@ import growthcraft.bamboo.client.renderer.RenderBambooWall;
 import growthcraft.bamboo.common.CommonProxy;
 import growthcraft.bamboo.common.entity.EntityBambooRaft;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy extends CommonProxy
 {

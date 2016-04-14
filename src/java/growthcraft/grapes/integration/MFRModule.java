@@ -27,7 +27,7 @@ import growthcraft.core.integration.MFRModuleBase;
 import growthcraft.grapes.GrowthCraftGrapes;
 import growthcraft.grapes.integration.mfr.GrapeFactoryFruit;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 public class MFRModule extends MFRModuleBase
 {

@@ -27,10 +27,12 @@ import javax.annotation.Nonnull;
 
 import growthcraft.api.core.GrcFluid;
 
+import net.minecraft.util.ResourceLocation;
+
 public class Booze extends GrcFluid
 {
-	public Booze(@Nonnull String fluidName)
+	public Booze(@Nonnull String fluidName, @Nonnull ResourceLocation still, @Nonnull ResourceLocation flowing)
 	{
-		super(fluidName);
+		super(fluidName, still, flowing);
 	}
 }

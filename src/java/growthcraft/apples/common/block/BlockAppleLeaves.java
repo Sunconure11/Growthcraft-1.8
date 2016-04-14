@@ -6,8 +6,8 @@ import java.util.Random;
 import growthcraft.apples.GrowthCraftApples;
 import growthcraft.api.core.util.BlockFlags;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.IGrowable;

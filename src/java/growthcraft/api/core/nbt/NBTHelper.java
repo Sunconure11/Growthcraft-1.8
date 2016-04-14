@@ -37,7 +37,8 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -48,7 +49,7 @@ public class NBTHelper
 
 	public static int getInteger(@Nonnull NBTBase tag)
 	{
-		return tag != null && (tag instanceof NBTBase.NBTPrimitive) ? ((NBTBase.NBTPrimitive)tag).func_150287_d() : 0;
+		return tag != null && (tag instanceof NBTBase.NBTPrimitive) ? ((NBTBase.NBTPrimitive)tag).getInt() : 0;
 	}
 
 	public static int getInteger(@Nonnull NBTTagCompound tag, String name)
@@ -128,7 +129,7 @@ public class NBTHelper
 	{
 		final NBTTagList tankTagList = new NBTTagList();
 		int tankId = 0;
-		for (FluidTankInfo tankInfo : fluidHandler.getTankInfo(ForgeDirection.UNKNOWN))
+		for (FluidTankInfo tankInfo : fluidHandler.getTankInfo((EnumFacing)null))
 		{
 			final NBTTagCompound tankTag = new NBTTagCompound();
 			tankTag.setInteger("tank_id", tankId);
@@ -136,7 +137,15 @@ public class NBTHelper
 			final FluidStack fluidStack = tankInfo.fluid;
 			if (fluidStack != null)
 			{
-				tankTag.setInteger("fluid_id", tankInfo.fluid.getFluidID());
+				final Fluid fluid = fluidStack.getFluid();
+				if (fluid != null)
+				{
+					tankTag.setString("fluid_name", fluid.getName());
+				}
+				else
+				{
+					tankTag.setString("fluid_name", "");
+				}
 				final NBTTagCompound fluidTag = new NBTTagCompound();
 				fluidStack.writeToNBT(fluidTag);
 				tankTag.setTag("fluid", fluidTag);
@@ -230,7 +239,7 @@ public class NBTHelper
 		if (base instanceof NBTTagIntArray)
 		{
 			final NBTTagIntArray ary = (NBTTagIntArray)base;
-			for (int i : ary.func_150302_c())
+			for (int i : ary.getIntArray())
 			{
 				coll.add(i);
 			}

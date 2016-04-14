@@ -21,39 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package growthcraft.api.bees;
+package growthcraft.api.core.util;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
-import net.minecraftforge.common.IPlantable;
-
-public class ForcedFlowerBlockEntry extends AbstractFlowerBlockEntry
+public class ContextPathname
 {
-	public ForcedFlowerBlockEntry(Block pBlock, int pMeta)
+	private String path;
+
+	public ContextPathname(String str)
 	{
-		super(pBlock, pMeta);
+		this.path = str;
 	}
 
-	public boolean canPlaceAt(World world, BlockPos pos)
+	public ContextPathname join(String other)
 	{
-		final IBlockState blockState = world.getBlockState(pos);
-		final Block existingBlock = blockState.getBlock();
+		return new ContextPathname(path + ":" + other);
+	}
 
-		if (existingBlock != null)
-		{
-			if (!existingBlock.isReplaceable(world, pos)) return false;
-		}
-
-		final IBlockState soilBlockState = world.getBlockState(pos.down());
-		final Block soilBlock = soilBlockState.getBlock();
-		if (soilBlock == null) return false;
-		if (getBlock() instanceof IPlantable)
-		{
-			return soilBlock.canSustainPlant(world, pos.down(), EnumFacing.UP, (IPlantable)getBlock());
-		}
-		return true;
+	public String toString()
+	{
+		return path;
 	}
 }

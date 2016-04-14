@@ -35,8 +35,8 @@ import growthcraft.milk.client.model.ModelPancheon;
 import growthcraft.milk.common.item.EnumCheeseType;
 import growthcraft.milk.common.item.EnumCheeseStage;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.util.ResourceLocation;
 
 @SideOnly(Side.CLIENT)

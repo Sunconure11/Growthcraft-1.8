@@ -23,8 +23,8 @@
  */
 package growthcraft.milk.common;
 
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import growthcraft.milk.common.world.WorldGenThistle;
 
 public class CommonProxy

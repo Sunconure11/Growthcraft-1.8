@@ -26,7 +26,7 @@ package growthcraft.milk.integration;
 import growthcraft.core.integration.MFRModuleBase;
 import growthcraft.milk.GrowthCraftMilk;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 public class MFRModule extends MFRModuleBase
 {

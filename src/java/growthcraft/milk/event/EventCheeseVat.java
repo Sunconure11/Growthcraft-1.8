@@ -23,7 +23,7 @@
  */
 package growthcraft.milk.event;
 
-import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraft.tileentity.TileEntity;
 
 public abstract class EventCheeseVat extends Event

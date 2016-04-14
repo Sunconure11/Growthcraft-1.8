@@ -32,7 +32,7 @@ import growthcraft.core.integration.bop.BopPlatform;
 import growthcraft.core.integration.bop.EnumBopWoodType;
 import growthcraft.core.integration.ModIntegrationBase;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 
 public class BoPModule extends ModIntegrationBase

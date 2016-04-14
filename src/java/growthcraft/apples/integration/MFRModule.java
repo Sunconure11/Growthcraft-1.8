@@ -27,7 +27,7 @@ import growthcraft.apples.GrowthCraftApples;
 import growthcraft.apples.integration.mfr.AppleBlockFactoryFruit;
 import growthcraft.core.integration.MFRModuleBase;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 public class MFRModule extends MFRModuleBase
 {

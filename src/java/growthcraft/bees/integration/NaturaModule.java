@@ -32,7 +32,7 @@ import growthcraft.core.integration.natura.NaturaPlatform;
 import growthcraft.core.integration.natura.EnumNaturaWoodType;
 import growthcraft.core.integration.ModIntegrationBase;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 
 public class NaturaModule extends ModIntegrationBase

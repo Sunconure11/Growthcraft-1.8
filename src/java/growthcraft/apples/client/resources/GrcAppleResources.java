@@ -21,39 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package growthcraft.api.bees;
+package growthcraft.apples.client.resources;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
-import net.minecraftforge.common.IPlantable;
-
-public class ForcedFlowerBlockEntry extends AbstractFlowerBlockEntry
+public class GrcAppleResources
 {
-	public ForcedFlowerBlockEntry(Block pBlock, int pMeta)
-	{
-		super(pBlock, pMeta);
-	}
 
-	public boolean canPlaceAt(World world, BlockPos pos)
-	{
-		final IBlockState blockState = world.getBlockState(pos);
-		final Block existingBlock = blockState.getBlock();
-
-		if (existingBlock != null)
-		{
-			if (!existingBlock.isReplaceable(world, pos)) return false;
-		}
-
-		final IBlockState soilBlockState = world.getBlockState(pos.down());
-		final Block soilBlock = soilBlockState.getBlock();
-		if (soilBlock == null) return false;
-		if (getBlock() instanceof IPlantable)
-		{
-			return soilBlock.canSustainPlant(world, pos.down(), EnumFacing.UP, (IPlantable)getBlock());
-		}
-		return true;
-	}
 }

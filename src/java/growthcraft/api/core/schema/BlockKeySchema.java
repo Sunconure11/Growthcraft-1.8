@@ -25,8 +25,8 @@ package growthcraft.api.core.schema;
 
 import growthcraft.api.core.util.BlockKey;
 
-import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry.UniqueIdentifier;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 
 public class BlockKeySchema implements ICommentable, IValidatable

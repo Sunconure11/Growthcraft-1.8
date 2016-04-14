@@ -25,7 +25,7 @@ package growthcraft.core.integration.forestry;
 
 import growthcraft.api.core.definition.IItemStackFactory;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

@@ -221,7 +221,7 @@ public class EffectWeightedRandomList extends AbstractEffect
 	 */
 	public WeightedEffect getRandomItem(@Nonnull Random random)
 	{
-		return (WeightedEffect)WeightedRandom.getRandomItem(random, effects);
+		return WeightedRandom.getRandomItem(random, effects);
 	}
 
 	/**

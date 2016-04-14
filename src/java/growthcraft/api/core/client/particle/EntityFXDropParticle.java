@@ -1,14 +1,16 @@
 // Copied from Buildcraft core and edited for Growthcraft
 package growthcraft.api.core.client.particle;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class EntityFXDropParticle extends EntityFX
@@ -78,22 +80,17 @@ public class EntityFXDropParticle extends EntityFX
 			this.motionZ *= 0.699999988079071D;
 		}
 
-		final int x = MathHelper.floor_double(this.posX);
-		final int y = MathHelper.floor_double(this.posY);
-		final int z = MathHelper.floor_double(this.posZ);
-		final Block block = worldObj.getBlock(x, y, z);
-
+		final BlockPos pos = new BlockPos(posX, posY, posZ);
+		final IBlockState state = worldObj.getBlockState(pos);
+		final Block block = state.getBlock();
 		final Material material = block.getMaterial();
 
 		if ((material.isLiquid() || material.isSolid()) && block instanceof IFluidBlock)
 		{
 			final double d0 = MathHelper.floor_double(this.posY) + 1 -
-				((IFluidBlock)block).getFilledPercentage(worldObj, x, y, z);
+				((IFluidBlock)block).getFilledPercentage(worldObj, pos);
 
-			if (this.posY < d0)
-			{
-				setDead();
-			}
+			if (posY < d0) setDead();
 		}
 	}
 }

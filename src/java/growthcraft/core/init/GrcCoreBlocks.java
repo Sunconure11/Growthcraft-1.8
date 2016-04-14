@@ -38,8 +38,8 @@ import growthcraft.core.integration.NEI;
 import growthcraft.core.registry.FenceRopeRegistry;
 import growthcraft.core.GrowthCraftCore;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.oredict.OreDictionary;

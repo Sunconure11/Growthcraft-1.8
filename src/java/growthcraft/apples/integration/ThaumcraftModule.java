@@ -32,8 +32,8 @@ import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.Aspect;
 
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.Optional;
 
 public class ThaumcraftModule extends ThaumcraftModuleBase
 {

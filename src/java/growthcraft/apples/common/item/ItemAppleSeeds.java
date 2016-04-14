@@ -4,8 +4,8 @@ import growthcraft.apples.GrowthCraftApples;
 import growthcraft.core.common.item.GrcItemBase;
 import growthcraft.core.GrowthCraftCore;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;

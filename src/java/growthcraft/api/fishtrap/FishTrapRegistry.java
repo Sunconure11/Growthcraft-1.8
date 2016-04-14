@@ -20,63 +20,43 @@ public class FishTrapRegistry
 		return instance;
 	}
 
-	//////////////////////////////////////////////////////////////////////
-	// FISH TRAP /////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////
-
-	/**
-	 * addTrapFish() // addTrapTreasure() // addTrapJunk()
-	 *
-	 * Example:
-	 * FishTrapRegistry.instance().addTrapTreasure(new FishTrapEntry(new ItemStack(Item.bow), 1).setDamage(0.25F).setEnchantable());
-	 *
-	 * new FishTrapEntry(new ItemStack(Item.bow), 1)
-	 * -- ItemStack represents the...ItemStack. k
-	 * -- 1 represents the weight of the ItemStack when randomly picked. Higher number means better chances being randomly picked.
-	 *
-	 * .setDamage(0.25F)
-	 * -- Float param is the damage factor of the ItemStack. It will serve as the base factor for the ItemStack's damage.
-	 *
-	 * .setEnchantable()
-	 * -- Call if the ItemStack can be enchanted.
-	 *
-	 * @param entry   - The entry to be added.
-	 */
 	public void addTrapFish(FishTrapEntry entry)
 	{
-		this.fishList.add(entry);
+		fishList.add(entry);
 	}
 
 	public void addTrapTreasure(FishTrapEntry entry)
 	{
-		this.treasureList.add(entry);
+		treasureList.add(entry);
 	}
 
 	public void addTrapJunk(FishTrapEntry entry)
 	{
-		this.junkList.add(entry);
+		junkList.add(entry);
 	}
 
-	/**
-	 * STUFF
-	 */
 	private ItemStack getFishableEntry(Random random, List<FishTrapEntry> list)
 	{
-		return ((FishTrapEntry)WeightedRandom.getRandomItem(random, list)).getFishable(random);
+		final FishTrapEntry entry = WeightedRandom.getRandomItem(random, list);
+		if (entry != null)
+		{
+			return entry.getFishable(random);
+		}
+		return null;
 	}
 
 	public ItemStack getFishList(World world)
 	{
-		return this.getFishableEntry(world.rand, this.fishList);
+		return getFishableEntry(world.rand, fishList);
 	}
 
 	public ItemStack getTreasureList(World world)
 	{
-		return this.getFishableEntry(world.rand, this.treasureList);
+		return getFishableEntry(world.rand, treasureList);
 	}
 
 	public ItemStack getJunkList(World world)
 	{
-		return this.getFishableEntry(world.rand, this.junkList);
+		return getFishableEntry(world.rand, junkList);
 	}
 }

@@ -5,8 +5,8 @@ import java.util.Random;
 
 import growthcraft.hops.GrowthCraftHops;
 
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;

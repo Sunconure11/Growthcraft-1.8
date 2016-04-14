@@ -34,7 +34,7 @@ import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.IStillManager;
 import forestry.api.recipes.RecipeManagers;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 public class RecipeManagersShims
 {

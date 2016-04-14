@@ -29,7 +29,7 @@ import growthcraft.api.core.util.RandomUtils;
 import growthcraft.core.util.ItemUtils;
 import growthcraft.milk.GrowthCraftMilk;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;

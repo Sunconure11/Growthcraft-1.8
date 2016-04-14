@@ -32,7 +32,7 @@ import growthcraft.milk.common.block.BlockHangingCurds;
 import growthcraft.milk.GrowthCraftMilk;
 import growthcraft.milk.integration.waila.GrcMilkDataProvider;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;

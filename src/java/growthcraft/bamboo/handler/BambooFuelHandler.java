@@ -2,7 +2,7 @@ package growthcraft.bamboo.handler;
 
 import growthcraft.bamboo.GrowthCraftBamboo;
 
-import cpw.mods.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

@@ -27,7 +27,7 @@ import growthcraft.core.integration.nei.NEIPlatform;
 
 import codechicken.nei.api.API;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraft.item.ItemStack;
 
 public class NEI

@@ -42,7 +42,7 @@ import growthcraft.core.common.GrcModuleBase;
 import growthcraft.core.GrowthCraftCore;
 import growthcraft.hops.GrowthCraftHops;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;

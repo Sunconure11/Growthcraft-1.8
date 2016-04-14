@@ -7,8 +7,8 @@ import growthcraft.api.core.util.BlockFlags;
 import growthcraft.api.core.util.AuxFX;
 import growthcraft.rice.util.RiceBlockCheck;
 
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;

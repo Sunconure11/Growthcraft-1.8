@@ -28,7 +28,7 @@ import java.util.Map;
 import forestry.api.recipes.ICentrifugeManager;
 import forestry.api.recipes.ICentrifugeRecipe;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraft.item.ItemStack;
 
 @Optional.Interface(iface="forestry.api.recipes.ICentrifugeManager", modid="ForestryAPI|recipes")

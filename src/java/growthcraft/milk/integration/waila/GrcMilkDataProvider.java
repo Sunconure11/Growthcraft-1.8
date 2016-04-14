@@ -34,7 +34,7 @@ import growthcraft.milk.common.tileentity.TileEntityHangingCurds;
 import growthcraft.milk.util.TagFormatterButterChurn;
 import growthcraft.milk.util.TagFormatterCheesePress;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;

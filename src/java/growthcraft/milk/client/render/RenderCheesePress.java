@@ -26,8 +26,8 @@ package growthcraft.milk.client.render;
 import growthcraft.milk.client.model.ModelCheesePress;
 import growthcraft.milk.client.resource.GrcMilkResources;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;

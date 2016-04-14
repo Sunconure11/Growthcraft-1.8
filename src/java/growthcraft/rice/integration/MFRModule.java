@@ -29,7 +29,7 @@ import growthcraft.rice.GrowthCraftRice;
 import growthcraft.rice.integration.mfr.RiceFactoryHarvester;
 import growthcraft.rice.integration.mfr.RiceFactoryPlanter;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 public class MFRModule extends MFRModuleBase
 {

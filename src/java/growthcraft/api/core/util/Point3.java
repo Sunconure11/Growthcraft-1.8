@@ -23,7 +23,7 @@
  */
 package growthcraft.api.core.util;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.Vec3i;
 
 /**
  * To mimic Forestry's internal Vect class
@@ -46,9 +46,9 @@ public class Point3
 		this(point.x, point.y, point.z);
 	}
 
-	public Point3(ForgeDirection dir)
+	public Point3(Vec3i vec3)
 	{
-		this(dir.offsetX, dir.offsetY, dir.offsetZ);
+		this(vec3.getX(), vec3.getY(), vec3.getZ());
 	}
 
 	public Point3()
@@ -81,9 +81,9 @@ public class Point3
 		return add(point.x, point.y, point.z);
 	}
 
-	public Point3 add(ForgeDirection dir)
+	public Point3 add(Vec3i vec3)
 	{
-		return add(dir.offsetX, dir.offsetY, dir.offsetZ);
+		return add(vec3.getX(), vec3.getY(), vec3.getZ());
 	}
 
 	public Point3 sub(int px, int py, int pz)
@@ -96,9 +96,9 @@ public class Point3
 		return sub(point.x, point.y, point.z);
 	}
 
-	public Point3 sub(ForgeDirection dir)
+	public Point3 sub(Vec3i vec3)
 	{
-		return sub(dir.offsetX, dir.offsetY, dir.offsetZ);
+		return sub(vec3.getX(), vec3.getY(), vec3.getZ());
 	}
 
 	public Point3 mul(int px, int py, int pz)
@@ -116,9 +116,9 @@ public class Point3
 		return mul(point.x, point.y, point.z);
 	}
 
-	public Point3 mul(ForgeDirection dir)
+	public Point3 mul(Vec3i vec3)
 	{
-		return mul(dir.offsetX, dir.offsetY, dir.offsetZ);
+		return mul(vec3.getX(), vec3.getY(), vec3.getZ());
 	}
 
 	@Override

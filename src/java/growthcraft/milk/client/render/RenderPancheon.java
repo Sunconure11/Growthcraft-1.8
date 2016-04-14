@@ -30,8 +30,8 @@ import growthcraft.milk.client.resource.GrcMilkResources;
 import growthcraft.milk.common.block.BlockPancheon;
 import growthcraft.milk.common.tileentity.TileEntityPancheon;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;

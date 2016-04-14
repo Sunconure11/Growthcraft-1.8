@@ -32,7 +32,7 @@ import growthcraft.core.common.tileentity.ITileHeatedDevice;
 import growthcraft.core.common.tileentity.ITileNamedFluidTanks;
 import growthcraft.core.util.TagFormatterFluidHandler;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;

@@ -30,7 +30,7 @@ import growthcraft.bees.GrowthCraftBees;
 import growthcraft.core.common.definition.BlockTypeDefinition;
 import growthcraft.core.integration.ModIntegrationBase;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class GrcNetherModule extends ModIntegrationBase

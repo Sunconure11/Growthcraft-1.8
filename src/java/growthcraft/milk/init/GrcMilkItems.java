@@ -40,7 +40,7 @@ import growthcraft.milk.common.item.ItemYogurt;
 import growthcraft.milk.GrowthCraftMilk;
 
 import net.minecraft.init.Items;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.oredict.ShapedOreRecipe;

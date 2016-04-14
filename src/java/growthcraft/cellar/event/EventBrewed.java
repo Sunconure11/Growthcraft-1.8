@@ -25,7 +25,7 @@ package growthcraft.cellar.event;
 
 import growthcraft.api.cellar.brewing.BrewingRecipe;
 
-import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraft.tileentity.TileEntity;
 
 /**

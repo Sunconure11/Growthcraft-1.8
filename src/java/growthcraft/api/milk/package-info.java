@@ -1,4 +1,4 @@
-@API(apiVersion="2.6.0", owner="GrowthcraftAPI|Core", provides="GrowthcraftAPI|Milk")
+@API(apiVersion="3.0.0", owner="GrowthcraftAPI|Core", provides="GrowthcraftAPI|Milk")
 package growthcraft.api.milk;
 
-import cpw.mods.fml.common.API;
+import net.minecraftforge.fml.common.API;

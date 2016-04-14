@@ -1,3 +1,26 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015, 2016 IceDragon200
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package growthcraft.api.core.fluids;
 
 import java.util.ArrayList;
@@ -8,22 +31,24 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
 public class FluidUtils
 {
 	private static Map<Fluid, List<FluidContainerData>> fluidData;
-	
+
 	private FluidUtils() {}
-	
+
 	public static Map<Fluid, List<FluidContainerData>> getFluidData()
 	{
 		if (fluidData == null || fluidData.size() == 0)
@@ -38,10 +63,10 @@ public class FluidUtils
 				fluidData.get(data.fluid.getFluid()).add(data);
 			}
 		}
-		
+
 		return fluidData;
 	}
-	
+
 	public static List<ItemStack> getFluidContainers(FluidStack... fluids)
 	{
 		if (fluids.length == 1)
@@ -56,43 +81,44 @@ public class FluidUtils
 					fluidContainers.add(data.filledContainer);
 				}
 			}
-			
+
 			return fluidContainers;
-		} 
+		}
 		else
 		{
 			return getFluidContainers(Arrays.asList(fluids));
 		}
 	}
-	
+
 	public static List<ItemStack> getFluidContainers(Collection<FluidStack> fluids)
 	{
 		final ArrayList<ItemStack> fluidContainers = new ArrayList<ItemStack>();
-		
+
 		for (FluidStack fluidStack : fluids)
 		{
 			fluidContainers.addAll(getFluidContainers(fluidStack));
 		}
-		
+
 		return fluidContainers;
 	}
 
-	public static FluidStack drainFluidBlock(World world, int x, int y, int z, boolean doDrain)
+	public static FluidStack drainFluidBlock(World world, BlockPos pos, boolean doDrain)
 	{
-		final Block block = world.getBlock(x, y, z);
+		final IBlockState state = world.getBlockState(pos);
+		final Block block = state.getBlock();
 		if (block instanceof BlockFluidBase)
 		{
 			final BlockFluidBase bfb = (BlockFluidBase)block;
-			return bfb.drain(world, x, y, z, doDrain);
+			return bfb.drain(world, pos, doDrain);
 		}
 		else if (block == Blocks.lava)
 		{
-			if (doDrain) world.setBlockToAir(x, y, z);
+			if (doDrain) world.setBlockToAir(pos);
 			return new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME);
 		}
 		else if (block == Blocks.water)
 		{
-			if (doDrain) world.setBlockToAir(x, y, z);
+			if (doDrain) world.setBlockToAir(pos);
 			return new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME);
 		}
 		return null;

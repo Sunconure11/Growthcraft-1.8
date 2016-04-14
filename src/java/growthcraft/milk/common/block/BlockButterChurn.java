@@ -29,8 +29,8 @@ import growthcraft.milk.client.render.RenderButterChurn;
 import growthcraft.milk.common.tileentity.TileEntityButterChurn;
 import growthcraft.milk.GrowthCraftMilk;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.IBlockAccess;

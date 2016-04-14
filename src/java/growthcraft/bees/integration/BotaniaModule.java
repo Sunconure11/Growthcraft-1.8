@@ -32,7 +32,7 @@ import growthcraft.core.integration.botania.BotaniaPlatform;
 import growthcraft.core.integration.botania.EnumBotaniaWoodType;
 import growthcraft.core.integration.ModIntegrationBase;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 
 public class BotaniaModule extends ModIntegrationBase

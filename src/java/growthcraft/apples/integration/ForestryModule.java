@@ -27,7 +27,7 @@ import growthcraft.apples.GrowthCraftApples;
 import growthcraft.core.integration.forestry.ForestryFluids;
 import growthcraft.core.integration.ForestryModuleBase;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraft.item.ItemStack;
 
 public class ForestryModule extends ForestryModuleBase

@@ -39,9 +39,9 @@ import growthcraft.core.integration.forestry.ForestryFluids;
 import growthcraft.core.integration.forestry.ForestryItems;
 import growthcraft.core.integration.ForestryModuleBase;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

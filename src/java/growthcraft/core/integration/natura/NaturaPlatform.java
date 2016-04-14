@@ -23,7 +23,7 @@
  */
 package growthcraft.core.integration.natura;
 
-import cpw.mods.fml.common.Loader;
+import net.minecraftforge.fml.common.Loader;
 
 public class NaturaPlatform
 {

@@ -26,7 +26,7 @@ package growthcraft.core.integration.thaumcraft;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.Aspect;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 /**
  * Utility class for handling Thaumcraft Aspects and AspectLists

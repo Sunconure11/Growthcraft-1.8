@@ -2,7 +2,7 @@ package growthcraft.cellar.eventhandler;
 
 import growthcraft.cellar.GrowthCraftCellar;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;

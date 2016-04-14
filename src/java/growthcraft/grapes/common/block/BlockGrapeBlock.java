@@ -8,8 +8,8 @@ import growthcraft.core.common.block.GrcBlockBase;
 import growthcraft.grapes.client.renderer.RenderGrape;
 import growthcraft.grapes.GrowthCraftGrapes;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;

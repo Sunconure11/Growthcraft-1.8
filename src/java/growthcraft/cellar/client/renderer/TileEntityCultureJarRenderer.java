@@ -3,8 +3,8 @@ package growthcraft.cellar.client.renderer;
 import growthcraft.cellar.client.resource.GrcCellarResources;
 import growthcraft.cellar.client.model.ModelCultureJar;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;

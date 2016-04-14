@@ -31,7 +31,7 @@ import java.util.Map;
 import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.ICraftingProvider;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 // Forestry API shims, so we don't have to do null checks all over the place.
 @Optional.Interface(iface="forestry.api.recipes.ICraftingProvider", modid="ForestryAPI|recipes")

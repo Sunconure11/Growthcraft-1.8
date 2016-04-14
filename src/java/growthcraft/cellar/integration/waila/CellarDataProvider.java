@@ -37,7 +37,7 @@ import growthcraft.cellar.util.TagFormatterCultureJar;
 import growthcraft.cellar.util.TagFormatterFruitPress;
 import growthcraft.api.core.nbt.NBTHelper;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;

@@ -29,7 +29,7 @@ import growthcraft.core.integration.ForestryModuleBase;
 import growthcraft.hops.common.block.BlockHops;
 import growthcraft.hops.GrowthCraftHops;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 

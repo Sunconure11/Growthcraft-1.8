@@ -22,7 +22,7 @@ import growthcraft.core.util.ItemUtils;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

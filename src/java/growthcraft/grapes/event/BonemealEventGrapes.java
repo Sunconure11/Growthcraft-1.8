@@ -7,8 +7,8 @@ import growthcraft.grapes.common.block.BlockGrapeVine1;
 import growthcraft.grapes.common.block.BlockGrapeLeaves;
 import growthcraft.grapes.GrowthCraftGrapes;
 
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.common.util.ForgeDirection;

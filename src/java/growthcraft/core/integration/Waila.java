@@ -31,7 +31,7 @@ import growthcraft.core.integration.waila.CoreDataProvider;
 import growthcraft.core.integration.waila.CropDataProvider;
 import growthcraft.core.integration.waila.PaddyDataProvider;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;

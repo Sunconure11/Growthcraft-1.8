@@ -122,7 +122,7 @@ public class VineDropRegistry implements IVineDropRegistry
 		final List<VineDropEntry> vineEntries = getVineDropsList();
 		if (vineEntries.isEmpty()) return null;
 
-		final VineDropEntry entry = (VineDropEntry)WeightedRandom.getRandomItem(world.rand, vineEntries);
+		final VineDropEntry entry = WeightedRandom.getRandomItem(world.rand, vineEntries);
 		if (entry == null || entry.getItemStack() == null) return null;
 
 		return entry.getItemStack().copy();
