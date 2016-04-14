@@ -69,13 +69,8 @@ public class GrowthCraftBees
 
 	public static BlockTypeDefinition<BlockBeeBox> beeBox;
 	public static BlockTypeDefinition<BlockBeeBox> beeBoxBamboo;
-	public static BlockTypeDefinition<BlockBeeBox> beeBoxNatura;
 	public static BlockTypeDefinition<BlockBeeBox> beeBoxBiomesOPlenty;
-	public static BlockTypeDefinition<BlockBeeBox> beeBoxBotania;
-	public static BlockTypeDefinition<BlockBeeBox> beeBoxNether;
 	public static BlockTypeDefinition<BlockBeeBox> beeBoxThaumcraft;
-	public static List<BlockTypeDefinition<BlockBeeBox>> beeBoxesForestry;
-	public static List<BlockTypeDefinition<BlockBeeBox>> beeBoxesForestryFireproof;
 	public static BlockDefinition beeHive;
 	public static GrcBeesItems items = new GrcBeesItems();
 	public static GrcBeesFluids fluids = new GrcBeesFluids();
@@ -126,12 +121,8 @@ public class GrowthCraftBees
 		//modules.add(userHoneyConfig);
 
 		if (config.enableGrcBambooIntegration) modules.add(new growthcraft.bees.integration.GrcBambooModule());
-		if (config.enableGrcNetherIntegration) modules.add(new growthcraft.bees.integration.GrcNetherModule());
 		if (config.enableWailaIntegration) modules.add(new growthcraft.bees.integration.Waila());
 		if (config.enableBoPIntegration) modules.add(new growthcraft.bees.integration.BoPModule());
-		if (config.enableNaturaIntegration) modules.add(new growthcraft.bees.integration.NaturaModule());
-		if (config.enableBotaniaIntegration) modules.add(new growthcraft.bees.integration.BotaniaModule());
-		if (config.enableForestryIntegration) modules.add(new growthcraft.bees.integration.ForestryModule());
 		if (config.enableThaumcraftIntegration) modules.add(new growthcraft.bees.integration.ThaumcraftModule());
 
 		if (config.debugEnabled)
@@ -215,7 +206,6 @@ public class GrowthCraftBees
 	@EventHandler
 	public void load(FMLInitializationEvent event)
 	{
-		CommonProxy.instance.initRenders();
 		CommonProxy.instance.initSounds();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandlerBees());

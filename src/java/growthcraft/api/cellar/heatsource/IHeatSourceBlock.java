@@ -23,9 +23,10 @@
  */
 package growthcraft.api.cellar.heatsource;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public interface IHeatSourceBlock
 {
-	float getHeat(World world, int x, int y, int z);
+	float getHeat(World world, BlockPos pos);
 }

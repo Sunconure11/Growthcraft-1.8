@@ -11,11 +11,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -23,9 +21,6 @@ import net.minecraftforge.common.IShearable;
 
 public class BlockBambooLeaves extends BlockLeavesBase implements IShearable
 {
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	private int[] adjacentTreeBlocks;
 
 	public BlockBambooLeaves()
@@ -238,26 +233,6 @@ public class BlockBambooLeaves extends BlockLeavesBase implements IShearable
 	public int quantityDropped(Random par1Random)
 	{
 		return 0;
-	}
-
-	/************
-	 * TEXTURES
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		this.icons = new IIcon[2];
-
-		icons[0] = reg.registerIcon("grcbamboo:leaves");
-		icons[1] = reg.registerIcon("grcbamboo:leaves_opaque");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		return icons[isOpaqueCube() ? 1 : 0];
 	}
 
 	/************

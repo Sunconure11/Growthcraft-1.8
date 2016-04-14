@@ -80,8 +80,6 @@ public class GrowthCraftApples
 
 		modules.add(fluids);
 		modules.add(recipes);
-		if (config.enableForestryIntegration) modules.add(new growthcraft.apples.integration.ForestryModule());
-		if (config.enableMFRIntegration) modules.add(new growthcraft.apples.integration.MFRModule());
 		if (config.enableThaumcraftIntegration) modules.add(new growthcraft.apples.integration.ThaumcraftModule());
 		if (config.debugEnabled) modules.setLogger(logger);
 
@@ -142,7 +140,6 @@ public class GrowthCraftApples
 	@EventHandler
 	public void load(FMLInitializationEvent event)
 	{
-		CommonProxy.instance.initRenders();
 		final VillageHandlerApples handler = new VillageHandlerApples();
 		VillagerRegistry.instance().registerVillageTradeHandler(GrowthCraftCellar.getConfig().villagerBrewerID, handler);
 		VillagerRegistry.instance().registerVillageCreationHandler(handler);

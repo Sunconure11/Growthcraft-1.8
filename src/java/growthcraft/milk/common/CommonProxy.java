@@ -32,9 +32,8 @@ public class CommonProxy
 	@SidedProxy(clientSide="growthcraft.milk.client.ClientProxy", serverSide="growthcraft.milk.common.CommonProxy")
 	public static CommonProxy instance;
 
-	public void initRenders() {}
-
-	public static void registerWorldGen() {
+	public void init()
+	{
 		GameRegistry.registerWorldGenerator(new WorldGenThistle(), 0);
 	}
 }

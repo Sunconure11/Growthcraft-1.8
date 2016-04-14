@@ -23,50 +23,8 @@
  */
 package growthcraft.milk.client;
 
-import growthcraft.milk.client.render.item.ItemRendererCheeseBlock;
-import growthcraft.milk.client.render.item.ItemRendererHangingCurds;
-import growthcraft.milk.client.render.RenderButterChurn;
-import growthcraft.milk.client.render.RenderCheeseBlock;
-import growthcraft.milk.client.render.RenderCheesePress;
-import growthcraft.milk.client.render.RenderCheeseVat;
-import growthcraft.milk.client.render.RenderPancheon;
-import growthcraft.milk.client.renderer.TileEntityButterChurnRenderer;
-import growthcraft.milk.client.renderer.TileEntityCheesePressRenderer;
-import growthcraft.milk.client.renderer.TileEntityCheeseVatRenderer;
-import growthcraft.milk.client.renderer.TileEntityHangingCurdsRenderer;
-import growthcraft.milk.client.renderer.TileEntityPancheonRenderer;
-import growthcraft.milk.client.resource.GrcMilkResources;
 import growthcraft.milk.common.CommonProxy;
-import growthcraft.milk.common.tileentity.TileEntityButterChurn;
-import growthcraft.milk.common.tileentity.TileEntityCheesePress;
-import growthcraft.milk.common.tileentity.TileEntityCheeseVat;
-import growthcraft.milk.common.tileentity.TileEntityHangingCurds;
-import growthcraft.milk.common.tileentity.TileEntityPancheon;
-import growthcraft.milk.GrowthCraftMilk;
-
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ClientProxy extends CommonProxy
 {
-	public void initRenders()
-	{
-		new GrcMilkResources();
-
-		MinecraftForgeClient.registerItemRenderer(GrowthCraftMilk.blocks.cheeseBlock.getItem(), new ItemRendererCheeseBlock());
-		MinecraftForgeClient.registerItemRenderer(GrowthCraftMilk.blocks.hangingCurds.getItem(), new ItemRendererHangingCurds());
-
-		RenderingRegistry.registerBlockHandler(new RenderButterChurn());
-		RenderingRegistry.registerBlockHandler(new RenderCheeseBlock());
-		RenderingRegistry.registerBlockHandler(new RenderCheesePress());
-		RenderingRegistry.registerBlockHandler(new RenderCheeseVat());
-		RenderingRegistry.registerBlockHandler(new RenderPancheon());
-
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityButterChurn.class, new TileEntityButterChurnRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCheesePress.class, new TileEntityCheesePressRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCheeseVat.class, new TileEntityCheeseVatRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHangingCurds.class, new TileEntityHangingCurdsRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPancheon.class, new TileEntityPancheonRenderer());
-	}
 }

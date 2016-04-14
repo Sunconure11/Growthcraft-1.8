@@ -39,7 +39,6 @@ import growthcraft.core.common.block.BlockFenceRope;
 import growthcraft.core.common.definition.BlockDefinition;
 import growthcraft.core.common.definition.BlockTypeDefinition;
 import growthcraft.core.common.GrcModuleBase;
-import growthcraft.core.integration.NEI;
 import growthcraft.core.registry.FenceRopeRegistry;
 
 import net.minecraft.block.BlockSlab;
@@ -110,8 +109,5 @@ public class GrcBambooBlocks extends GrcModuleBase
 		Blocks.fire.setFireInfo(bambooSingleSlab.getBlock(), 5, 20);
 		Blocks.fire.setFireInfo(bambooDoubleSlab.getBlock(), 5, 20);
 		Blocks.fire.setFireInfo(bambooScaffold.getBlock(), 5, 20);
-
-		NEI.hideItem(bambooDoor.asStack());
-		NEI.hideItem(bambooFenceRope.asStack());
 	}
 }

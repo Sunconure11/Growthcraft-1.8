@@ -76,8 +76,6 @@ public class GrowthCraftRice
 		config.load(event.getModConfigurationDirectory(), "growthcraft/rice.conf");
 
 		modules.add(fluids);
-		if (config.enableForestryIntegration) modules.add(new growthcraft.rice.integration.ForestryModule());
-		if (config.enableMFRIntegration) modules.add(new growthcraft.rice.integration.MFRModule());
 		if (config.enableThaumcraftIntegration) modules.add(new growthcraft.rice.integration.ThaumcraftModule());
 
 		if (config.debugEnabled) modules.setLogger(logger);
