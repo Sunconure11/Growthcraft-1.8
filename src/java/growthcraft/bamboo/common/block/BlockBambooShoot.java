@@ -23,7 +23,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.terraingen.TerrainGen;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IGrowable
 {
@@ -98,7 +98,7 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 	public boolean canBlockStay(World world, int x, int y, int z)
 	{
 		return (world.getFullBlockLightValue(x, y, z) >= 8 || world.canBlockSeeTheSky(x, y, z)) &&
-			BlockCheck.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this);
+			BlockCheck.canSustainPlant(world, x, y - 1, z, EnumFacing.UP, this);
 	}
 
 	/************

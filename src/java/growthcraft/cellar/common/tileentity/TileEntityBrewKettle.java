@@ -20,7 +20,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
@@ -234,19 +234,19 @@ public class TileEntityBrewKettle extends TileEntityCellarDevice implements ITil
 	}
 
 	@Override
-	protected int doFill(ForgeDirection from, FluidStack resource, boolean shouldFill)
+	protected int doFill(EnumFacing from, FluidStack resource, boolean shouldFill)
 	{
 		return fillFluidTank(0, resource, shouldFill);
 	}
 
 	@Override
-	protected FluidStack doDrain(ForgeDirection from, int maxDrain, boolean shouldDrain)
+	protected FluidStack doDrain(EnumFacing from, int maxDrain, boolean shouldDrain)
 	{
 		return drainFluidTank(1, maxDrain, shouldDrain);
 	}
 
 	@Override
-	protected FluidStack doDrain(ForgeDirection from, FluidStack stack, boolean shouldDrain)
+	protected FluidStack doDrain(EnumFacing from, FluidStack stack, boolean shouldDrain)
 	{
 		if (stack == null || !stack.isFluidEqual(getFluidStack(1)))
 		{

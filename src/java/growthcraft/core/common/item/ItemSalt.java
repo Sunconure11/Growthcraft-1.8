@@ -30,7 +30,6 @@ public class ItemSalt extends GrcItemBase
 	public ItemSalt()
 	{
 		super();
-		setTextureName("grccore:salt");
 		setUnlocalizedName("grccore.salt");
 		setCreativeTab(GrowthCraftCore.creativeTab);
 	}

@@ -2,34 +2,29 @@ package growthcraft.cellar.common.block;
 
 import java.util.Random;
 
-import growthcraft.cellar.client.render.RenderFruitPresser;
 import growthcraft.cellar.common.tileentity.TileEntityFruitPresser;
 import growthcraft.cellar.GrowthCraftCellar;
 import growthcraft.core.common.block.IRotatableBlock;
 import growthcraft.core.common.block.IWrenchable;
 import growthcraft.api.core.util.BlockFlags;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockFruitPresser extends BlockContainer implements IWrenchable, IRotatableBlock
 {
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	public BlockFruitPresser()
 	{
 		super(Material.piston);
@@ -61,7 +56,7 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 	 ************/
 
 	/* IRotatableBLock */
-	public boolean isRotatable(IBlockAccess world, int x, int y, int z, ForgeDirection side)
+	public boolean isRotatable(IBlockAccess world, BlockPos pos, EnumFacing side)
 	{
 		final Block below = world.getBlock(x, y - 1, z);
 		if (below instanceof IRotatableBlock)
@@ -71,7 +66,7 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 		return false;
 	}
 
-	public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection side)
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing side)
 	{
 		if (isRotatable(world, x, y, z, side))
 		{
@@ -83,7 +78,7 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 
 	/* IWrenchable */
 	@Override
-	public boolean wrenchBlock(World world, int x, int y, int z, EntityPlayer player, ItemStack wrench)
+	public boolean wrenchBlock(World world, BlockPos pos, EntityPlayer player, ItemStack wrench)
 	{
 		final Block below = world.getBlock(x, y - 1, z);
 		if (below instanceof BlockFruitPress)
@@ -94,7 +89,7 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int meta, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float par7, float par8, float par9)
 	{
 		if (world.isRemote) return true;
 		final Block below = world.getBlock(x, y - 1, z);
@@ -106,7 +101,7 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 	}
 
 	@Override
-	public void onBlockAdded(World world, int x, int y, int z)
+	public void onBlockAdded(World world, BlockPos pos)
 	{
 		super.onBlockAdded(world, x, y, z);
 		final int m = world.getBlockMetadata(x,  y - 1, z);
@@ -119,7 +114,7 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack)
+	public void onBlockPlacedBy(World world, BlockPos pos, EntityLivingBase entity, ItemStack stack)
 	{
 		final int m = world.getBlockMetadata(x,  y - 1, z);
 		world.setBlockMetadataWithNotify(x, y, z, m, BlockFlags.UPDATE_AND_SYNC);
@@ -131,7 +126,7 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
+	public void onNeighborBlockChange(World world, BlockPos pos, Block block)
 	{
 		if (!this.canBlockStay(world, x, y, z))
 		{
@@ -144,7 +139,7 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 		}
 	}
 
-	private void updatePressState(World world, int x, int y, int z)
+	private void updatePressState(World world, BlockPos pos)
 	{
 		final int     meta = world.getBlockMetadata(x, y, z);
 		final boolean flag = world.isBlockIndirectlyGettingPowered(x, y, z);
@@ -167,23 +162,23 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 	 * CONDITIONS
 	 ************/
 	@Override
-	public boolean canBlockStay(World world, int x, int y, int z)
+	public boolean canBlockStay(World world, BlockPos pos)
 	{
 		return GrowthCraftCellar.blocks.fruitPress.getBlock() == world.getBlock(x, y - 1, z);
 	}
 
 	@Override
-	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side)
+	public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side)
 	{
 		final int meta = world.getBlockMetadata(x, y, z);
 
 		if (meta == 0 || meta == 2)
 		{
-			return side == ForgeDirection.EAST || side == ForgeDirection.WEST;
+			return side == EnumFacing.EAST || side == EnumFacing.WEST;
 		}
 		else if (meta == 1 || meta == 3)
 		{
-			return side == ForgeDirection.NORTH || side == ForgeDirection.SOUTH;
+			return side == EnumFacing.NORTH || side == EnumFacing.SOUTH;
 		}
 
 		return isNormalCube(world, x, y, z);
@@ -194,7 +189,7 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 	 ************/
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item getItem(World world, int x, int y, int z)
+	public Item getItem(World world, BlockPos pos)
 	{
 		return GrowthCraftCellar.blocks.fruitPress.getItem();
 	}
@@ -220,43 +215,6 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 		return 0;
 	}
 
-	/************
-	 * TEXTURES
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		icons = new IIcon[4];
-
-		icons[0] = reg.registerIcon("grccellar:fruitpresser_0");
-		icons[1] = reg.registerIcon("grccellar:fruitpresser_1");
-		icons[2] = reg.registerIcon("grccellar:fruitpresser_2");
-		icons[3] = reg.registerIcon("planks_oak");
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconByIndex(int index)
-	{
-		return icons[index];
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		return side == 0 ? icons[0] : (side == 1 ? icons[1] : icons[2]);
-	}
-
-	/************
-	 * RENDERS
-	 ************/
-	@Override
-	public int getRenderType()
-	{
-		return RenderFruitPresser.RENDER_ID;
-	}
-
 	@Override
 	public boolean isOpaqueCube()
 	{
@@ -271,7 +229,7 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int side)
 	{
 		return true;
 	}

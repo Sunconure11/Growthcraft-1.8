@@ -5,13 +5,12 @@ import growthcraft.core.GrowthCraftCore;
 import growthcraft.rice.GrowthCraftRice;
 import growthcraft.rice.util.RiceBlockCheck;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemRice extends GrcItemBase
 {
@@ -22,9 +21,6 @@ public class ItemRice extends GrcItemBase
 		this.setCreativeTab(GrowthCraftCore.creativeTab);
 	}
 
-	/************
-	 * MAIN
-	 ************/
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int dir, float par8, float par9, float par10)
 	{
@@ -52,15 +48,4 @@ public class ItemRice extends GrcItemBase
 			return false;
 		}
 	}
-
-	/************
-	 * TEXTURES
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg)
-	{
-		this.itemIcon = reg.registerIcon("grcrice:rice");
-	}
-
 }

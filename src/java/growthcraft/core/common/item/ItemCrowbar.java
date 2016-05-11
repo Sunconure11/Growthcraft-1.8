@@ -32,28 +32,23 @@ import buildcraft.api.tools.IToolWrench;
 import growthcraft.api.core.item.EnumDye;
 import growthcraft.core.GrowthCraftCore;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockLever;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemCrowbar extends GrcItemBase implements IToolWrench
 {
 	private final Set<Class<? extends Block>> shiftRotations = new HashSet<Class<? extends Block>>();
-
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
 
 	public ItemCrowbar()
 	{
@@ -66,7 +61,6 @@ public class ItemCrowbar extends GrcItemBase implements IToolWrench
 		shiftRotations.add(BlockChest.class);
 		setHarvestLevel("wrench", 0);
 		setUnlocalizedName("grccore.crowbar");
-		setTextureName("grccore:crowbar");
 		setCreativeTab(GrowthCraftCore.creativeTab);
 	}
 
@@ -85,7 +79,7 @@ public class ItemCrowbar extends GrcItemBase implements IToolWrench
 		final Block block = world.getBlock(x, y, z);
 		if (block == null) return false;
 		if (player.isSneaking() != isShiftRotation(block.getClass())) return false;
-		if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
+		if (block.rotateBlock(world, x, y, z, EnumFacing.getFront(side)))
 		{
 			player.swingItem();
 			return !world.isRemote;
@@ -123,17 +117,6 @@ public class ItemCrowbar extends GrcItemBase implements IToolWrench
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg)
-	{
-		this.icons = new IIcon[EnumDye.VALUES.length];
-		for (EnumDye dye : EnumDye.VALUES)
-		{
-			this.icons[dye.meta] = reg.registerIcon(String.format("%s/%s", getIconString(), dye.name));
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void getSubItems(Item item, CreativeTabs tab, List list)
 	{
@@ -141,12 +124,5 @@ public class ItemCrowbar extends GrcItemBase implements IToolWrench
 		{
 			list.add(new ItemStack(item, 1, dye.meta));
 		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int meta)
-	{
-		return icons[MathHelper.clamp_int(meta, 0, icons.length - 1)];
 	}
 }

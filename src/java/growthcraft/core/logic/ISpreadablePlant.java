@@ -24,8 +24,9 @@
 package growthcraft.core.logic;
 
 import net.minecraft.world.World;
+import net.minecraft.util.BlockPos;
 
 public interface ISpreadablePlant
 {
-	boolean canSpreadTo(World world, int x, int y, int z);
+	boolean canSpreadTo(World world, BlockPos pos);
 }

@@ -18,7 +18,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class BlockGrapeVine1 extends BlockGrapeVineBase
 {
@@ -86,7 +86,7 @@ public class BlockGrapeVine1 extends BlockGrapeVineBase
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z)
 	{
-		return BlockCheck.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this) ||
+		return BlockCheck.canSustainPlant(world, x, y - 1, z, EnumFacing.UP, this) ||
 			this == world.getBlock(x, y - 1, z);
 	}
 

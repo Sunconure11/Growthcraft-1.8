@@ -9,7 +9,6 @@ import growthcraft.core.common.definition.BlockTypeDefinition;
 import growthcraft.core.common.definition.ItemDefinition;
 import growthcraft.api.core.module.ModuleContainer;
 import growthcraft.core.GrowthCraftCore;
-import growthcraft.core.integration.NEI;
 import growthcraft.core.util.MapGenHelper;
 import growthcraft.hops.common.block.BlockHops;
 import growthcraft.hops.common.CommonProxy;

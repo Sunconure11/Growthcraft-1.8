@@ -33,11 +33,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class BlockCheck
 {
-	/* An extension of ForgeDirection, supports 26 directions */
+	/* An extension of EnumFacing, supports 26 directions */
 	public static enum BlockDirection
 	{
 		DOWN(0, -1, 0),
@@ -89,11 +89,11 @@ public class BlockCheck
 	/**
 	 * 2D directions
 	 */
-	public static final ForgeDirection[] DIR4 = new ForgeDirection[] {
-		ForgeDirection.NORTH,
-		ForgeDirection.SOUTH,
-		ForgeDirection.WEST,
-		ForgeDirection.EAST
+	public static final EnumFacing[] DIR4 = new EnumFacing[] {
+		EnumFacing.NORTH,
+		EnumFacing.SOUTH,
+		EnumFacing.WEST,
+		EnumFacing.EAST
 	};
 	public static final BlockDirection[] DIR8 = new BlockDirection[] {
 		BlockDirection.NORTH,
@@ -114,7 +114,7 @@ public class BlockCheck
 	 * @param random - random number generator
 	 * @return a random direction
 	 */
-	public static ForgeDirection randomDirection4(Random random)
+	public static EnumFacing randomDirection4(Random random)
 	{
 		return DIR4[random.nextInt(DIR4.length)];
 	}
@@ -196,7 +196,7 @@ public class BlockCheck
 	 * @param plant  - the plant in question
 	 * @return true if the block can be planted, false otherwise
 	 */
-	public static boolean canSustainPlantOn(IBlockAccess world, int x, int y, int z, ForgeDirection dir, IPlantable plant, Block soil)
+	public static boolean canSustainPlantOn(IBlockAccess world, int x, int y, int z, EnumFacing dir, IPlantable plant, Block soil)
 	{
 		return soil != null && soil.canSustainPlant(world, x, y, z, dir, plant);
 	}
@@ -213,7 +213,7 @@ public class BlockCheck
 	 * @param plant  - the plant in question
 	 * @return true if the block can be planted, false otherwise
 	 */
-	public static boolean canSustainPlant(IBlockAccess world, int x, int y, int z, ForgeDirection dir, IPlantable plant)
+	public static boolean canSustainPlant(IBlockAccess world, int x, int y, int z, EnumFacing dir, IPlantable plant)
 	{
 		final Block soil = world.getBlock(x, y, z);
 		return canSustainPlantOn(world, x, y, z, dir, plant, soil);
@@ -230,7 +230,7 @@ public class BlockCheck
 	 * @param plant  - the plant in question
 	 * @return block if it can be planted upon, else null
 	 */
-	public static Block getFarmableBlock(IBlockAccess world, int x, int y, int z, ForgeDirection dir, IPlantable plant)
+	public static Block getFarmableBlock(IBlockAccess world, int x, int y, int z, EnumFacing dir, IPlantable plant)
 	{
 		final Block soil = world.getBlock(x, y, z);
 		if (canSustainPlantOn(world, x, y, z, dir, plant, soil))
@@ -247,7 +247,7 @@ public class BlockCheck
 	 * @param z  - z coord
 	 * @param dir  - direction the block will be placed against
 	 */
-	public static boolean isBlockPlacableOnSide(World world, int x, int y, int z, ForgeDirection dir)
+	public static boolean isBlockPlacableOnSide(World world, int x, int y, int z, EnumFacing dir)
 	{
 		if (world.isAirBlock(x, y, z)) return false;
 		final Block b = world.getBlock(x, y, z);

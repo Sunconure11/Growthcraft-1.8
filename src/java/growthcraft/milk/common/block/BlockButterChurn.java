@@ -25,16 +25,16 @@ package growthcraft.milk.common.block;
 
 import growthcraft.core.common.block.GrcBlockContainer;
 import growthcraft.api.core.util.BBox;
-import growthcraft.milk.client.render.RenderButterChurn;
 import growthcraft.milk.common.tileentity.TileEntityButterChurn;
 import growthcraft.milk.GrowthCraftMilk;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockButterChurn extends GrcBlockContainer
 {
@@ -52,7 +52,7 @@ public class BlockButterChurn extends GrcBlockContainer
 		setBlockTextureName("grcmilk:butter_churn");
 	}
 
-	private boolean tryChurning(World world, int x, int y, int z, EntityPlayer player)
+	private boolean tryChurning(World world, BlockPos pos, EntityPlayer player)
 	{
 		final TileEntityButterChurn butterChurn = getTileEntity(world, x, y, z);
 		if (butterChurn != null)
@@ -71,7 +71,7 @@ public class BlockButterChurn extends GrcBlockContainer
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int meta, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float par7, float par8, float par9)
 	{
 		if (super.onBlockActivated(world, x, y, z, player, meta, par7, par8, par9)) return true;
 		if (!player.isSneaking())
@@ -79,12 +79,6 @@ public class BlockButterChurn extends GrcBlockContainer
 			if (tryChurning(world, x, y, z, player)) return true;
 		}
 		return false;
-	}
-
-	@Override
-	public int getRenderType()
-	{
-		return RenderButterChurn.RENDER_ID;
 	}
 
 	@Override
@@ -101,7 +95,7 @@ public class BlockButterChurn extends GrcBlockContainer
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int side)
 	{
 		return true;
 	}

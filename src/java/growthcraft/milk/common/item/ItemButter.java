@@ -30,18 +30,13 @@ import growthcraft.core.common.item.GrcItemFoodBase;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 
 public class ItemButter extends GrcItemFoodBase
 {
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	public ItemButter()
 	{
 		super(2, 0.3F, false);
@@ -60,25 +55,6 @@ public class ItemButter extends GrcItemFoodBase
 	public String getUnlocalizedName(ItemStack stack)
 	{
 		return super.getUnlocalizedName(stack) + "." + getEnumButter(stack).name;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister ir)
-	{
-		this.icons = new IIcon[EnumButter.VALUES.length];
-
-		for (EnumButter butter : EnumButter.VALUES)
-		{
-			this.icons[butter.meta] = ir.registerIcon("grcmilk:butter/butter_" + butter.name);
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int meta)
-	{
-		return icons[MathHelper.clamp_int(meta, 0, icons.length - 1)];
 	}
 
 	@Override

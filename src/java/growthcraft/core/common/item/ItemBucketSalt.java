@@ -32,7 +32,6 @@ public class ItemBucketSalt extends GrcItemBase
 	public ItemBucketSalt()
 	{
 		super();
-		setTextureName("grccore:bucket_salt");
 		setUnlocalizedName("grccore.bucketSalt");
 		setCreativeTab(GrowthCraftCore.creativeTab);
 		setContainerItem(Items.bucket);

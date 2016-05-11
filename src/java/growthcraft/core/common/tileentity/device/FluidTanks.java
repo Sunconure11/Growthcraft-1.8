@@ -30,7 +30,7 @@ import growthcraft.api.core.stream.IStreamable;
 import growthcraft.api.core.stream.StreamUtils;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -50,7 +50,7 @@ public class FluidTanks implements IFluidTanks, INBTSerializableContext, IStream
 		return tanks.length;
 	}
 
-	public FluidTankInfo[] getTankInfo(ForgeDirection from)
+	public FluidTankInfo[] getTankInfo(EnumFacing from)
 	{
 		final FluidTankInfo[] tankInfos = new FluidTankInfo[tanks.length];
 		for (int i = 0; i < tanks.length; ++i)

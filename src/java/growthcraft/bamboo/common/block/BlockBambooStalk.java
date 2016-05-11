@@ -22,7 +22,7 @@ import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class BlockBambooStalk extends Block
 {
@@ -198,7 +198,7 @@ public class BlockBambooStalk extends Block
 
 	public boolean isBambooOnGround(World world, int x, int y, int z)
 	{
-		if (!BlockCheck.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, GrowthCraftBamboo.blocks.bambooShoot.getBlock())) return false;
+		if (!BlockCheck.canSustainPlant(world, x, y - 1, z, EnumFacing.UP, GrowthCraftBamboo.blocks.bambooShoot.getBlock())) return false;
 		return this == world.getBlock(x, y, z);
 	}
 

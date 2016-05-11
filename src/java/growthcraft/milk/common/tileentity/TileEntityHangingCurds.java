@@ -43,7 +43,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -119,9 +119,9 @@ public class TileEntityHangingCurds extends GrcTileEntityBase implements INBTIte
 				if (pancheonTile != null)
 				{
 					final FluidStack stack = GrowthCraftMilk.fluids.whey.fluid.asFluidStack(100);
-					if (pancheonTile.canFill(ForgeDirection.UP, stack.getFluid()))
+					if (pancheonTile.canFill(EnumFacing.UP, stack.getFluid()))
 					{
-						pancheonTile.fill(ForgeDirection.UP, stack, true);
+						pancheonTile.fill(EnumFacing.UP, stack, true);
 					}
 				}
 				// regardless of a pancheon being present, the curd SHOULD drip

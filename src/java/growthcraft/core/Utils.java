@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
@@ -96,7 +96,7 @@ public class Utils
 	{
 		if (held == null) return false;
 
-		final ForgeDirection direction = ForgeDirection.UNKNOWN;
+		final EnumFacing direction = EnumFacing.UNKNOWN;
 
 		if (held.getItem() instanceof IFluidContainerItem)
 		{
@@ -159,7 +159,7 @@ public class Utils
 	{
 		if (held == null) return null;
 
-		final ForgeDirection direction = ForgeDirection.UNKNOWN;
+		final EnumFacing direction = EnumFacing.UNKNOWN;
 		final FluidStack available = tank.drain(direction, DRAIN_CAP, false);
 		if (available == null) return null;
 

@@ -33,7 +33,7 @@ import growthcraft.core.common.tileentity.event.EventHandler;
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -59,29 +59,29 @@ public abstract class GrcTileEntityDeviceBase extends GrcTileEntityInventoryBase
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid)
+	public boolean canFill(EnumFacing from, Fluid fluid)
 	{
 		return true;
 	}
 
 	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid)
+	public boolean canDrain(EnumFacing from, Fluid fluid)
 	{
 		return true;
 	}
 
-	protected FluidStack doDrain(ForgeDirection dir, int amount, boolean shouldDrain)
+	protected FluidStack doDrain(EnumFacing dir, int amount, boolean shouldDrain)
 	{
 		return null;
 	}
 
-	protected FluidStack doDrain(ForgeDirection dir, FluidStack stack, boolean shouldDrain)
+	protected FluidStack doDrain(EnumFacing dir, FluidStack stack, boolean shouldDrain)
 	{
 		return null;
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection dir, int amount, boolean shouldDrain)
+	public FluidStack drain(EnumFacing dir, int amount, boolean shouldDrain)
 	{
 		final FluidStack result = doDrain(dir, amount, shouldDrain);
 		if (shouldDrain && FluidTest.isValid(result)) markForFluidUpdate();
@@ -89,7 +89,7 @@ public abstract class GrcTileEntityDeviceBase extends GrcTileEntityInventoryBase
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection dir, FluidStack stack, boolean shouldDrain)
+	public FluidStack drain(EnumFacing dir, FluidStack stack, boolean shouldDrain)
 	{
 		if (!FluidTest.isValid(stack)) return null;
 		final FluidStack result = doDrain(dir, stack, shouldDrain);
@@ -97,13 +97,13 @@ public abstract class GrcTileEntityDeviceBase extends GrcTileEntityInventoryBase
 		return result;
 	}
 
-	protected int doFill(ForgeDirection dir, FluidStack stack, boolean shouldFill)
+	protected int doFill(EnumFacing dir, FluidStack stack, boolean shouldFill)
 	{
 		return 0;
 	}
 
 	@Override
-	public int fill(ForgeDirection dir, FluidStack stack, boolean shouldFill)
+	public int fill(EnumFacing dir, FluidStack stack, boolean shouldFill)
 	{
 		final int result = doFill(dir, stack, shouldFill);
 		if (shouldFill && result != 0) markForFluidUpdate();
@@ -111,7 +111,7 @@ public abstract class GrcTileEntityDeviceBase extends GrcTileEntityInventoryBase
 	}
 
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from)
+	public FluidTankInfo[] getTankInfo(EnumFacing from)
 	{
 		return tanks.getTankInfo(from);
 	}

@@ -9,7 +9,6 @@ import growthcraft.core.common.definition.BlockTypeDefinition;
 import growthcraft.core.common.definition.ItemDefinition;
 import growthcraft.core.eventhandler.PlayerInteractEventPaddy;
 import growthcraft.core.GrowthCraftCore;
-import growthcraft.core.integration.NEI;
 import growthcraft.core.util.MapGenHelper;
 import growthcraft.rice.common.block.BlockPaddy;
 import growthcraft.rice.common.block.BlockRice;

@@ -28,24 +28,20 @@ import java.util.List;
 import growthcraft.bees.GrowthCraftBees;
 import growthcraft.core.common.item.GrcItemBase;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBeesWax extends GrcItemBase
 {
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	public ItemBeesWax()
 	{
 		super();
 		setUnlocalizedName("grcbees.BeesWax");
 		setCreativeTab(GrowthCraftBees.tab);
-		setTextureName("grcbees:bees_wax");
 		setHasSubtypes(true);
 		setMaxDamage(0);
 	}

@@ -1,6 +1,5 @@
 package growthcraft.cellar.common.block;
 
-import growthcraft.cellar.client.render.RenderFermentBarrel;
 import growthcraft.cellar.common.tileentity.TileEntityFermentBarrel;
 import growthcraft.cellar.event.EventBarrelDrained;
 import growthcraft.cellar.GrowthCraftCellar;
@@ -20,15 +19,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
 public class BlockFermentBarrel extends BlockCellarContainer
 {
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	public BlockFermentBarrel()
 	{
 		super(Material.wood);
@@ -36,7 +32,6 @@ public class BlockFermentBarrel extends BlockCellarContainer
 		setHardness(2.5F);
 		setStepSound(soundTypeWood);
 		setBlockName("grc.fermentBarrel");
-		setBlockTextureName("grccellar:ferment_barrel");
 		setCreativeTab(GrowthCraftCellar.tab);
 		setGuiType(CellarGuiType.FERMENT_BARREL);
 	}
@@ -54,7 +49,7 @@ public class BlockFermentBarrel extends BlockCellarContainer
 	}
 
 	@Override
-	public boolean isRotatable(IBlockAccess world, int x, int y, int z, ForgeDirection side)
+	public boolean isRotatable(IBlockAccess world, int x, int y, int z, EnumFacing side)
 	{
 		return true;
 	}
@@ -118,49 +113,6 @@ public class BlockFermentBarrel extends BlockCellarContainer
 		super.onBlockPlacedBy(world, x, y, z, entity, stack);
 		final int meta = BlockPistonBase.determineOrientation(world, x, y, z, entity);
 		world.setBlockMetadataWithNotify(x, y, z, meta, BlockFlags.UPDATE_AND_SYNC);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		this.icons = new IIcon[4];
-		final String basename = getTextureName();
-		icons[0] = reg.registerIcon(String.format("%s/minecraft/oak/side", basename));
-		icons[1] = reg.registerIcon(String.format("%s/minecraft/oak/side_alt", basename));
-		icons[2] = reg.registerIcon(String.format("%s/minecraft/oak/top", basename));
-		icons[3] = reg.registerIcon(String.format("%s/minecraft/oak/bottom", basename));
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconByIndex(int index)
-	{
-		return icons[index];
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		if (meta == 0 || meta == 1)
-		{
-			return side == 0 || side == 1 ? icons[1] : icons[0];
-		}
-		else if (meta == 2 || meta == 3)
-		{
-			return side == 2 || side == 3 ? icons[1] : icons[0];
-		}
-		else if (meta == 4 || meta == 5)
-		{
-			return side == 4 || side == 5 ? icons[1] : icons[0];
-		}
-		return icons[0];
-	}
-
-	@Override
-	public int getRenderType()
-	{
-		return RenderFermentBarrel.RENDER_ID;
 	}
 
 	@Override

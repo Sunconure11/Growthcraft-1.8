@@ -8,7 +8,6 @@ import growthcraft.core.common.block.GrcBlockBase;
 import growthcraft.core.common.block.ICropDataProvider;
 import growthcraft.core.common.block.IPaddyCrop;
 import growthcraft.core.integration.AppleCore;
-import growthcraft.rice.client.renderer.RenderRice;
 import growthcraft.rice.GrowthCraftRice;
 import growthcraft.rice.util.RiceBlockCheck;
 
@@ -18,11 +17,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -34,9 +31,6 @@ public class BlockRice extends GrcBlockBase implements IPaddyCrop, ICropDataProv
 
 		private RiceStage() {}
 	}
-
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
 
 	private final float growth = GrowthCraftRice.getConfig().riceGrowthRate;
 
@@ -268,52 +262,6 @@ public class BlockRice extends GrcBlockBase implements IPaddyCrop, ICropDataProv
 		return ret;
 	}
 
-	/************
-	 * TEXTURE
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		icons = new IIcon[5];
-
-		for (int i = 0; i < icons.length; ++i)
-		{
-			icons[i] = reg.registerIcon("grcrice:rice_" + i);
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		if (meta < 0 || meta > 7)
-		{
-			meta = 7;
-		}
-
-		int i = 0;
-		switch (meta)
-		{
-			case 0: case 1: i = 0; break;
-			case 2: case 3: i = 1; break;
-			case 4: case 5: i = 2; break;
-			case 6: case 7: i = 3; break;
-			default: i = 2;
-		}
-
-		return icons[i];
-	}
-
-	/************
-	 * RENDERS
-	 ************/
-	@Override
-	public int getRenderType()
-	{
-		return RenderRice.id;
-	}
-
 	@Override
 	public boolean isOpaqueCube()
 	{
@@ -326,9 +274,6 @@ public class BlockRice extends GrcBlockBase implements IPaddyCrop, ICropDataProv
 		return false;
 	}
 
-	/************
-	 * BOXES
-	 ************/
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z)
 	{

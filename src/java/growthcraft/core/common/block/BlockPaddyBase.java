@@ -6,7 +6,6 @@ import java.util.Random;
 import growthcraft.core.util.ItemUtils;
 import growthcraft.api.core.util.BlockFlags;
 import growthcraft.core.client.ClientProxy;
-import growthcraft.core.client.renderer.RenderPaddy;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -147,9 +146,9 @@ public abstract class BlockPaddyBase extends GrcBlockBase implements IPaddy
 	}
 
 	@Override
-	public boolean isSideSolid(IBlockAccess world, int i, int j, int k, ForgeDirection side)
+	public boolean isSideSolid(IBlockAccess world, int i, int j, int k, EnumFacing side)
 	{
-		return ForgeDirection.UP != side;
+		return EnumFacing.UP != side;
 	}
 
 	@Override

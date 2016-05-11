@@ -8,9 +8,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
-import net.minecraft.world.World;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.world.World;
 
 public class WorldGenBamboo extends WorldGenAbstractTree
 {
@@ -25,13 +26,13 @@ public class WorldGenBamboo extends WorldGenAbstractTree
 		super(doblocknotify);
 	}
 
-	public boolean generateClumps(World world, Random rand, int i, int j, int k)
+	public boolean generateClumps(World world, Random rand, BlockPos pos)
 	{
 		for (int loop = 0; loop < this.density; ++loop)
 		{
-			final int x = i + rand.nextInt(8) - rand.nextInt(8);
-			final int y = j + rand.nextInt(4) - rand.nextInt(4);
-			final int z = k + rand.nextInt(8) - rand.nextInt(8);
+			final int x = pos.getX() + rand.nextInt(8) - rand.nextInt(8);
+			final int y = pos.getY() + rand.nextInt(4) - rand.nextInt(4);
+			final int z = pos.getZ() + rand.nextInt(8) - rand.nextInt(8);
 			this.generate(world, rand, x, y, z);
 		}
 
@@ -39,7 +40,7 @@ public class WorldGenBamboo extends WorldGenAbstractTree
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int i, int j, int k)
+	public boolean generate(World world, Random rand, BlockPos pos)
 	{
 		final int height = rand.nextInt(3) + this.minTreeHeight;
 		boolean flag = true;
@@ -90,7 +91,7 @@ public class WorldGenBamboo extends WorldGenAbstractTree
 			{
 				final Block soil = world.getBlock(i, j - 1, k);
 				final boolean isSoil = soil != null &&
-					soil.canSustainPlant(world, i, j - 1, k, ForgeDirection.UP, (BlockSapling)Blocks.sapling);
+					soil.canSustainPlant(world, i, j - 1, k, EnumFacing.UP, (BlockSapling)Blocks.sapling);
 
 				int it;
 				Block block;

@@ -11,7 +11,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -190,25 +190,25 @@ public class TileEntityFruitPress extends TileEntityCellarDevice implements ITil
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid)
+	public boolean canFill(EnumFacing from, Fluid fluid)
 	{
 		return false;
 	}
 
 	@Override
-	protected int doFill(ForgeDirection from, FluidStack resource, boolean doFill)
+	protected int doFill(EnumFacing from, FluidStack resource, boolean doFill)
 	{
 		return 0;
 	}
 
 	@Override
-	protected FluidStack doDrain(ForgeDirection from, int maxDrain, boolean doDrain)
+	protected FluidStack doDrain(EnumFacing from, int maxDrain, boolean doDrain)
 	{
 		return drainFluidTank(0, maxDrain, doDrain);
 	}
 
 	@Override
-	protected FluidStack doDrain(ForgeDirection from, FluidStack stack, boolean doDrain)
+	protected FluidStack doDrain(EnumFacing from, FluidStack stack, boolean doDrain)
 	{
 		if (stack == null || !stack.isFluidEqual(getFluidStack(0)))
 		{

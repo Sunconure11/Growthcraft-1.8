@@ -41,11 +41,7 @@ import growthcraft.core.util.UnitFormatter;
 import squeek.applecore.api.food.IEdible;
 import squeek.applecore.api.food.FoodValues;
 
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -53,12 +49,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Optional.Interface(iface="squeek.applecore.api.food.IEdible", modid=AppleCore.MOD_ID)
 public class ItemWaterBag extends GrcItemBase implements IFluidContainerItem, IEdible
@@ -66,16 +64,12 @@ public class ItemWaterBag extends GrcItemBase implements IFluidContainerItem, IE
 	protected int capacity;
 	protected int dosage;
 
-	@SideOnly(Side.CLIENT)
-	protected IIcon[] icons;
-
 	public ItemWaterBag()
 	{
 		super();
 		setHasSubtypes(true);
 		setMaxDamage(0);
 		setUnlocalizedName("grc.waterBag");
-		setTextureName("grccellar:water_bag");
 		setCreativeTab(GrowthCraftCellar.tab);
 		this.maxStackSize = 1;
 		this.capacity = GrowthCraftCellar.getConfig().waterBagCapacity;
@@ -107,30 +101,6 @@ public class ItemWaterBag extends GrcItemBase implements IFluidContainerItem, IE
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg)
-	{
-		this.icons = new IIcon[17];
-		this.icons[0] = reg.registerIcon(getIconString() + "/white");
-		this.icons[1] = reg.registerIcon(getIconString() + "/orange");
-		this.icons[2] = reg.registerIcon(getIconString() + "/magenta");
-		this.icons[3] = reg.registerIcon(getIconString() + "/light_blue");
-		this.icons[4] = reg.registerIcon(getIconString() + "/yellow");
-		this.icons[5] = reg.registerIcon(getIconString() + "/lime");
-		this.icons[6] = reg.registerIcon(getIconString() + "/pink");
-		this.icons[7] = reg.registerIcon(getIconString() + "/gray");
-		this.icons[8] = reg.registerIcon(getIconString() + "/light_gray");
-		this.icons[9] = reg.registerIcon(getIconString() + "/cyan");
-		this.icons[10] = reg.registerIcon(getIconString() + "/purple");
-		this.icons[11] = reg.registerIcon(getIconString() + "/blue");
-		this.icons[12] = reg.registerIcon(getIconString() + "/brown");
-		this.icons[13] = reg.registerIcon(getIconString() + "/green");
-		this.icons[14] = reg.registerIcon(getIconString() + "/red");
-		this.icons[15] = reg.registerIcon(getIconString() + "/black");
-		this.icons[16] = reg.registerIcon(getIconString() + "/default");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void getSubItems(Item item, CreativeTabs tab, List list)
 	{
@@ -138,13 +108,6 @@ public class ItemWaterBag extends GrcItemBase implements IFluidContainerItem, IE
 		{
 			list.add(new ItemStack(item, 1, i));
 		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int meta)
-	{
-		return this.icons[meta];
 	}
 
 	public int getFluidAmount(ItemStack container)

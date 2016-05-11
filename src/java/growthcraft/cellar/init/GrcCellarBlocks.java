@@ -31,7 +31,6 @@ import growthcraft.cellar.common.block.BlockFruitPresser;
 import growthcraft.cellar.common.itemblock.ItemBlockFermentBarrel;
 import growthcraft.core.common.definition.BlockDefinition;
 import growthcraft.core.common.GrcModuleBase;
-import growthcraft.core.integration.NEI;
 
 public class GrcCellarBlocks extends GrcModuleBase
 {

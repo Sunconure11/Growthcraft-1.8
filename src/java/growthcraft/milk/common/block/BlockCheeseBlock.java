@@ -30,7 +30,6 @@ import java.util.Map;
 
 import growthcraft.api.core.util.BBox;
 import growthcraft.core.common.block.GrcBlockContainer;
-import growthcraft.milk.client.render.RenderCheeseBlock;
 import growthcraft.milk.common.item.EnumCheeseType;
 import growthcraft.milk.common.item.EnumCheeseStage;
 import growthcraft.milk.common.item.ItemBlockCheeseBlock;
@@ -40,12 +39,11 @@ import growthcraft.core.util.ItemUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -54,9 +52,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCheeseBlock extends GrcBlockContainer
 {
-	@SideOnly(Side.CLIENT)
-	private Map<EnumCheeseType, Map<EnumCheeseStage, IIcon[]>> iconMap;
-
 	public BlockCheeseBlock()
 	{
 		super(Material.cake);
@@ -70,19 +65,19 @@ public class BlockCheeseBlock extends GrcBlockContainer
 	}
 
 	@Override
-	protected boolean shouldRestoreBlockState(World world, int x, int y, int z, ItemStack stack)
+	protected boolean shouldRestoreBlockState(World world, BlockPos pos, ItemStack stack)
 	{
 		return true;
 	}
 
 	@Override
-	protected boolean shouldDropTileStack(World world, int x, int y, int z, int metadata, int fortune)
+	protected boolean shouldDropTileStack(World world, BlockPos pos, int metadata, int fortune)
 	{
 		return false;
 	}
 
 	@Override
-	protected ItemStack createHarvestedBlockItemStack(World world, EntityPlayer player, int x, int y, int z, int meta)
+	protected ItemStack createHarvestedBlockItemStack(World world, EntityPlayer player, BlockPos pos, int meta)
 	{
 		final TileEntityCheeseBlock te = getTileEntity(world, x, y, z);
 		if (te != null)
@@ -93,7 +88,7 @@ public class BlockCheeseBlock extends GrcBlockContainer
 	}
 
 	@Override
-	protected void getTileItemStackDrops(List<ItemStack> ret, World world, int x, int y, int z, int metadata, int fortune)
+	protected void getTileItemStackDrops(List<ItemStack> ret, World world, BlockPos pos, int metadata, int fortune)
 	{
 		final TileEntityCheeseBlock te = getTileEntity(world, x, y, z);
 		if (te != null)
@@ -107,13 +102,13 @@ public class BlockCheeseBlock extends GrcBlockContainer
 	}
 
 	@Override
-	protected boolean shouldScatterInventoryOnBreak(World world, int x, int y, int z)
+	protected boolean shouldScatterInventoryOnBreak(World world, BlockPos pos)
 	{
 		return true;
 	}
 
 	@Override
-	protected void scatterInventory(World world, int x, int y, int z, Block block)
+	protected void scatterInventory(World world, BlockPos pos, Block block)
 	{
 		final TileEntityCheeseBlock te = getTileEntity(world, x, y, z);
 		if (te != null)
@@ -128,7 +123,7 @@ public class BlockCheeseBlock extends GrcBlockContainer
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player)
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player)
 	{
 		final TileEntityCheeseBlock teCheeseBlock = getTileEntity(world, x, y, z);
 		if (teCheeseBlock != null)
@@ -139,7 +134,7 @@ public class BlockCheeseBlock extends GrcBlockContainer
 	}
 
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
+	public ArrayList<ItemStack> getDrops(World world, BlockPos pos, int metadata, int fortune)
 	{
 		final ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		final TileEntityCheeseBlock te = getTileEntity(world, x, y, z);
@@ -172,12 +167,6 @@ public class BlockCheeseBlock extends GrcBlockContainer
 	}
 
 	@Override
-	public int getRenderType()
-	{
-		return RenderCheeseBlock.RENDER_ID;
-	}
-
-	@Override
 	public boolean isOpaqueCube()
 	{
 		return false;
@@ -191,72 +180,9 @@ public class BlockCheeseBlock extends GrcBlockContainer
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int side)
 	{
 		return true;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		this.iconMap = new HashMap<EnumCheeseType, Map<EnumCheeseStage, IIcon[]>>();
-		for (EnumCheeseType type : EnumCheeseType.VALUES)
-		{
-			if (!type.hasBlock()) continue;
-			iconMap.put(type, new HashMap<EnumCheeseStage, IIcon[]>());
-			final String prefix = "grcmilk:cheese/" + type.name;
-			for (EnumCheeseStage stage : type.stages)
-			{
-				final IIcon[] icons = new IIcon[3];
-				icons[0] = reg.registerIcon(String.format("%s_%s/bottom", prefix, stage.name));
-				icons[1] = reg.registerIcon(String.format("%s_%s/top", prefix, stage.name));
-				icons[2] = reg.registerIcon(String.format("%s_%s/side", prefix, stage.name));
-				iconMap.get(type).put(stage, icons);
-			}
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	private IIcon getIconByTypeAndStage(int side, EnumCheeseType type, EnumCheeseStage stage)
-	{
-		final IIcon[] icons = iconMap.get(type).get(stage);
-		if (side == 0)
-		{
-			return icons[0];
-		}
-		else if (side == 1)
-		{
-			return icons[1];
-		}
-		else
-		{
-			return icons[2];
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
-	{
-		final TileEntityCheeseBlock te = getTileEntity(world, x, y, z);
-		final int meta = world.getBlockMetadata(x, y, z);
-		EnumCheeseType type = EnumCheeseType.getSafeById(meta);
-		EnumCheeseStage stage = type.stages.get(0);
-		if (te != null)
-		{
-			type = te.getCheese().getType();
-			stage = te.getCheese().getStage();
-		}
-		return getIconByTypeAndStage(side, type, stage);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		final EnumCheeseType type = EnumCheeseType.getSafeById(meta);
-		return getIconByTypeAndStage(side, type, type.stages.get(0));
 	}
 
 	@Override

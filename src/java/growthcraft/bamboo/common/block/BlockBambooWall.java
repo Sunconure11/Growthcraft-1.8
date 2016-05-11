@@ -3,29 +3,23 @@ package growthcraft.bamboo.common.block;
 import java.util.List;
 
 import growthcraft.bamboo.GrowthCraftBamboo;
-import growthcraft.bamboo.client.renderer.RenderBambooWall;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockBambooWall extends Block
 {
-	@SideOnly(Side.CLIENT)
-	public static IIcon[] tex;
-
 	public BlockBambooWall()
 	{
 		super(Material.wood);
@@ -60,35 +54,6 @@ public class BlockBambooWall extends Block
 			block.renderAsNormalBlock()) return true;
 
 		return false;
-	}
-
-	/************
-	 * ICONS
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		tex = new IIcon[2];
-
-		tex[0] = reg.registerIcon("grcbamboo:fence_top");
-		tex[1] = reg.registerIcon("grcbamboo:fence");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		return side == 1 ? tex[0] : ( side == 0 ? tex[0] : tex[1]);
-	}
-
-	/************
-	 * RENDERS
-	 ************/
-	@Override
-	public int getRenderType()
-	{
-		return RenderBambooWall.id;
 	}
 
 	@Override

@@ -43,7 +43,6 @@ import growthcraft.cellar.common.item.ItemBucketBooze;
 import growthcraft.core.common.definition.ItemDefinition;
 import growthcraft.core.eventhandler.EventHandlerBucketFill;
 import growthcraft.core.GrowthCraftCore;
-import growthcraft.core.integration.NEI;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.init.Items;

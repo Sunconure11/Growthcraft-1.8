@@ -8,14 +8,13 @@ import growthcraft.hops.GrowthCraftHops;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class ItemHopSeeds extends GrcItemBase implements IPlantable
 {
@@ -38,7 +37,7 @@ public class ItemHopSeeds extends GrcItemBase implements IPlantable
 		}
 		else if (player.canPlayerEdit(x, y, z, dir, stack) && player.canPlayerEdit(x, y + 1, z, dir, stack))
 		{
-			if (BlockCheck.canSustainPlant(world, x, y, z, ForgeDirection.UP, GrowthCraftHops.hopVine.getBlock()) && BlockCheck.isRope(world, x, y + 1, z))
+			if (BlockCheck.canSustainPlant(world, x, y, z, EnumFacing.UP, GrowthCraftHops.hopVine.getBlock()) && BlockCheck.isRope(world, x, y + 1, z))
 			{
 				world.setBlock(x, y + 1, z, GrowthCraftHops.hopVine.getBlock());
 				--stack.stackSize;
@@ -53,16 +52,6 @@ public class ItemHopSeeds extends GrcItemBase implements IPlantable
 		{
 			return false;
 		}
-	}
-
-	/************
-	 * TEXTURES
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg)
-	{
-		this.itemIcon = reg.registerIcon("grchops:hop_seeds");
 	}
 
 	@Override

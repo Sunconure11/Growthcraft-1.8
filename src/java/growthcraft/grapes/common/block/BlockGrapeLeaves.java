@@ -2,27 +2,26 @@ package growthcraft.grapes.common.block;
 
 import java.util.Random;
 
+import growthcraft.api.core.util.BlockFlags;
 import growthcraft.core.common.block.IBlockRope;
 import growthcraft.core.GrowthCraftCore;
 import growthcraft.core.util.BlockCheck;
-import growthcraft.api.core.util.BlockFlags;
 import growthcraft.grapes.client.renderer.RenderGrapeLeaves;
 import growthcraft.grapes.GrowthCraftGrapes;
 import growthcraft.grapes.util.GrapeBlockCheck;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope
 {
@@ -139,7 +138,7 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope
 		{
 			if (canGrowOutwards(world, x, y, z))
 			{
-				final ForgeDirection dir = BlockCheck.DIR4[random.nextInt(4)];
+				final EnumFacing dir = BlockCheck.DIR4[random.nextInt(4)];
 
 				if (canGrowHere(world, x + dir.offsetX, y, z + dir.offsetZ))
 				{
@@ -190,7 +189,7 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope
 		}
 		else
 		{
-			for (ForgeDirection dir : BlockCheck.DIR4)
+			for (EnumFacing dir : BlockCheck.DIR4)
 			{
 				for (int i = 1; i <= grapeVineSupportedLength; ++i)
 				{

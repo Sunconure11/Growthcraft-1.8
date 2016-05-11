@@ -1,27 +1,22 @@
 package growthcraft.grapes.common.block;
 
 import growthcraft.api.core.util.BlockFlags;
-import growthcraft.api.core.util.RenderType;
 import growthcraft.grapes.GrowthCraftGrapes;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This is the Grape Vine sapling block
  */
 public class BlockGrapeVine0 extends BlockGrapeVineBase
 {
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	public BlockGrapeVine0()
 	{
 		super();
@@ -37,76 +32,41 @@ public class BlockGrapeVine0 extends BlockGrapeVineBase
 	 * TICK
 	 ************/
 	@Override
-	protected boolean canUpdateGrowth(World world, int x, int y, int z)
+	protected boolean canUpdateGrowth(World world, BlockPos pos)
 	{
 		return world.getBlockLightValue(x, y + 1, z) >= 9;
 	}
 
 	@Override
-	protected void doGrowth(World world, int x, int y, int z, int meta)
+	protected void doGrowth(World world, BlockPos pos, int meta)
 	{
 		if (meta == 0)
 		{
-			incrementGrowth(world, x, y, z, meta);
+			incrementGrowth(world, pos, meta);
 		}
 		else
 		{
-			world.setBlock(x, y, z, GrowthCraftGrapes.blocks.grapeVine1.getBlock(), 0, BlockFlags.UPDATE_AND_SYNC);
+			world.setBlock(pos, GrowthCraftGrapes.blocks.grapeVine1.getBlock(), 0, BlockFlags.UPDATE_AND_SYNC);
 		}
 	}
 
-	/************
-	 * STUFF
-	 ************/
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item getItem(World world, int x, int y, int z)
+	public Item getItem(World world, BlockPos pos)
 	{
 		return GrowthCraftGrapes.items.grapeSeeds.getItem();
 	}
 
-	/************
-	 * TEXTURES
-	 ************/
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		this.icons = new IIcon[2];
-
-		icons[0] = reg.registerIcon("grcgrapes:vine_0");
-		icons[1] = reg.registerIcon("grcgrapes:vine_1");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		return this.icons[MathHelper.clamp_int(meta, 0, 1)];
-	}
-
-	/************
-	 * RENDER
-	 ************/
-	@Override
-	public int getRenderType()
-	{
-		return RenderType.BUSH;
-	}
-
-	/************
-	 * BOXES
-	 ************/
-	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, BlockPos pos)
 	{
 		return null;
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z)
+	public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos)
 	{
-		final int meta = world.getBlockMetadata(x, y, z);
+		final int meta = world.getBlockMetadata(pos);
 		final float f = 0.0625F;
 
 		if (meta == 0)

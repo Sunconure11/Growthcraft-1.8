@@ -23,14 +23,12 @@
  */
 package growthcraft.core.common.item;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.EnumAction;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.fluids.Fluid;
 
 /**
  * Generic fluid bottle for growthcraft fluids that are edible
@@ -40,11 +38,6 @@ public class ItemFoodBottleFluid extends GrcItemFoodBase implements IFluidItem
 	private Fluid fluid;
 	// Used to override the fluid color
 	private int color = -1;
-
-	@SideOnly(Side.CLIENT)
-	private IIcon bottle;
-	@SideOnly(Side.CLIENT)
-	private IIcon contents;
 
 	public ItemFoodBottleFluid(Fluid flu, int healAmount, float saturation, boolean isWolfFavouriteFood)
 	{
@@ -85,34 +78,5 @@ public class ItemFoodBottleFluid extends GrcItemFoodBase implements IFluidItem
 	{
 		if (color != -1) return color;
 		return getFluid(stack).getColor();
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg)
-	{
-		this.bottle = reg.registerIcon("minecraft:potion_bottle_empty");
-		this.contents = reg.registerIcon("minecraft:potion_overlay");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamageForRenderPass(int _damage, int pass)
-	{
-		return pass == 0 ? this.contents : this.bottle;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack stack, int pass)
-	{
-		return pass == 0 ? getColor(stack) : 0xFFFFFF;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean requiresMultipleRenderPasses()
-	{
-		return true;
 	}
 }

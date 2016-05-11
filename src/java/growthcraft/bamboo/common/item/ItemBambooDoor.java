@@ -6,7 +6,6 @@ import growthcraft.core.common.item.GrcItemBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
@@ -101,15 +100,5 @@ public class ItemBambooDoor extends GrcItemBase
 		world.setBlock(i, j + 1, k, block, 8 | (flag2 ? 1 : 0), 2);
 		world.notifyBlocksOfNeighborChange(i, j, k, block);
 		world.notifyBlocksOfNeighborChange(i, j + 1, k, block);
-	}
-
-	/************
-	 * TEXTURES
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg)
-	{
-		this.itemIcon = reg.registerIcon("grcbamboo:door");
 	}
 }

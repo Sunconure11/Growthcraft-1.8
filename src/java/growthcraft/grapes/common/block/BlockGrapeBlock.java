@@ -27,7 +27,6 @@ public class BlockGrapeBlock extends GrcBlockBase
 	public BlockGrapeBlock()
 	{
 		super(Material.plants);
-		setBlockTextureName("grcgrapes:grape");
 		setHardness(0.0F);
 		setStepSound(soundTypeGrass);
 		setBlockName("grc.grapeBlock");

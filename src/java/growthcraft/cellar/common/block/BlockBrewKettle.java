@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Random;
 
 import growthcraft.api.core.util.BBox;
-import growthcraft.cellar.client.render.RenderBrewKettle;
 import growthcraft.cellar.common.tileentity.TileEntityBrewKettle;
 import growthcraft.cellar.GrowthCraftCellar;
 import growthcraft.cellar.util.CellarGuiType;
@@ -13,26 +12,21 @@ import growthcraft.core.Utils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class BlockBrewKettle extends BlockCellarContainer
 {
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	private final BBox kettleContentsBB = BBox.newCube(2, 4, 2, 12, 10, 12).scale(1f / 16f);
 	private final boolean dropItemsInBrewKettle = GrowthCraftCellar.getConfig().dropItemsInBrewKettle;
 	private final boolean fillsWithRain = GrowthCraftCellar.getConfig().brewKettleFillsWithRain;
@@ -58,7 +52,7 @@ public class BlockBrewKettle extends BlockCellarContainer
 			final TileEntityBrewKettle te = getTileEntity(world, x, y, z);
 			if (te != null)
 			{
-				te.fill(ForgeDirection.UP, new FluidStack(FluidRegistry.WATER, rainFillPerUnit), true);
+				te.fill(EnumFacing.UP, new FluidStack(FluidRegistry.WATER, rainFillPerUnit), true);
 			}
 		}
 		super.fillWithRain(world, x, y, z);
@@ -114,51 +108,6 @@ public class BlockBrewKettle extends BlockCellarContainer
 	public int quantityDropped(Random random)
 	{
 		return 1;
-	}
-
-	/************
-	 * TEXTURES
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		this.icons = new IIcon[4];
-
-		icons[0] = reg.registerIcon("grccellar:brewkettle_0");
-		icons[1] = reg.registerIcon("grccellar:brewkettle_1");
-		icons[2] = reg.registerIcon("grccellar:brewkettle_2");
-		icons[3] = reg.registerIcon("grccellar:brewkettle_3");
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconByIndex(int index)
-	{
-		return icons[index];
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		if (side == 1)
-		{
-			return icons[3];
-		}
-		else if (side == 0)
-		{
-			return icons[0];
-		}
-		return icons[2];
-	}
-
-	/************
-	 * RENDERS
-	 ************/
-	@Override
-	public int getRenderType()
-	{
-		return RenderBrewKettle.RENDER_ID;
 	}
 
 	@Override

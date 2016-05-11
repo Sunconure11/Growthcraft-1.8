@@ -15,7 +15,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class ItemGrapeSeeds extends GrcItemBase implements IPlantable
 {
@@ -39,7 +39,7 @@ public class ItemGrapeSeeds extends GrcItemBase implements IPlantable
 		else if (player.canPlayerEdit(x, y, z, dir, stack) && player.canPlayerEdit(x, y + 1, z, dir, stack))
 		{
 			final BlockGrapeVine0 block = GrowthCraftGrapes.blocks.grapeVine0.getBlock();
-			if (BlockCheck.canSustainPlant(world, x, y, z, ForgeDirection.UP, block) && world.isAirBlock(x, y + 1, z))
+			if (BlockCheck.canSustainPlant(world, x, y, z, EnumFacing.UP, block) && world.isAirBlock(x, y + 1, z))
 			{
 				world.setBlock(x, y + 1, z, block);
 				--stack.stackSize;

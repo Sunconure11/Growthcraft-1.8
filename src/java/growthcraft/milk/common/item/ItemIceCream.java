@@ -28,20 +28,15 @@ import java.util.List;
 import growthcraft.core.common.item.GrcItemFoodBase;
 import growthcraft.milk.GrowthCraftMilk;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemIceCream extends GrcItemFoodBase
 {
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	public ItemIceCream()
 	{
 		super(2, 0.3F, false);
@@ -60,25 +55,6 @@ public class ItemIceCream extends GrcItemFoodBase
 	public String getUnlocalizedName(ItemStack stack)
 	{
 		return super.getUnlocalizedName(stack) + "." + getEnumIceCream(stack).name;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister ir)
-	{
-		this.icons = new IIcon[EnumIceCream.VALUES.length];
-
-		for (EnumIceCream iceCream : EnumIceCream.VALUES)
-		{
-			this.icons[iceCream.meta] = ir.registerIcon("grcmilk:ice_cream/ice_cream_" + iceCream.name);
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int meta)
-	{
-		return icons[MathHelper.clamp_int(meta, 0, EnumIceCream.VALUES.length - 1)];
 	}
 
 	@Override

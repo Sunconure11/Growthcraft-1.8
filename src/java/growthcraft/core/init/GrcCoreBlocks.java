@@ -34,7 +34,6 @@ import growthcraft.core.common.GrcModuleBase;
 import growthcraft.core.common.item.ItemBlockFenceRope;
 import growthcraft.core.common.item.ItemBlockNaturaFenceRope;
 import growthcraft.core.integration.minecraft.EnumMinecraftWoodType;
-import growthcraft.core.integration.NEI;
 import growthcraft.core.registry.FenceRopeRegistry;
 import growthcraft.core.GrowthCraftCore;
 
@@ -92,7 +91,6 @@ public class GrcCoreBlocks extends GrcModuleBase
 					fp.register(basename, ItemBlockFenceRope.class);
 					Blocks.fire.setFireInfo(fp.getBlock(), 5, 20);
 					FenceRopeRegistry.instance().addEntry(block, fp.getBlock());
-					NEI.hideItem(fp.asStack());
 				}
 			}
 		}
@@ -160,7 +158,6 @@ public class GrcCoreBlocks extends GrcModuleBase
 				naturaFenceRope.register("grc.naturaFenceRope", ItemBlockNaturaFenceRope.class);
 				Blocks.fire.setFireInfo(naturaFenceRope.getBlock(), 5, 20);
 				FenceRopeRegistry.instance().addEntry(block, naturaFenceRope.getBlock());
-				NEI.hideItem(naturaFenceRope.asStack());
 			}
 		}
 	}
@@ -173,8 +170,5 @@ public class GrcCoreBlocks extends GrcModuleBase
 		if (GrowthCraftCore.getConfig().enableEtfuturumIntegration) initEtfuturum();
 		if (GrowthCraftCore.getConfig().enableWoodstuffIntegration) initWoodstuff();
 		if (GrowthCraftCore.getConfig().enableNaturaIntegration) initNatura();
-		NEI.hideItem(fenceRope.asStack());
-		NEI.hideItem(netherBrickFenceRope.asStack());
-		NEI.hideItem(ropeBlock.asStack());
 	}
 }

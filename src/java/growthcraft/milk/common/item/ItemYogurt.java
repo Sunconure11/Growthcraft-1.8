@@ -30,25 +30,19 @@ import growthcraft.milk.GrowthCraftMilk;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 
 public class ItemYogurt extends GrcItemFoodBase
 {
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	public ItemYogurt()
 	{
 		super(2, 0.3F, false);
 		setHasSubtypes(true);
 		setMaxDamage(0);
 		setUnlocalizedName("grcmilk.Yogurt");
-		setTextureName("grcmilk:yogurt/yogurt");
 		setCreativeTab(GrowthCraftMilk.creativeTab);
 	}
 
@@ -61,25 +55,6 @@ public class ItemYogurt extends GrcItemFoodBase
 	public String getUnlocalizedName(ItemStack stack)
 	{
 		return super.getUnlocalizedName(stack) + "." + getEnumYogurt(stack).name;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister ir)
-	{
-		this.icons = new IIcon[EnumYogurt.VALUES.length];
-
-		for (EnumYogurt yogurt : EnumYogurt.VALUES)
-		{
-			this.icons[yogurt.meta] = ir.registerIcon("grcmilk:yogurt/yogurt_" + yogurt.name);
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int meta)
-	{
-		return icons[MathHelper.clamp_int(meta, 0, EnumYogurt.VALUES.length - 1)];
 	}
 
 	@Override

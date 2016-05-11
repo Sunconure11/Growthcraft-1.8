@@ -30,7 +30,7 @@ import growthcraft.core.util.BlockCheck;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Component for handling heat source blocks for a tile entity
@@ -38,7 +38,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class HeatBlockComponent
 {
 	private TileEntity tileEntity;
-	private ForgeDirection sourceDir = ForgeDirection.DOWN;
+	private EnumFacing sourceDir = EnumFacing.DOWN;
 	// Adjacent heating allows the block to accept heat from blocks on the same y axis and directly
 	// adjacent to it
 	private float adjacentHeating;
@@ -58,7 +58,7 @@ public class HeatBlockComponent
 		return tileEntity.getWorldObj();
 	}
 
-	public float getHeatMultiplierFromDir(ForgeDirection dir)
+	public float getHeatMultiplierFromDir(EnumFacing dir)
 	{
 		final int x = tileEntity.xCoord + dir.offsetX;
 		final int y = tileEntity.yCoord + dir.offsetY;
@@ -78,7 +78,7 @@ public class HeatBlockComponent
 		if (adjacentHeating > 0)
 		{
 			float heat = 0.0f;
-			for (ForgeDirection dir : BlockCheck.DIR4)
+			for (EnumFacing dir : BlockCheck.DIR4)
 			{
 				heat += getHeatMultiplierFromDir(dir);
 			}

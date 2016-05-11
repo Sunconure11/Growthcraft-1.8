@@ -25,22 +25,22 @@ package growthcraft.milk.common.block;
 
 import growthcraft.api.core.util.BlockFlags;
 import growthcraft.core.common.block.GrcBlockContainer;
-import growthcraft.milk.client.render.RenderCheesePress;
 import growthcraft.milk.common.tileentity.TileEntityCheesePress;
 import growthcraft.milk.GrowthCraftMilk;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCheesePress extends GrcBlockContainer
 {
@@ -56,24 +56,24 @@ public class BlockCheesePress extends GrcBlockContainer
 		setBlockTextureName("grcmilk:cheese_press");
 	}
 
-	public boolean isRotatable(IBlockAccess world, int x, int y, int z, ForgeDirection side)
+	public boolean isRotatable(IBlockAccess world, BlockPos pos, EnumFacing side)
 	{
 		return true;
 	}
 
-	public void doRotateBlock(World world, int x, int y, int z, ForgeDirection side)
+	public void doRotateBlock(World world, BlockPos pos, EnumFacing side)
 	{
 		world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) ^ 1, BlockFlags.SYNC);
 	}
 
 	@Override
-	public void onBlockAdded(World world, int x, int y, int z)
+	public void onBlockAdded(World world, BlockPos pos)
 	{
 		super.onBlockAdded(world, x, y, z);
 		this.setDefaultDirection(world, x, y, z);
 	}
 
-	private void setDefaultDirection(World world, int x, int y, int z)
+	private void setDefaultDirection(World world, BlockPos pos)
 	{
 		if (!world.isRemote)
 		{
@@ -108,7 +108,7 @@ public class BlockCheesePress extends GrcBlockContainer
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack)
+	public void onBlockPlacedBy(World world, BlockPos pos, EntityLivingBase entity, ItemStack stack)
 	{
 		super.onBlockPlacedBy(world, x, y, z, entity, stack);
 		final int a = MathHelper.floor_double((entity.rotationYaw * 4.0D / 360.0D) + 0.5D) & 3;
@@ -123,7 +123,7 @@ public class BlockCheesePress extends GrcBlockContainer
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int meta, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float par7, float par8, float par9)
 	{
 		if (super.onBlockActivated(world, x, y, z, player, meta, par7, par8, par9)) return true;
 		if (GrowthCraftMilk.getConfig().cheesePressHandOperated)
@@ -144,7 +144,7 @@ public class BlockCheesePress extends GrcBlockContainer
 		return false;
 	}
 
-	private void updatePressState(World world, int x, int y, int z)
+	private void updatePressState(World world, BlockPos pos)
 	{
 		final boolean isPowered = world.isBlockIndirectlyGettingPowered(x, y, z);
 		final TileEntityCheesePress cheesePress = getTileEntity(world, x, y, z);
@@ -158,7 +158,7 @@ public class BlockCheesePress extends GrcBlockContainer
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
+	public void onNeighborBlockChange(World world, BlockPos pos, Block block)
 	{
 		super.onNeighborBlockChange(world, x, y, z, block);
 		if (!world.isRemote)
@@ -168,12 +168,6 @@ public class BlockCheesePress extends GrcBlockContainer
 				this.updatePressState(world, x, y, z);
 			}
 		}
-	}
-
-	@Override
-	public int getRenderType()
-	{
-		return RenderCheesePress.RENDER_ID;
 	}
 
 	@Override
@@ -190,7 +184,7 @@ public class BlockCheesePress extends GrcBlockContainer
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int side)
 	{
 		return true;
 	}
@@ -202,7 +196,7 @@ public class BlockCheesePress extends GrcBlockContainer
 	}
 
 	@Override
-	public int getComparatorInputOverride(World world, int x, int y, int z, int par5)
+	public int getComparatorInputOverride(World world, BlockPos pos, int par5)
 	{
 		final TileEntityCheesePress te = getTileEntity(world, x, y, z);
 		if (te != null)

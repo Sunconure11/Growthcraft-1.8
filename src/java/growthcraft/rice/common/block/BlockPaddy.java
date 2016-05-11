@@ -12,10 +12,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -23,9 +21,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 public class BlockPaddy extends BlockPaddyBase
 {
-	@SideOnly(Side.CLIENT)
-	protected IIcon[] icons;
-
 	private final int paddyFieldMax = GrowthCraftRice.getConfig().paddyFieldMax;
 
 	public BlockPaddy()
@@ -102,37 +97,5 @@ public class BlockPaddy extends BlockPaddyBase
 	public int quantityDropped(Random random)
 	{
 		return 1;
-	}
-
-	/************
-	 * TEXTURES
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		icons = new IIcon[3];
-
-		icons[0] = reg.registerIcon("dirt");
-		icons[1] = reg.registerIcon("farmland_dry");
-		icons[2] = reg.registerIcon("farmland_wet");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		if (side == 1)
-		{
-			if (meta == 0)
-			{
-				return icons[1];
-			}
-			else
-			{
-				return icons[2];
-			}
-		}
-		return icons[0];
 	}
 }

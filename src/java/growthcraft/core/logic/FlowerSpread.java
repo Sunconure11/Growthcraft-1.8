@@ -31,6 +31,7 @@ import growthcraft.api.core.util.CuboidI;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
+import net.minecraft.util.BlockPos;
 
 public class FlowerSpread
 {
@@ -41,28 +42,29 @@ public class FlowerSpread
 		this.spreadCube = spread;
 	}
 
-	private boolean canSpreadTo(Block block, World world, int x, int y, int z)
+	private boolean canSpreadTo(Block block, World world, BlockPos pos)
 	{
 		if (block instanceof ISpreadablePlant)
 		{
-			return ((ISpreadablePlant)block).canSpreadTo(world, x, y, z);
+			return ((ISpreadablePlant)block).canSpreadTo(world, pos);
 		}
 		else
 		{
-			return world.isAirBlock(x, y, z) && block.canBlockStay(world, x, y, z);
+			return world.isAirBlock(pos) && block.canBlockStay(world, pos);
 		}
 	}
 
-	public boolean run(Block block, int meta, World world, int x, int y, int z, Random random)
+	public boolean run(Block block, int meta, World world, BlockPos pos, Random random)
 	{
 		final int fx = x + random.nextInt(spreadCube.w) + spreadCube.x;
 		final int fz = z + random.nextInt(spreadCube.l) + spreadCube.z;
 		for (int i = spreadCube.y; i <= spreadCube.y2(); ++i)
 		{
 			final int fy = y + i;
-			if (canSpreadTo(block, world, fx, fy, fz))
+			final BlockPos fpos = new BlockPos(fx, fy, fz);
+			if (canSpreadTo(block, world, fpos))
 			{
-				world.setBlock(fx, fy, fz, block, meta, BlockFlags.UPDATE_AND_SYNC);
+				world.setBlock(fpos, block, meta, BlockFlags.UPDATE_AND_SYNC);
 				return true;
 			}
 		}

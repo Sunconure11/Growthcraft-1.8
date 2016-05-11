@@ -36,7 +36,6 @@ import growthcraft.core.lib.GrcCoreState;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,18 +44,12 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
 public class ItemBoozeBottle extends GrcItemFoodBase implements IFluidItem
 {
 	private Fluid[] boozes;
-
-	@SideOnly(Side.CLIENT)
-	private IIcon bottle;
-	@SideOnly(Side.CLIENT)
-	private IIcon contents;
 
 	public ItemBoozeBottle(Fluid[] boozeAry)
 	{
@@ -157,21 +150,6 @@ public class ItemBoozeBottle extends GrcItemFoodBase implements IFluidItem
 					GrcI18n.translate("grc.tooltip.detailed_information",
 						EnumChatFormatting.WHITE + GrcCoreState.detailedKey + EnumChatFormatting.GRAY));
 		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg)
-	{
-		this.bottle = reg.registerIcon("grccellar:booze");
-		this.contents = reg.registerIcon("grccellar:booze_contents");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamageForRenderPass(int par1, int pass)
-	{
-		return pass == 0 ? this.contents : this.bottle;
 	}
 
 	@Override

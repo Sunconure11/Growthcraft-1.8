@@ -27,7 +27,6 @@ import growthcraft.api.core.log.GrcLogger;
 import growthcraft.api.core.log.ILogger;
 import growthcraft.api.core.module.ModuleContainer;
 import growthcraft.api.milk.MilkRegistry;
-import growthcraft.milk.client.handler.GrcMilkHandleTextureStitch;
 import growthcraft.milk.common.CommonProxy;
 import growthcraft.milk.common.tileentity.TileEntityButterChurn;
 import growthcraft.milk.common.tileentity.TileEntityCheeseBlock;
@@ -121,7 +120,6 @@ public class GrowthCraftMilk
 		GrowthCraftMilk.creativeTab = new GrcMilkCreativeTabs("creative_tab_grcmilk");
 
 		modules.preInit();
-		MinecraftForge.EVENT_BUS.register(new GrcMilkHandleTextureStitch());
 		MinecraftForge.EVENT_BUS.register(new EventHandlerOnBabyCowDeath());
 		register();
 	}

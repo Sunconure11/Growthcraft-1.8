@@ -2,7 +2,6 @@ package growthcraft.cellar.common.block;
 
 import java.util.Random;
 
-import growthcraft.cellar.client.render.RenderFruitPress;
 import growthcraft.cellar.common.tileentity.TileEntityFruitPress;
 import growthcraft.cellar.GrowthCraftCellar;
 import growthcraft.cellar.util.CellarGuiType;
@@ -12,21 +11,16 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class BlockFruitPress extends BlockCellarContainer
 {
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	public BlockFruitPress()
 	{
 		super(Material.wood);
@@ -43,12 +37,12 @@ public class BlockFruitPress extends BlockCellarContainer
 		return GrowthCraftCellar.blocks.fruitPresser.getBlock();
 	}
 
-	public boolean isRotatable(IBlockAccess world, int x, int y, int z, ForgeDirection side)
+	public boolean isRotatable(IBlockAccess world, int x, int y, int z, EnumFacing side)
 	{
 		return true;
 	}
 
-	public void doRotateBlock(World world, int x, int y, int z, ForgeDirection side)
+	public void doRotateBlock(World world, int x, int y, int z, EnumFacing side)
 	{
 		world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) ^ 1, BlockFlags.SYNC);
 		world.setBlockMetadataWithNotify(x, y + 1, z, world.getBlockMetadata(x, y + 1, z) ^ 1, BlockFlags.SYNC);
@@ -137,17 +131,17 @@ public class BlockFruitPress extends BlockCellarContainer
 	 * CONDITIONS
 	 ************/
 	@Override
-	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side)
+	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, EnumFacing side)
 	{
 		final int meta = world.getBlockMetadata(x, y, z);
 
 		if (meta == 0)
 		{
-			return side == ForgeDirection.EAST || side == ForgeDirection.WEST;
+			return side == EnumFacing.EAST || side == EnumFacing.WEST;
 		}
 		else if (meta == 1)
 		{
-			return side == ForgeDirection.NORTH || side == ForgeDirection.SOUTH;
+			return side == EnumFacing.NORTH || side == EnumFacing.SOUTH;
 		}
 
 		return isNormalCube(world, x, y, z);
@@ -189,53 +183,6 @@ public class BlockFruitPress extends BlockCellarContainer
 	public int quantityDropped(Random random)
 	{
 		return 1;
-	}
-
-	/************
-	 * TEXTURES
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		this.icons = new IIcon[6];
-
-		icons[0] = reg.registerIcon("grccellar:fruit_press_wood_bottom");
-		icons[1] = reg.registerIcon("grccellar:fruit_press_wood_top");
-		icons[2] = reg.registerIcon("grccellar:fruit_press_wood_side");
-		icons[3] = reg.registerIcon("grccellar:fruit_press_metal_bottom");
-		icons[4] = reg.registerIcon("grccellar:fruit_press_metal_top");
-		icons[5] = reg.registerIcon("grccellar:fruit_press_metal_side");
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconByIndex(int index)
-	{
-		return icons[index];
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		if (side == 0)
-		{
-			return icons[0];
-		}
-		else if (side == 1)
-		{
-			return icons[1];
-		}
-		return icons[2];
-	}
-
-	/************
-	 * RENDERS
-	 ************/
-	@Override
-	public int getRenderType()
-	{
-		return RenderFruitPress.RENDER_ID;
 	}
 
 	@Override

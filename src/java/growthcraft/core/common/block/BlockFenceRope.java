@@ -6,27 +6,21 @@ import java.util.Random;
 
 import growthcraft.api.core.util.BlockFlags;
 import growthcraft.api.core.util.BlockKey;
-import growthcraft.core.client.renderer.RenderFenceRope;
 import growthcraft.core.GrowthCraftCore;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockFenceRope extends GrcBlockBase implements IBlockRope
 {
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	private BlockKey fenceBlockKey;
 
 	public BlockFenceRope(BlockKey srcKey, String name)
@@ -211,46 +205,6 @@ public class BlockFenceRope extends GrcBlockBase implements IBlockRope
 		}
 
 		this.setBlockBoundsBasedOnState(world, x, y, z);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		this.icons = new IIcon[2];
-
-		icons[0] = reg.registerIcon("grccore:rope_0");
-		icons[1] = reg.registerIcon("grccore:rope_1");
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconByIndex(int index)
-	{
-		if (index == 0)
-		{
-			return getFenceBlock().getIcon(0, 0);
-		}
-		return icons[index - 1];
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		return getFenceBlock().getIcon(side, meta);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
-	{
-		return getFenceBlock().getIcon(world, x, y, z, side);
-	}
-
-	@Override
-	public int getRenderType()
-	{
-		return RenderFenceRope.RENDER_ID;
 	}
 
 	@Override

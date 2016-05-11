@@ -6,7 +6,6 @@ import growthcraft.core.common.item.GrcItemFoodBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -117,15 +116,5 @@ public class ItemBambooShoot extends GrcItemFoodBase implements IPlantable
 	public int getPlantMetadata(IBlockAccess world, int x, int y, int z)
 	{
 		return 0;
-	}
-
-	/************
-	 * TEXTURES
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg)
-	{
-		this.itemIcon = reg.registerIcon("grcbamboo:shoot");
 	}
 }

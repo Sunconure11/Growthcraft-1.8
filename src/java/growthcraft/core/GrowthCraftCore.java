@@ -21,7 +21,6 @@ import growthcraft.core.eventhandler.EventHandlerLivingDeathCore;
 import growthcraft.core.eventhandler.EventHandlerSpecialBucketFill;
 import growthcraft.core.eventhandler.HarvestDropsEventCore;
 import growthcraft.core.eventhandler.PlayerInteractEventPaddy;
-import growthcraft.core.eventhandler.TextureStitchEventCore;
 import growthcraft.core.init.GrcCoreBlocks;
 import growthcraft.core.init.GrcCoreFluids;
 import growthcraft.core.init.GrcCoreItems;
@@ -33,7 +32,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -66,11 +64,6 @@ public class GrowthCraftCore
 
 	@Instance(MOD_ID)
 	public static GrowthCraftCore instance;
-
-	@SideOnly(Side.CLIENT)
-	public static IIcon liquidSmoothTexture;
-	@SideOnly(Side.CLIENT)
-	public static IIcon liquidBlobsTexture;
 	public static GrcCoreAchievements achievements;
 	public static CreativeTabs creativeTab;
 
@@ -149,8 +142,6 @@ public class GrowthCraftCore
 
 	private void register()
 	{
-		MinecraftForge.EVENT_BUS.register(new TextureStitchEventCore());
-
 		modules.register();
 		achievements = new GrcCoreAchievements();
 	}

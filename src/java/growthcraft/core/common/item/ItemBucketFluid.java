@@ -25,15 +25,13 @@ package growthcraft.core.common.item;
 
 import growthcraft.core.util.UnitFormatter;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Generic fluid bucket code
@@ -44,11 +42,6 @@ public class ItemBucketFluid extends GrcItemBucketBase implements IFluidItem
 	private int index;
 	// Used to override the fluid color
 	private int color = -1;
-
-	@SideOnly(Side.CLIENT)
-	private IIcon bucket;
-	@SideOnly(Side.CLIENT)
-	private IIcon contents;
 
 	public ItemBucketFluid(Block block, Fluid flu, CreativeTabs creativeTab)
 	{
@@ -80,21 +73,6 @@ public class ItemBucketFluid extends GrcItemBucketBase implements IFluidItem
 	public String getItemStackDisplayName(ItemStack stack)
 	{
 		return UnitFormatter.fluidBucketName(getFluid(stack));
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg)
-	{
-		this.bucket = reg.registerIcon("bucket_empty");
-		this.contents = reg.registerIcon("grccore:bucket_contents");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamageForRenderPass(int par1, int pass)
-	{
-		return pass == 1 ? this.contents : this.bucket;
 	}
 
 	@Override

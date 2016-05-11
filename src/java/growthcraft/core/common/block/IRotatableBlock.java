@@ -1,7 +1,8 @@
 package growthcraft.core.common.block;
 
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 public interface IRotatableBlock
 {
@@ -15,5 +16,5 @@ public interface IRotatableBlock
 	 * @param side - side that block should be rotated from
 	 * @return true, if it can be rotated, false otherwise
 	 */
-	boolean isRotatable(IBlockAccess world, int x, int y, int z, ForgeDirection side);
+	boolean isRotatable(IBlockAccess world, BlockPos pos, EnumFacing side);
 }

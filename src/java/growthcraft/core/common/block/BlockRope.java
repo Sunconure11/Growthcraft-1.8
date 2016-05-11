@@ -4,25 +4,19 @@ import java.util.List;
 import java.util.Random;
 
 import growthcraft.core.GrowthCraftCore;
-import growthcraft.core.client.renderer.RenderRope;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockRope extends GrcBlockBase implements IBlockRope
 {
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	public BlockRope()
 	{
 		super(Material.circuits);
@@ -100,41 +94,6 @@ public class BlockRope extends GrcBlockBase implements IBlockRope
 	public int quantityDropped(Random random)
 	{
 		return 1;
-	}
-
-	/************
-	 * TEXTURES
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		this.icons = new IIcon[2];
-
-		icons[0] = reg.registerIcon("grccore:rope_1");
-		icons[1] = reg.registerIcon("grccore:rope");
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconByIndex(int index)
-	{
-		return icons[index];
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		return this.icons[1];
-	}
-
-	/************
-	 * RENDER
-	 ************/
-	@Override
-	public int getRenderType()
-	{
-		return RenderRope.id;
 	}
 
 	@Override

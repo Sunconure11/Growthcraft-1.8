@@ -41,7 +41,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -156,7 +155,7 @@ public abstract class GrcGuiContainer<C extends Container, T extends TileEntity>
 				final float g = (float)(color >> 8 & 255) / 255.0F;
 				final float b = (float)(color & 255) / 255.0F;
 				GL11.glColor4f(r, g, b, 1.0f);
-				drawTexturedModelRectFromIcon(x + wp, y + hp + height - amount, icon, width, amount);
+				//drawTexturedModelRectFromIcon(x + wp, y + hp + height - amount, icon, width, amount);
 				GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 			}
 		}

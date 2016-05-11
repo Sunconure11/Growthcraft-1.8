@@ -23,9 +23,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockBeeHive extends Block
 {
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	public BlockBeeHive()
 	{
 		super(Material.plants);

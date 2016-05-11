@@ -8,9 +8,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
-import net.minecraft.world.World;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.world.World;
 
 public class WorldGenAppleTree extends WorldGenerator
 {
@@ -25,7 +26,7 @@ public class WorldGenAppleTree extends WorldGenerator
 		super(doblocknotify);
 	}
 
-	public boolean generate(World world, Random random, int x, int y, int z)
+	public boolean generate(World world, Random random, BlockPos pos)
 	{
 		final int l = random.nextInt(3) + this.minTreeHeight;
 		boolean flag = true;
@@ -78,7 +79,7 @@ public class WorldGenAppleTree extends WorldGenerator
 			else
 			{
 				final Block block2 = world.getBlock(x, y - 1, z);
-				final boolean isSoil = block2.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, (BlockSapling)Blocks.sapling);
+				final boolean isSoil = block2.canSustainPlant(world, x, y - 1, z, EnumFacing.UP, (BlockSapling)Blocks.sapling);
 
 				if (isSoil && y < 256 - l - 1)
 				{
@@ -152,7 +153,7 @@ public class WorldGenAppleTree extends WorldGenerator
 			block == Blocks.vine;
 	}
 
-	protected boolean isReplaceable(World world, int x, int y, int z)
+	protected boolean isReplaceable(World world, BlockPos pos)
 	{
 		final Block block = world.getBlock(x, y, z);
 		return block.isAir(world, x, y, z) ||
