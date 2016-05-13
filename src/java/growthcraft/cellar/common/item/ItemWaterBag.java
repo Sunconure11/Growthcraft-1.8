@@ -355,7 +355,7 @@ public class ItemWaterBag extends GrcItemBase implements IFluidContainerItem, IE
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack _stack, EntityPlayer _p, World _w, int _x, int _y, int _z, int _d, float _fx, float _fy, float _fz)
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing dir, float hitX, float hitY, float hitZ)
 	{
 		return false;
 	}

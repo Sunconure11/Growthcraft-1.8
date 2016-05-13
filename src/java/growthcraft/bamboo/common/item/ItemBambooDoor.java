@@ -9,6 +9,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class ItemBambooDoor extends GrcItemBase
@@ -21,42 +23,7 @@ public class ItemBambooDoor extends GrcItemBase
 		setCreativeTab(GrowthCraftBamboo.creativeTab);
 	}
 
-	/************
-	 * MAIN
-	 ************/
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10)
-	{
-		if (side != 1)
-		{
-			return false;
-		}
-		else
-		{
-			++y;
-			final Block block = GrowthCraftBamboo.blocks.bambooDoor.getBlock();
-
-			if (player.canPlayerEdit(x, y, z, side, stack) && player.canPlayerEdit(x, y + 1, z, side, stack))
-			{
-				if (!block.canPlaceBlockAt(world, x, y, z))
-				{
-					return false;
-				}
-				else
-				{
-					final int i1 = MathHelper.floor_double((double)((player.rotationYaw + 180.0F) * 4.0F / 360.0F) - 0.5D) & 3;
-					placeDoorBlock(world, x, y, z, i1, block);
-					--stack.stackSize;
-					return true;
-				}
-			}
-			else
-			{
-				return false;
-			}
-		}
-	}
-
-	public static void placeDoorBlock(World world, int i, int j, int k, int side, Block block)
+	private static void placeDoorBlock(World world, int i, int j, int k, int side, Block block)
 	{
 		byte b0 = 0;
 		byte b1 = 0;
@@ -100,5 +67,38 @@ public class ItemBambooDoor extends GrcItemBase
 		world.setBlock(i, j + 1, k, block, 8 | (flag2 ? 1 : 0), 2);
 		world.notifyBlocksOfNeighborChange(i, j, k, block);
 		world.notifyBlocksOfNeighborChange(i, j + 1, k, block);
+	}
+
+	@Override
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing dir, float hitX, float hitY, float hitZ)
+	{
+		if (side != 1)
+		{
+			return false;
+		}
+		else
+		{
+			++y;
+			final Block block = GrowthCraftBamboo.blocks.bambooDoor.getBlock();
+
+			if (player.canPlayerEdit(pos, side, stack) && player.canPlayerEdit(pos.up(), side, stack))
+			{
+				if (!block.canPlaceBlockAt(world, pos))
+				{
+					return false;
+				}
+				else
+				{
+					final int i1 = MathHelper.floor_double((double)((player.rotationYaw + 180.0F) * 4.0F / 360.0F) - 0.5D) & 3;
+					placeDoorBlock(world, pos, i1, block);
+					--stack.stackSize;
+					return true;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
 	}
 }

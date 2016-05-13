@@ -26,6 +26,7 @@ package growthcraft.rice.util;
 import growthcraft.rice.GrowthCraftRice;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.IBlockAccess;
 
 public class RiceBlockCheck
@@ -38,40 +39,40 @@ public class RiceBlockCheck
 	 * @param block - the block to check
 	 * @return true if the block is a Paddy, false otherwise
 	 */
-	public static boolean isPaddy(Block block)
+	public static boolean isPaddy(IBlockState state)
 	{
-		return GrowthCraftRice.paddyField.equals(block);
+		if (state != null)
+		{
+			return GrowthCraftRice.paddyField.equals(state.getBlock());
+		}
+		return false;
 	}
 
 	/**
 	 * Determines if the block at the location is a paddy
 	 *
 	 * @param world - world to check the block
-	 * @param x - x coord
-	 * @param y - y coord
-	 * @param z - z coord
+	 * @param pos - block position
 	 * @return true, the block is a paddy, false otherwise
 	 */
-	public static boolean isPaddy(IBlockAccess world, int x, int y, int z)
+	public static boolean isPaddy(IBlockAccess world, BlockPos pos)
 	{
-		final Block block = world.getBlock(x, y, z);
-		return isPaddy(block);
+		final IBlockState state = world.getBlockState(pos);
+		return isPaddy(state);
 	}
 
 	/**
 	 * Determines if the block at the location is a paddy (with water)
 	 *
 	 * @param world - world to check the block
-	 * @param x - x coord
-	 * @param y - y coord
-	 * @param z - z coord
+	 * @param pos - block position
 	 * @param amount - metadata, how much water should be present
 	 * @return true, the block is a paddy, false otherwise
 	 */
-	public static boolean isPaddyWithWater(IBlockAccess world, int x, int y, int z, int amount)
+	public static boolean isPaddyWithWater(IBlockAccess world, BlockPos pos, int amount)
 	{
-		final Block block = world.getBlock(x, y, z);
-		if (isPaddy(block))
+		final IBlockState state = world.getBlockState(pos);
+		if (isPaddy(state))
 		{
 			final int meta = world.getBlockMetadata(x, y, z);
 			return meta >= amount;

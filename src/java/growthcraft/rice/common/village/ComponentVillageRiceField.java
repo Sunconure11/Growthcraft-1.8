@@ -105,7 +105,7 @@ public class ComponentVillageRiceField extends StructureVillagePieces.Village im
 
 	public void placeBlockAtCurrentPositionPub(World world, Block block, int meta, int x, int y, int z, StructureBoundingBox box)
 	{
-		placeBlockAtCurrentPosition(world, block, meta, x, y, z, box);
+		setBlockState(world, block, meta, x, y, z, box);
 	}
 
 	public boolean addComponentParts(World world, Random random, StructureBoundingBox box)
@@ -147,7 +147,7 @@ public class ComponentVillageRiceField extends StructureVillagePieces.Village im
 			for (int col = 0; col < 11; ++col)
 			{
 				this.clearCurrentPositionBlocksUpwards(world, col, 4, row, box);
-				this.func_151554_b(world, Blocks.dirt, 0, col, -1, row, box);
+				this.replaceAirAndLiquidDownwards(world, Blocks.dirt, 0, col, -1, row, box);
 			}
 		}
 

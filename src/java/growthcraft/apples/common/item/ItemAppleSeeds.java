@@ -4,17 +4,19 @@ import growthcraft.apples.GrowthCraftApples;
 import growthcraft.core.common.item.GrcItemBase;
 import growthcraft.core.GrowthCraftCore;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemAppleSeeds extends GrcItemBase implements IPlantable
 {
@@ -24,18 +26,15 @@ public class ItemAppleSeeds extends GrcItemBase implements IPlantable
 	{
 		super();
 		this.cropBlock = GrowthCraftApples.appleSapling.getBlock();
-		this.setUnlocalizedName("grc.appleSeeds");
-		this.setCreativeTab(GrowthCraftCore.creativeTab);
+		setUnlocalizedName("grc.appleSeeds");
+		setCreativeTab(GrowthCraftCore.creativeTab);
 	}
 
-	/************
-	 * MAIN
-	 ************/
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int dir, float par8, float par9, float par10)
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing dir, float hitX, float hitY, float hitZ)
 	{
-		final Block block = world.getBlock(x, y, z);
-		if (block == Blocks.snow_layer && (world.getBlockMetadata(x, y, z) & 7) < 1)
+		final Block block = world.getBlock(pos);
+		if (block == Blocks.snow_layer && (world.getBlockMetadata(pos) & 7) < 1)
 		{
 			dir = 1;
 		}
@@ -73,7 +72,7 @@ public class ItemAppleSeeds extends GrcItemBase implements IPlantable
 		}
 
 
-		if (!player.canPlayerEdit(x, y, z, dir, stack))
+		if (!player.canPlayerEdit(pos, dir, stack))
 		{
 			return false;
 		}
@@ -83,16 +82,16 @@ public class ItemAppleSeeds extends GrcItemBase implements IPlantable
 		}
 		else
 		{
-			if (world.canPlaceEntityOnSide(cropBlock, x, y, z, false, dir, (Entity)null, stack))
+			if (world.canPlaceEntityOnSide(cropBlock, pos, false, dir, (Entity)null, stack))
 			{
-				final int meta = cropBlock.onBlockPlaced(world, x, y, z, dir, par8, par9, par10, 0);
+				final int meta = cropBlock.onBlockPlaced(world, pos, dir, par8, par9, par10, 0);
 
-				if (world.setBlock(x, y, z, cropBlock, meta, 3))
+				if (world.setBlock(pos, cropBlock, meta, 3))
 				{
-					if (world.getBlock(x, y, z) == cropBlock)
+					if (world.getBlock(pos) == cropBlock)
 					{
-						cropBlock.onBlockPlacedBy(world, x, y, z, player, stack);
-						cropBlock.onPostBlockPlaced(world, x, y, z, meta);
+						cropBlock.onBlockPlacedBy(world, pos, player, stack);
+						cropBlock.onPostBlockPlaced(world, pos, meta);
 					}
 
 					world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), cropBlock.stepSound.func_150496_b(), (cropBlock.stepSound.getVolume() + 1.0F) / 2.0F, cropBlock.stepSound.getPitch() * 0.8F);
@@ -105,20 +104,14 @@ public class ItemAppleSeeds extends GrcItemBase implements IPlantable
 	}
 
 	@Override
-	public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z)
+	public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos)
 	{
 		return EnumPlantType.Plains;
 	}
 
 	@Override
-	public Block getPlant(IBlockAccess world, int x, int y, int z)
+	public IBlockState getPlant(IBlockAccess world, BlockPos pos)
 	{
-		return cropBlock;
-	}
-
-	@Override
-	public int getPlantMetadata(IBlockAccess world, int x, int y, int z)
-	{
-		return 0;
+		return cropBlock.getDefaultState();
 	}
 }

@@ -10,6 +10,7 @@ import growthcraft.core.integration.minecraft.EnumMinecraftWoodType;
 import growthcraft.core.util.ItemUtils;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -93,10 +94,10 @@ public class BlockBeeBox extends GrcBlockContainer
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, Random rand)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
-		super.updateTick(world, x, y, z, rand);
-		final TileEntityBeeBox te = getTileEntity(world, x, y, z);
+		super.updateTick(world, pos, rand);
+		final TileEntityBeeBox te = getTileEntity(world, pos);
 		if (te != null) te.updateBlockTick();
 	}
 
@@ -106,7 +107,7 @@ public class BlockBeeBox extends GrcBlockContainer
 	{
 		if (random.nextInt(24) == 0)
 		{
-			final TileEntityBeeBox te = (TileEntityBeeBox)world.getTileEntity(x, y, z);
+			final TileEntityBeeBox te = (TileEntityBeeBox)world.getTileEntity(pos);
 			if (te != null)
 			{
 				if (te.hasBees())
@@ -124,17 +125,17 @@ public class BlockBeeBox extends GrcBlockContainer
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float par7, float par8, float par9)
 	{
-		if (super.onBlockActivated(world, x, y, z, player, meta, par7, par8, par9)) return true;
+		if (super.onBlockActivated(world, pos, player, meta, par7, par8, par9)) return true;
 		if (world.isRemote)
 		{
 			return true;
 		}
 		else
 		{
-			final TileEntityBeeBox te = (TileEntityBeeBox)world.getTileEntity(x, y, z);
+			final TileEntityBeeBox te = (TileEntityBeeBox)world.getTileEntity(pos);
 			if (te != null)
 			{
-				player.openGui(GrowthCraftBees.instance, 0, world, x, y, z);
+				player.openGui(GrowthCraftBees.instance, 0, world, pos);
 				return true;
 			}
 			return false;
@@ -144,7 +145,7 @@ public class BlockBeeBox extends GrcBlockContainer
 	@Override
 	public void breakBlock(World world, BlockPos pos, Block par5, int par6)
 	{
-		final TileEntityBeeBox te = (TileEntityBeeBox)world.getTileEntity(x, y, z);
+		final TileEntityBeeBox te = (TileEntityBeeBox)world.getTileEntity(pos);
 
 		if (te != null)
 		{
@@ -152,13 +153,13 @@ public class BlockBeeBox extends GrcBlockContainer
 			{
 				final ItemStack stack = te.getStackInSlot(index);
 
-				ItemUtils.spawnItemStack(world, x, y, z, stack, world.rand);
+				ItemUtils.spawnItemStack(world, pos, stack, world.rand);
 			}
 
-			world.func_147453_f(x, y, z, par5);
+			world.func_147453_f(pos, par5);
 		}
 
-		super.breakBlock(world, x, y, z, par5, par6);
+		super.breakBlock(world, pos, par5, par6);
 	}
 
 	/************
@@ -180,7 +181,7 @@ public class BlockBeeBox extends GrcBlockContainer
 	}
 
 	@Override
-	public Item getItemDropped(int par1, Random random, int par3)
+	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{
 		return GrowthCraftBees.beeBox.getItem();
 	}
@@ -193,12 +194,6 @@ public class BlockBeeBox extends GrcBlockContainer
 
 	@Override
 	public boolean isOpaqueCube()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
 	{
 		return false;
 	}
@@ -226,21 +221,21 @@ public class BlockBeeBox extends GrcBlockContainer
 		final float f = 0.0625F;
 		// LEGS
 		setBlockBounds(3*f, 0.0F, 3*f, 5*f, 3*f, 5*f);
-		super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, axis, list, entity);
 		setBlockBounds(11*f, 0.0F, 3*f, 13*f, 3*f, 5*f);
-		super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, axis, list, entity);
 		setBlockBounds(3*f, 0.0F, 11*f, 5*f, 3*f, 13*f);
-		super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, axis, list, entity);
 		setBlockBounds(11*f, 0.0F, 11*f, 13*f, 3*f, 13*f);
-		super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, axis, list, entity);
 		// BODY
 		setBlockBounds(1*f, 3*f, 1*f, 15*f, 10*f, 15*f);
-		super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, axis, list, entity);
 		// ROOF
 		setBlockBounds(0.0F, 10*f, 0.0F, 1.0F, 13*f, 1.0F);
-		super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, axis, list, entity);
 		setBlockBounds(2*f, 13*f, 2*f, 14*f, 1.0F, 14*f);
-		super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, axis, list, entity);
 		setBlockBoundsForItemRender();
 	}
 
@@ -256,7 +251,7 @@ public class BlockBeeBox extends GrcBlockContainer
 	@Override
 	public int getComparatorInputOverride(World world, BlockPos pos, int par5)
 	{
-		final TileEntityBeeBox te = (TileEntityBeeBox)world.getTileEntity(x, y, z);
+		final TileEntityBeeBox te = (TileEntityBeeBox)world.getTileEntity(pos);
 		return te.countHoney() * 15 / 27;
 	}
 }

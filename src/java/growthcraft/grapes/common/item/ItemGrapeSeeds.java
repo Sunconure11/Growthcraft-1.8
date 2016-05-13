@@ -8,6 +8,7 @@ import growthcraft.grapes.GrowthCraftGrapes;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -26,11 +27,8 @@ public class ItemGrapeSeeds extends GrcItemBase implements IPlantable
 		this.setCreativeTab(GrowthCraftGrapes.creativeTab);
 	}
 
-	/************
-	 * MAIN
-	 ************/
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int dir, float par8, float par9, float par10)
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing dir, float hitX, float hitY, float hitZ)
 	{
 		if (dir != 1)
 		{
@@ -56,31 +54,15 @@ public class ItemGrapeSeeds extends GrcItemBase implements IPlantable
 		}
 	}
 
-	/************
-	 * TEXTURES
-	 ************/
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg)
-	{
-		this.itemIcon = reg.registerIcon("grcgrapes:grape_seeds");
-	}
-
-	@Override
-	public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z)
+	public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos)
 	{
 		return EnumPlantType.Crop;
 	}
 
 	@Override
-	public Block getPlant(IBlockAccess world, int x, int y, int z)
+	public IBlockState getPlant(IBlockAccess world, BlockPos pos)
 	{
-		return GrowthCraftGrapes.blocks.grapeVine0.getBlock();
-	}
-
-	@Override
-	public int getPlantMetadata(IBlockAccess world, int x, int y, int z)
-	{
-		return 0;
+		return GrowthCraftGrapes.blocks.grapeVine0.getBlock().getDefaultState();
 	}
 }

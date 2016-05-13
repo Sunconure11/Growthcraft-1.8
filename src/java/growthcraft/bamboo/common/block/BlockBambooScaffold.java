@@ -3,7 +3,9 @@ package growthcraft.bamboo.common.block;
 import java.util.Random;
 
 import growthcraft.bamboo.GrowthCraftBamboo;
+import growthcraft.core.common.block.GrcBlockBase;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -19,7 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockBambooScaffold extends Block
+public class BlockBambooScaffold extends GrcBlockBase
 {
 	public BlockBambooScaffold()
 	{
@@ -32,9 +34,10 @@ public class BlockBambooScaffold extends Block
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, Random random)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
-		onNeighborBlockChange(world, pos, null);
+		super.updateTick(world, pos, state, random);
+		onNeighborBlockChange(world, pos, state, null);
 	}
 
 	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float float7, float float8, float float9)
@@ -148,12 +151,6 @@ public class BlockBambooScaffold extends Block
 	public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side)
 	{
 		return EnumFacing.UP == side;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
-	{
-		return false;
 	}
 
 	@Override

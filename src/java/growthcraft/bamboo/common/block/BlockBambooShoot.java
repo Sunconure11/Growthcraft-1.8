@@ -11,6 +11,7 @@ import growthcraft.api.core.util.RenderType;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
@@ -43,7 +44,7 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 		setCreativeTab(null);
 	}
 
-	public float getGrowthProgress(IBlockAccess world, int x, int y, int z, int meta)
+	public float getGrowthProgress(IBlockAccess world, BlockPos pos, int meta)
 	{
 		return (float)(meta / 1.0);
 	}
@@ -52,15 +53,15 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 	 * TICK
 	 ************/
 	@Override
-	public void updateTick(World world, int x, int y, int z, Random rand)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
 		if (!world.isRemote)
 		{
-			super.updateTick(world, x, y, z, rand);
+			super.updateTick(world, pos, rand);
 
-			if (world.getBlockLightValue(x, y + 1, z) >= 9 && rand.nextInt(this.growth) == 0)
+			if (world.getBlockLightValue(pos.up()) >= 9 && rand.nextInt(this.growth) == 0)
 			{
-				this.markOrGrowMarked(world, x, y, z, rand);
+				markOrGrowMarked(world, pos, rand);
 			}
 		}
 	}
@@ -69,18 +70,18 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 	 * EVENTS
 	 ************/
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block par5)
+	public void onNeighborBlockChange(World world, BlockPos pos, Block par5)
 	{
-		super.onNeighborBlockChange(world, x, y, z, par5);
-		checkShootChange(world, x, y, z);
+		super.onNeighborBlockChange(world, pos, par5);
+		checkShootChange(world, pos);
 	}
 
-	protected final void checkShootChange(World world, int x, int y, int z)
+	protected final void checkShootChange(World world, BlockPos pos)
 	{
-		if (!canBlockStay(world, x, y, z))
+		if (!canBlockStay(world, pos))
 		{
-			dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-			world.setBlockToAir(x, y, z);
+			dropBlockAsItem(world, pos, world.getBlockMetadata(pos), 0);
+			world.setBlockToAir(pos);
 		}
 	}
 
@@ -89,15 +90,15 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 	 ************/
 
 	@Override
-	public boolean canPlaceBlockAt(World world, int x, int y, int z)
+	public boolean canPlaceBlockAt(World world, BlockPos pos)
 	{
-		return super.canPlaceBlockAt(world, x, y, z) && canBlockStay(world, x, y, z);
+		return super.canPlaceBlockAt(world, pos) && canBlockStay(world, pos);
 	}
 
 	@Override
-	public boolean canBlockStay(World world, int x, int y, int z)
+	public boolean canBlockStay(World world, BlockPos pos)
 	{
-		return (world.getFullBlockLightValue(x, y, z) >= 8 || world.canBlockSeeTheSky(x, y, z)) &&
+		return (world.getFullBlockLightValue(pos) >= 8 || world.canBlockSeeTheSky(pos)) &&
 			BlockCheck.canSustainPlant(world, x, y - 1, z, EnumFacing.UP, this);
 	}
 
@@ -106,80 +107,74 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 	 ************/
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item getItem(World world, int x, int y, int z)
+	public Item getItem(World world, BlockPos pos)
 	{
 		return GrowthCraftBamboo.items.bambooShootFood.getItem();
 	}
 
-	public void growBamboo(World world, int x, int y, int z, Random rand)
+	public void growBamboo(World world, BlockPos pos, Random rand)
 	{
-		if (!TerrainGen.saplingGrowTree(world, rand, x, y, z)) return;
+		if (!TerrainGen.saplingGrowTree(world, rand, pos)) return;
 
-		final int meta = world.getBlockMetadata(x, y, z) & 3;
+		final int meta = world.getBlockMetadata(pos) & 3;
 		final WorldGenerator generator = new WorldGenBamboo(true);
 
-		world.setBlock(x, y, z, Blocks.air, 0, BlockFlags.ALL);
+		world.setBlock(pos, Blocks.air, 0, BlockFlags.ALL);
 
-		if (!generator.generate(world, rand, x, y, z))
+		if (!generator.generate(world, rand, pos))
 		{
-			world.setBlock(x, y, z, this, meta, BlockFlags.ALL);
+			world.setBlock(pos, this, meta, BlockFlags.ALL);
 		}
 	}
 
-	public void markOrGrowMarked(World world, int x, int y, int z, Random random)
+	public void markOrGrowMarked(World world, BlockPos pos, Random random)
 	{
-		final int meta = world.getBlockMetadata(x, y, z);
+		final int meta = world.getBlockMetadata(pos);
 
 		if ((meta & 8) == 0)
 		{
-			world.setBlockMetadataWithNotify(x, y, z, meta | 8, BlockFlags.SUPRESS_RENDER);
+			world.setBlockMetadataWithNotify(pos, meta | 8, BlockFlags.SUPRESS_RENDER);
 		}
 		else
 		{
-			this.growBamboo(world, x, y, z, random);
+			this.growBamboo(world, pos, random);
 		}
 	}
 
 	/* Both side */
 	@Override
-	public boolean func_149851_a(World world, int x, int y, int z, boolean isClient)
+	public boolean canGrow(World world, BlockPos pos, boolean isClient)
 	{
 		return true;
 	}
 
 	/* SideOnly(Side.SERVER) Can this apply bonemeal effect? */
 	@Override
-	public boolean func_149852_a(World world, Random random, int x, int y, int z)
+	public boolean canUseBonemeal(World world, Random random, BlockPos pos)
 	{
 		return true;
 	}
 
 	/* Apply bonemeal effect */
 	@Override
-	public void func_149853_b(World world, Random random, int x, int y, int z)
+	public void grow(World world, Random random, BlockPos pos)
 	{
 		if (random.nextFloat() < 0.45D)
 		{
-			markOrGrowMarked(world, x, y, z, random);
+			markOrGrowMarked(world, pos, random);
 		}
 	}
 
 	@Override
-	public boolean canSilkHarvest(World world, EntityPlayer player, int x, int y, int z, int metadata)
+	public boolean canSilkHarvest(World world, EntityPlayer player, BlockPos pos, int metadata)
 	{
 		return false;
 	}
 
 	@Override
-	public Item getItemDropped(int meta, Random par2Random, int par3)
+	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{
 		return GrowthCraftBamboo.items.bambooShootFood.getItem();
-	}
-
-	@Override
-	public int getRenderType()
-	{
-		return RenderType.BUSH;
 	}
 
 	@Override
@@ -189,13 +184,7 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 	}
 
 	@Override
-	public boolean renderAsNormalBlock()
-	{
-		return false;
-	}
-
-	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, BlockPos pos)
 	{
 		return null;
 	}

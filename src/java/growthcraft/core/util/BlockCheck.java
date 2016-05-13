@@ -30,10 +30,12 @@ import growthcraft.core.GrowthCraftCore;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.world.World;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.IPlantable;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
 
 public class BlockCheck
 {
@@ -159,9 +161,13 @@ public class BlockCheck
 	 * @param block - the block to check
 	 * @return true if the block is a Rope, false otherwise
 	 */
-	public static boolean isRope(Block block)
+	public static boolean isRope(IBlockState state)
 	{
-		return GrowthCraftCore.blocks.ropeBlock.equals(block);
+		if (state != null)
+		{
+			return GrowthCraftCore.blocks.ropeBlock.equals(state.getBlock());
+		}
+		return false;
 	}
 
 	/**
@@ -173,14 +179,14 @@ public class BlockCheck
 	 * @param z  - z coord
 	 * @return true if the block is a Rope, false otherwise
 	 */
-	public static boolean isRope(IBlockAccess world, int x, int y, int z)
+	public static boolean isRope(IBlockAccess world, BlockPos pos)
 	{
-		final Block block = world.getBlock(x, y, z);
+		final IBlockState state = world.getBlockState(pos);
 		// TODO: IBlockRope is used for any block which can grow on Ropes,
 		// as well as Ropes themselves, we need someway to seperate them,
-		// either, IBlockRope.isRope(world, x, y, z) OR an additional interface
+		// either, IBlockRope.isRope(world, pos) OR an additional interface
 		// IBlockRopeCrop, IRope
-		return isRope(block);
+		return isRope(state);
 	}
 
 	/**
@@ -196,9 +202,9 @@ public class BlockCheck
 	 * @param plant  - the plant in question
 	 * @return true if the block can be planted, false otherwise
 	 */
-	public static boolean canSustainPlantOn(IBlockAccess world, int x, int y, int z, EnumFacing dir, IPlantable plant, Block soil)
+	public static boolean canSustainPlantOn(IBlockAccess world, BlockPos pos, EnumFacing dir, IPlantable plant, IBlockState soil)
 	{
-		return soil != null && soil.canSustainPlant(world, x, y, z, dir, plant);
+		return soil != null && soil.getBlock().canSustainPlant(world, pos, dir, plant);
 	}
 
 	/**
@@ -213,10 +219,9 @@ public class BlockCheck
 	 * @param plant  - the plant in question
 	 * @return true if the block can be planted, false otherwise
 	 */
-	public static boolean canSustainPlant(IBlockAccess world, int x, int y, int z, EnumFacing dir, IPlantable plant)
+	public static boolean canSustainPlant(IBlockAccess world, BlockPos pos, EnumFacing dir, IPlantable plant)
 	{
-		final Block soil = world.getBlock(x, y, z);
-		return canSustainPlantOn(world, x, y, z, dir, plant, soil);
+		return canSustainPlantOn(world, pos, dir, plant, world.getBlockState(pos));
 	}
 
 	/**
@@ -230,10 +235,9 @@ public class BlockCheck
 	 * @param plant  - the plant in question
 	 * @return block if it can be planted upon, else null
 	 */
-	public static Block getFarmableBlock(IBlockAccess world, int x, int y, int z, EnumFacing dir, IPlantable plant)
+	public static Block getFarmableBlock(IBlockAccess world, BlockPos pos, EnumFacing dir, IPlantable plant)
 	{
-		final Block soil = world.getBlock(x, y, z);
-		if (canSustainPlantOn(world, x, y, z, dir, plant, soil))
+		if (canSustainPlantOn(world, pos, dir, plant, world.getBlockState(pos)))
 			return soil;
 		return null;
 	}
@@ -247,13 +251,13 @@ public class BlockCheck
 	 * @param z  - z coord
 	 * @param dir  - direction the block will be placed against
 	 */
-	public static boolean isBlockPlacableOnSide(World world, int x, int y, int z, EnumFacing dir)
+	public static boolean isBlockPlacableOnSide(World world, BlockPos pos, EnumFacing dir)
 	{
-		if (world.isAirBlock(x, y, z)) return false;
-		final Block b = world.getBlock(x, y, z);
-		if (b != null)
+		if (world.isAirBlock(pos)) return false;
+		final IBlockState state = world.getBlock(pos);
+		if (state != null)
 		{
-			return b.isBlockSolid(world, x, y, z, dir.ordinal());
+			return state.getBlock().isBlockSolid(world, pos, dir);
 		}
 		return false;
 	}

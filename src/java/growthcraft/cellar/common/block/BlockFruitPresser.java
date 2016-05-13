@@ -11,6 +11,7 @@ import growthcraft.api.core.util.BlockFlags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -204,7 +205,7 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 	 * DROPS
 	 ************/
 	@Override
-	public Item getItemDropped(int par1, Random random, int par3)
+	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{
 		return null;
 	}
@@ -217,12 +218,6 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 
 	@Override
 	public boolean isOpaqueCube()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
 	{
 		return false;
 	}

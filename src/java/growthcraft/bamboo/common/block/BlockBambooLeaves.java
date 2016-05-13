@@ -7,6 +7,7 @@ import growthcraft.api.core.util.BlockFlags;
 import growthcraft.bamboo.GrowthCraftBamboo;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -41,11 +42,8 @@ public class BlockBambooLeaves extends BlockLeavesBase implements IShearable
 		world.setBlockToAir(pos);
 	}
 
-	/************
-	 * TICK
-	 ************/
 	@Override
-	public void updateTick(World world, BlockPos pos, Random rand)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
 		if (!world.isRemote)
 		{
@@ -225,7 +223,7 @@ public class BlockBambooLeaves extends BlockLeavesBase implements IShearable
 	 * DROPS
 	 ************/
 	@Override
-	public Item getItemDropped(int par1, Random par2Random, int par3)
+	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{
 		return null;
 	}

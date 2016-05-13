@@ -88,7 +88,7 @@ public class BlockPaddy extends BlockPaddyBase
 	 * DROPS
 	 ************/
 	@Override
-	public Item getItemDropped(int meta, Random random, int par3)
+	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{
 		return Item.getItemFromBlock(Blocks.dirt);
 	}

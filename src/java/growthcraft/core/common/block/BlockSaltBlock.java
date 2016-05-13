@@ -44,7 +44,7 @@ public class BlockSaltBlock extends GrcBlockBase
 	}
 
 	@Override
-	public Item getItemDropped(int meta, Random rand, int fortune)
+	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{
 		return GrowthCraftCore.items.salt.getItem();
 	}

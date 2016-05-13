@@ -89,7 +89,7 @@ public class ComponentVillageAppleFarm extends StructureVillagePieces.Village im
 
 	public void placeBlockAtCurrentPositionPub(World world, Block block, int meta, int x, int y, int z, StructureBoundingBox box)
 	{
-		placeBlockAtCurrentPosition(world, block, meta, x, y, z, box);
+		setBlockState(world, block, meta, x, y, z, box);
 	}
 
 	protected void placeWorldGenAt(World world, Random random, int tx, int ty, int tz, StructureBoundingBox bb, WorldGenerator generator)
@@ -146,7 +146,7 @@ public class ComponentVillageAppleFarm extends StructureVillagePieces.Village im
 			for (int col = 0; col < 11; ++col)
 			{
 				clearCurrentPositionBlocksUpwards(world, col, 7, row, box);
-				func_151554_b(world, Blocks.dirt, 0, col, -1, row, box);
+				replaceAirAndLiquidDownwards(world, Blocks.dirt, 0, col, -1, row, box);
 			}
 		}
 		return true;

@@ -23,7 +23,7 @@ public class ItemRope extends GrcItemBase
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int dir, float par8, float par9, float par10)
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing dir, float hitX, float hitY, float hitZ)
 	{
 		final Block block = world.getBlock(x, y, z);
 		final int blockMeta = world.getBlockMetadata(x, y, z);

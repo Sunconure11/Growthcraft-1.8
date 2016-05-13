@@ -91,7 +91,7 @@ public class BlockFenceRope extends GrcBlockBase implements IBlockRope
 	}
 
 	@Override
-	public Item getItemDropped(int meta, Random random, int par3)
+	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{
 		return null;
 	}
@@ -205,12 +205,6 @@ public class BlockFenceRope extends GrcBlockBase implements IBlockRope
 		}
 
 		this.setBlockBoundsBasedOnState(world, x, y, z);
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
-	{
-		return false;
 	}
 
 	@Override

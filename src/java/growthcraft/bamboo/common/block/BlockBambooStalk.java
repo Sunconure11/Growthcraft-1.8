@@ -5,9 +5,11 @@ import java.util.Random;
 
 import growthcraft.bamboo.client.renderer.RenderBamboo;
 import growthcraft.bamboo.GrowthCraftBamboo;
+import growthcraft.core.common.block.GrcBlockBase;
 import growthcraft.core.util.BlockCheck;
 import growthcraft.core.util.RenderUtils;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -24,7 +26,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 
-public class BlockBambooStalk extends Block
+public class BlockBambooStalk extends GrcBlockBase
 {
 	private final int growth = GrowthCraftBamboo.getConfig().bambooStalkGrowthRate;
 
@@ -39,7 +41,7 @@ public class BlockBambooStalk extends Block
 	}
 
 	@Override
-	public boolean canPlaceTorchOnTop(World world, int x, int y, int z)
+	public boolean canPlaceTorchOnTop(World world, BlockPos pos)
 	{
 		return true;
 	}
@@ -54,7 +56,7 @@ public class BlockBambooStalk extends Block
 	}
 
 	@Override
-	public void updateTick(World world, int x, int y, int z, Random rand)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
 		if (world.getBlockMetadata(x, y, z) == 0)
 		{
@@ -122,7 +124,7 @@ public class BlockBambooStalk extends Block
 	 * TRIGGERS
 	 ************/
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block s)
+	public void onNeighborBlockChange(World world, BlockPos pos, Block s)
 	{
 		boolean flag = false;
 
@@ -144,7 +146,7 @@ public class BlockBambooStalk extends Block
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block par5, int par6)
+	public void breakBlock(World world, BlockPos pos, Block par5, int par6)
 	{
 		if (world.getBlockMetadata(x, y, z) == 0)
 		{
@@ -173,60 +175,60 @@ public class BlockBambooStalk extends Block
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item getItem(World world, int x, int y, int z)
+	public Item getItem(World world, BlockPos pos)
 	{
 		return GrowthCraftBamboo.items.bamboo.getItem();
 	}
 
 	@Override
-	public boolean canSustainLeaves(IBlockAccess world, int x, int y, int z)
+	public boolean canSustainLeaves(IBlockAccess world, BlockPos pos)
 	{
 		return world.getBlockMetadata(x, y, z) == 0 ? true : false;
 	}
 
 	@Override
-	public boolean isWood(IBlockAccess world, int x, int y, int z)
+	public boolean isWood(IBlockAccess world, BlockPos pos)
 	{
 		return true;
 	}
 
 	@Override
-	public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z)
+	public boolean canBeReplacedByLeaves(IBlockAccess world, BlockPos pos)
 	{
 		return false;
 	}
 
-	public boolean isBambooOnGround(World world, int x, int y, int z)
+	public boolean isBambooOnGround(World world, BlockPos pos)
 	{
 		if (!BlockCheck.canSustainPlant(world, x, y - 1, z, EnumFacing.UP, GrowthCraftBamboo.blocks.bambooShoot.getBlock())) return false;
 		return this == world.getBlock(x, y, z);
 	}
 
 	@Override
-	public boolean canSilkHarvest(World world, EntityPlayer player, int x, int y, int z, int metadata)
+	public boolean canSilkHarvest(World world, EntityPlayer player, BlockPos pos, int metadata)
 	{
 		return false;
 	}
 
-	private boolean canFence(IBlockAccess world, int x, int y, int z)
+	private boolean canFence(IBlockAccess world, BlockPos pos)
 	{
 		return world.getBlock(x, y, z) == GrowthCraftBamboo.blocks.bambooFence.getBlock() ||
 			world.getBlock(x, y, z) == Blocks.fence_gate ||
 			world.getBlock(x, y, z) == GrowthCraftBamboo.blocks.bambooFenceGate.getBlock();
 	}
 
-	private boolean canWall(IBlockAccess world, int x, int y, int z)
+	private boolean canWall(IBlockAccess world, BlockPos pos)
 	{
 		return world.getBlock(x, y, z) == GrowthCraftBamboo.blocks.bambooWall.getBlock();
 	}
 
-	private boolean canDoor(IBlockAccess world, int x, int y, int z)
+	private boolean canDoor(IBlockAccess world, BlockPos pos)
 	{
 		return world.getBlock(x, y, z) instanceof BlockDoor;
 	}
 
 	@Override
-	public Item getItemDropped(int par1, Random par2Random, int par3)
+	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{
 		return GrowthCraftBamboo.items.bamboo.getItem();
 	}
@@ -244,14 +246,8 @@ public class BlockBambooStalk extends Block
 	}
 
 	@Override
-	public boolean renderAsNormalBlock()
-	{
-		return false;
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int s)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int s)
 	{
 		return true;
 	}
@@ -274,7 +270,7 @@ public class BlockBambooStalk extends Block
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int colorMultiplier(IBlockAccess world, int x, int y, int z)
+	public int colorMultiplier(IBlockAccess world, BlockPos pos)
 	{
 		if (world.getBlockMetadata(x, y, z) == 0)
 		{
@@ -302,7 +298,7 @@ public class BlockBambooStalk extends Block
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z)
+	public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos)
 	{
 		float x1 = 0.25F;
 		float x2 = 0.75F;
@@ -337,7 +333,7 @@ public class BlockBambooStalk extends Block
 
 	@Override
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axis, List list, Entity entity)
+	public void addCollisionBoxesToList(World world, BlockPos pos, AxisAlignedBB axis, List list, Entity entity)
 	{
 		final float x1 = 0.25F;
 		final float x2 = 0.75F;
@@ -406,7 +402,7 @@ public class BlockBambooStalk extends Block
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void renderFence(World world, AxisAlignedBB axis, List list, Entity entity, int x, int y, int z, RenderUtils.Face m)
+	private void renderFence(World world, AxisAlignedBB axis, List list, Entity entity, BlockPos pos, RenderUtils.Face m)
 	{
 		float x1 = x;
 		float x2 = x + 1.0F;
@@ -485,7 +481,7 @@ public class BlockBambooStalk extends Block
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void renderWall(World world, AxisAlignedBB axis, List list, Entity entity, int x, int y, int z, RenderUtils.Face m)
+	private void renderWall(World world, AxisAlignedBB axis, List list, Entity entity, BlockPos pos, RenderUtils.Face m)
 	{
 		float x1 = x;
 		float x2 = x + 1.0F;
@@ -529,7 +525,7 @@ public class BlockBambooStalk extends Block
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void renderDoor(World world, AxisAlignedBB axis, List list, Entity entity, int x, int y, int z, RenderUtils.Face m)
+	private void renderDoor(World world, AxisAlignedBB axis, List list, Entity entity, BlockPos pos, RenderUtils.Face m)
 	{
 		float x1 = x;
 		float x2 = x + 1.0F;

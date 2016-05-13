@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -30,23 +31,23 @@ public abstract class BlockPaddyBase extends GrcBlockBase implements IPaddy
 	}
 
 	@Override
-	public boolean isFilledWithFluid(IBlockAccess world, int x, int y, int z, int meta)
+	public boolean isFilledWithFluid(IBlockAccess world, BlockPos pos, int meta)
 	{
-		return meta >= getMaxPaddyMeta(world, x, y, z);
+		return meta >= getMaxPaddyMeta(world, pos);
 	}
 
-	public void drainPaddy(World world, int x, int y, int z)
+	public void drainPaddy(World world, BlockPos pos)
 	{
-		final int meta = world.getBlockMetadata(x, y, z);
+		final int meta = world.getBlockMetadata(pos);
 		if (meta > 0)
 		{
-			world.setBlockMetadataWithNotify(x, y, z, meta - 1, BlockFlags.UPDATE_AND_SYNC);
+			world.setBlockMetadataWithNotify(pos, meta - 1, BlockFlags.UPDATE_AND_SYNC);
 		}
 	}
 
-	public void fillPaddy(World world, int x, int y, int z)
+	public void fillPaddy(World world, BlockPos pos)
 	{
-		world.setBlockMetadataWithNotify(x, y, z, getMaxPaddyMeta(world, x, y, z), BlockFlags.UPDATE_AND_SYNC);
+		world.setBlockMetadataWithNotify(pos, getMaxPaddyMeta(world, pos), BlockFlags.UPDATE_AND_SYNC);
 	}
 
 	/************
@@ -54,11 +55,11 @@ public abstract class BlockPaddyBase extends GrcBlockBase implements IPaddy
 	 ************/
 
 	@Override
-	public void updateTick(World world, int x, int y, int z, Random random)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
-		if (isBelowFillingFluid(world, x, y, z) && world.canLightningStrikeAt(x, y + 1, z))
+		if (isBelowFillingFluid(world, pos) && world.canLightningStrikeAt(x, y + 1, z))
 		{
-			fillPaddy(world, x, y, z);
+			fillPaddy(world, pos);
 		}
 	}
 
@@ -66,7 +67,7 @@ public abstract class BlockPaddyBase extends GrcBlockBase implements IPaddy
 	 * TRIGGERS
 	 ************/
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int meta, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float par7, float par8, float par9)
 	{
 		if (world.isRemote)
 		{
@@ -117,7 +118,7 @@ public abstract class BlockPaddyBase extends GrcBlockBase implements IPaddy
 	}
 
 	@Override
-	public void onFallenUpon(World world, int x, int y, int z, Entity entity, float par6)
+	public void onFallenUpon(World world, BlockPos pos, Entity entity, float par6)
 	{
 		if (!world.isRemote && world.rand.nextFloat() < par6 - 0.5F)
 		{
@@ -136,12 +137,12 @@ public abstract class BlockPaddyBase extends GrcBlockBase implements IPaddy
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block par5)
+	public void onNeighborBlockChange(World world, BlockPos pos, Block par5)
 	{
-		super.onNeighborBlockChange(world, x, y, z, par5);
-		if (isBelowFillingFluid(world, x, y, z))
+		super.onNeighborBlockChange(world, pos, par5);
+		if (isBelowFillingFluid(world, pos))
 		{
-			fillPaddy(world, x, y, z);
+			fillPaddy(world, pos);
 		}
 	}
 
@@ -152,28 +153,13 @@ public abstract class BlockPaddyBase extends GrcBlockBase implements IPaddy
 	}
 
 	@Override
-	public boolean canSilkHarvest(World world, EntityPlayer player, int x, int y, int z, int metadata)
+	public boolean canSilkHarvest(World world, EntityPlayer player, BlockPos pos, int metadata)
 	{
 		return false;
-	}
-
-	/************
-	 * RENDERS
-	 ************/
-	@Override
-	public int getRenderType()
-	{
-		return RenderPaddy.id;
 	}
 
 	@Override
 	public boolean isOpaqueCube()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
 	{
 		return false;
 	}

@@ -9,15 +9,17 @@ import growthcraft.api.core.util.BlockFlags;
 
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
-import net.minecraft.world.World;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.World;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class BlockAppleSapling extends BlockBush implements IGrowable
 {
-	private final int growth = GrowthCraftApples.getConfig().appleSaplingGrowthRate;
+	private final int growthRate = GrowthCraftApples.getConfig().appleSaplingGrowthRate;
 
 	public BlockAppleSapling()
 	{
@@ -27,28 +29,11 @@ public class BlockAppleSapling extends BlockBush implements IGrowable
 		setBlockName("grc.appleSapling");
 		setTickRandomly(true);
 		setCreativeTab(GrowthCraftCore.creativeTab);
-		setBlockTextureName("grcapples:apple_sapling");
 		final float f = 0.4F;
 		setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f * 2.0F, 0.5F + f);
 	}
 
-	/************
-	 * MAIN
-	 ************/
-	public void updateTick(World world, int x, int y, int z, Random random)
-	{
-		if (!world.isRemote)
-		{
-			super.updateTick(world, x, y, z, random);
-
-			if (world.getBlockLightValue(x, y + 1, z) >= 9 && random.nextInt(this.growth) == 0)
-			{
-				this.markOrGrowMarked(world, x, y, z, random);
-			}
-		}
-	}
-
-	public void markOrGrowMarked(World world, int x, int y, int z, Random random)
+	public void markOrGrowMarked(World world, BlockPos pos, Random random)
 	{
 		final int meta = world.getBlockMetadata(x, y, z);
 
@@ -62,14 +47,28 @@ public class BlockAppleSapling extends BlockBush implements IGrowable
 		}
 	}
 
-	public void growTree(World world, int x, int y, int z, Random random)
+	@Override
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
+	{
+		if (!world.isRemote)
+		{
+			super.updateTick(world, pos, random);
+
+			if (world.getBlockLightValue(pos.up()) >= 9 && random.nextInt(growthRate) == 0)
+			{
+				this.markOrGrowMarked(world, pos, random);
+			}
+		}
+	}
+
+	public void growTree(World world, BlockPos pos, Random random)
 	{
 		if (!TerrainGen.saplingGrowTree(world, random, x, y, z)) return;
 
 		final int meta = world.getBlockMetadata(x, y, z) & 3;
 		final WorldGenerator generator = new WorldGenAppleTree(true);
 
-		world.setBlock(x, y, z, Blocks.air, 0, BlockFlags.ALL);
+		world.setBlockToAir(pos);
 
 		if (!generator.generate(world, random, x, y, z))
 		{
@@ -77,23 +76,20 @@ public class BlockAppleSapling extends BlockBush implements IGrowable
 		}
 	}
 
-	/* Both side */
 	@Override
-	public boolean func_149851_a(World world, int x, int y, int z, boolean isClient)
+	public boolean canGrow(World world, BlockPos pos, boolean isClient)
 	{
 		return (world.getBlockMetadata(x, y, z) & 8) == 0;
 	}
 
-	/* SideOnly(Side.SERVER) Can this apply bonemeal effect? */
 	@Override
-	public boolean func_149852_a(World world, Random random, int x, int y, int z)
+	public boolean canUseBonemeal(World world, Random random, BlockPos pos)
 	{
 		return true;
 	}
 
-	/* Apply bonemeal effect */
 	@Override
-	public void func_149853_b(World world, Random random, int x, int y, int z)
+	public void grow(World world, Random random, BlockPos pos)
 	{
 		if (random.nextFloat() < 0.45D)
 		{

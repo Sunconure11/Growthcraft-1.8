@@ -62,7 +62,7 @@ public class BlockBambooFence extends BlockFence
 		}
 		else
 		{
-			if (block != null && block.getMaterial().isOpaque() && block.renderAsNormalBlock())
+			if (block != null && block.getMaterial().isOpaque())
 			{
 				return block.getMaterial() != Material.gourd;
 			}

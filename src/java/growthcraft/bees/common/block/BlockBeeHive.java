@@ -5,6 +5,7 @@ import java.util.Random;
 
 import growthcraft.api.core.util.BlockFlags;
 import growthcraft.bees.GrowthCraftBees;
+import growthcraft.core.common.block.GrcBlockBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -21,7 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockBeeHive extends Block
+public class BlockBeeHive extends GrcBlockBase
 {
 	public BlockBeeHive()
 	{
@@ -157,7 +158,7 @@ public class BlockBeeHive extends Block
 	 * DROPS
 	 ************/
 	@Override
-	public Item getItemDropped(int par1, Random rand, int par3)
+	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{
 		return GrowthCraftBees.items.bee.getItem();
 	}
@@ -194,12 +195,6 @@ public class BlockBeeHive extends Block
 
 	@Override
 	public boolean isOpaqueCube()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
 	{
 		return false;
 	}

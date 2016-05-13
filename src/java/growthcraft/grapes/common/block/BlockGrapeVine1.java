@@ -4,29 +4,21 @@ import java.util.List;
 
 import growthcraft.core.util.BlockCheck;
 import growthcraft.api.core.util.BlockFlags;
-import growthcraft.grapes.client.renderer.RenderGrapeVine1;
 import growthcraft.grapes.GrowthCraftGrapes;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 
 public class BlockGrapeVine1 extends BlockGrapeVineBase
 {
-	public boolean graphicFlag;
-
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	public BlockGrapeVine1()
 	{
 		super();
@@ -39,9 +31,6 @@ public class BlockGrapeVine1 extends BlockGrapeVineBase
 		setCreativeTab(null);
 	}
 
-	/************
-	 * TICK
-	 ************/
 	@Override
 	protected boolean canUpdateGrowth(World world, int x, int y, int z)
 	{
@@ -80,9 +69,6 @@ public class BlockGrapeVine1 extends BlockGrapeVineBase
 		return super.getGrowthRate(world, x, j, z);
 	}
 
-	/************
-	 * CONDITIONS
-	 ************/
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z)
 	{
@@ -90,9 +76,6 @@ public class BlockGrapeVine1 extends BlockGrapeVineBase
 			this == world.getBlock(x, y - 1, z);
 	}
 
-	/************
-	 * STUFF
-	 ************/
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Item getItem(World world, int x, int y, int z)
@@ -100,46 +83,6 @@ public class BlockGrapeVine1 extends BlockGrapeVineBase
 		return GrowthCraftGrapes.items.grapeSeeds.getItem();
 	}
 
-	/************
-	 * TEXTURES
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		this.icons = new IIcon[3];
-
-		icons[0] = reg.registerIcon("grcgrapes:trunk");
-		icons[1] = reg.registerIcon("grcgrapes:leaves");
-		icons[2] = reg.registerIcon("grcgrapes:leaves_opaque");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		return icons[0];
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getLeafTexture()
-	{
-		graphicFlag = Blocks.leaves.isOpaqueCube();
-		return !this.graphicFlag ? icons[1] : icons[2];
-	}
-
-	/************
-	 * RENDER
-	 ************/
-	@Override
-	public int getRenderType()
-	{
-		return RenderGrapeVine1.id;
-	}
-
-	/************
-	 * BOXES
-	 ************/
 	@Override
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)

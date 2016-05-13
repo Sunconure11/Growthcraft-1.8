@@ -3,6 +3,7 @@ package growthcraft.bamboo.common.block;
 import java.util.List;
 
 import growthcraft.bamboo.GrowthCraftBamboo;
+import growthcraft.core.common.block.GrcBlockBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
@@ -18,7 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockBambooWall extends Block
+public class BlockBambooWall extends GrcBlockBase
 {
 	public BlockBambooWall()
 	{
@@ -50,20 +51,13 @@ public class BlockBambooWall extends Block
 			GrowthCraftBamboo.blocks.bambooStalk.getBlock() == block ||
 			Blocks.glass_pane == block ||
 			block instanceof BlockFenceGate ||
-			block instanceof BlockFence ||
-			block.renderAsNormalBlock()) return true;
+			block instanceof BlockFence) return true;
 
 		return false;
 	}
 
 	@Override
 	public boolean isOpaqueCube()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
 	{
 		return false;
 	}

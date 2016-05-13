@@ -81,11 +81,8 @@ public class BlockRope extends GrcBlockBase implements IBlockRope
 		return world.getBlock(x, y, z) instanceof IBlockRope;
 	}
 
-	/************
-	 * DROPS
-	 ************/
 	@Override
-	public Item getItemDropped(int meta, Random random, int par3)
+	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{
 		return GrowthCraftCore.items.rope.getItem();
 	}
@@ -94,12 +91,6 @@ public class BlockRope extends GrcBlockBase implements IBlockRope
 	public int quantityDropped(Random random)
 	{
 		return 1;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
-	{
-		return false;
 	}
 
 	@Override
@@ -115,9 +106,6 @@ public class BlockRope extends GrcBlockBase implements IBlockRope
 		return true;
 	}
 
-	/************
-	 * BOXES
-	 ************/
 	@Override
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity)

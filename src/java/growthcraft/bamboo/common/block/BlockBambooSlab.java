@@ -65,7 +65,7 @@ public class BlockBambooSlab extends BlockSlab
 	 * DROPS
 	 ************/
 	@Override
-	public Item getItemDropped(int par1, Random par2Random, int par3)
+	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{
 		return Item.getItemFromBlock(GrowthCraftBamboo.blocks.bambooSingleSlab.getBlock());
 	}

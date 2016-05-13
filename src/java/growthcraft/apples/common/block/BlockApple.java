@@ -4,10 +4,12 @@ import java.util.Random;
 
 import growthcraft.api.core.util.BlockFlags;
 import growthcraft.apples.GrowthCraftApples;
+import growthcraft.core.common.block.GrcBlockBase;
 import growthcraft.core.common.block.ICropDataProvider;
 import growthcraft.core.integration.AppleCore;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +24,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockApple extends Block implements IGrowable, ICropDataProvider
+public class BlockApple extends GrcBlockBase implements IGrowable, ICropDataProvider
 {
 	public static class AppleStage
 	{
@@ -51,7 +53,7 @@ public class BlockApple extends Block implements IGrowable, ICropDataProvider
 
 	public boolean isMature(IBlockAccess world, BlockPos pos)
 	{
-		final int meta = world.getBlockMetadata(x, y, z);
+		final int meta = world.getBlockMetadata(pos);
 		return meta >= AppleStage.MATURE;
 	}
 
@@ -62,8 +64,8 @@ public class BlockApple extends Block implements IGrowable, ICropDataProvider
 
 	void incrementGrowth(World world, BlockPos pos, int meta)
 	{
-		world.setBlockMetadataWithNotify(x, y, z, meta + 1, BlockFlags.SYNC);
-		AppleCore.announceGrowthTick(this, world, x, y, z, meta);
+		world.setBlockMetadataWithNotify(pos, meta + 1, BlockFlags.SYNC);
+		AppleCore.announceGrowthTick(this, world, pos, meta);
 	}
 
 	/* IGrowable interface
@@ -73,66 +75,49 @@ public class BlockApple extends Block implements IGrowable, ICropDataProvider
 
 	/* Can this accept bonemeal? */
 	@Override
-	public boolean func_149851_a(World world, BlockPos pos, boolean isClient)
+	public boolean canGrow(World world, BlockPos pos, boolean isClient)
 	{
-		return world.getBlockMetadata(x, y, z) < AppleStage.MATURE;
+		return world.getBlockMetadata(pos) < AppleStage.MATURE;
 	}
 
 	/* SideOnly(Side.SERVER) Can this apply bonemeal effect? */
 	@Override
-	public boolean func_149852_a(World world, Random random, BlockPos pos)
+	public boolean canUseBonemeal(World world, Random random, BlockPos pos)
 	{
 		return true;
 	}
 
 	/* Apply bonemeal effect */
 	@Override
-	public void func_149853_b(World world, Random random, BlockPos pos)
+	public void grow(World world, Random random, BlockPos pos)
 	{
-		incrementGrowth(world, x, y, z, world.getBlockMetadata(x, y, z));
+		incrementGrowth(world, pos, world.getBlockState(pos));
 	}
 
-	/**
-	 * Drops the block as an item and replaces it with air
-	 * @param world - world to drop in
-	 * @param x - x Coord
-	 * @param y - y Coord
-	 * @param z - z Coord
-	 */
-	public void fellBlockAsItem(World world, BlockPos pos)
-	{
-		this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-		world.setBlockToAir(x, y, z);
-	}
-
-	/************
-	 * TICK
-	 ************/
 	@Override
-	public void updateTick(World world, BlockPos pos, Random random)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
-		if (!this.canBlockStay(world, x, y, z))
+		if (!this.canBlockStay(world, pos))
 		{
-			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-			world.setBlock(x, y, z, Blocks.air, 0, BlockFlags.UPDATE_AND_SYNC);
+			fellBlockAsItem(world, pos);
 		}
 		else
 		{
-			final Event.Result allowGrowthResult = AppleCore.validateGrowthTick(this, world, x, y, z, random);
+			final Event.Result allowGrowthResult = AppleCore.validateGrowthTick(this, world, pos, random);
 			if (allowGrowthResult == Event.Result.DENY)
 				return;
 
 			final boolean continueGrowth = random.nextInt(this.growth) == 0;
 			if (allowGrowthResult == Event.Result.ALLOW || continueGrowth)
 			{
-				final int meta = world.getBlockMetadata(x, y, z);
+				final int meta = world.getBlockMetadata(pos);
 				if (meta < AppleStage.MATURE)
 				{
-					incrementGrowth(world, x, y, z, meta);
+					incrementGrowth(world, pos, meta);
 				}
 				else if (dropRipeApples && world.rand.nextInt(this.dropChance) == 0)
 				{
-					fellBlockAsItem(world, x, y, z);
+					fellBlockAsItem(world, pos);
 				}
 			}
 		}
@@ -144,11 +129,11 @@ public class BlockApple extends Block implements IGrowable, ICropDataProvider
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int dir, float par7, float par8, float par9)
 	{
-		if (world.getBlockMetadata(x, y, z) >= AppleStage.MATURE)
+		if (world.getBlockMetadata(pos) >= AppleStage.MATURE)
 		{
 			if (!world.isRemote)
 			{
-				fellBlockAsItem(world, x, y, z);
+				fellBlockAsItem(world, pos);
 			}
 			return true;
 		}
@@ -158,9 +143,9 @@ public class BlockApple extends Block implements IGrowable, ICropDataProvider
 	@Override
 	public void onNeighborBlockChange(World world, BlockPos pos, Block block)
 	{
-		if (!this.canBlockStay(world, x, y, z))
+		if (!this.canBlockStay(world, pos))
 		{
-			fellBlockAsItem(world, x, y, z);
+			fellBlockAsItem(world, pos);
 		}
 	}
 
@@ -184,11 +169,8 @@ public class BlockApple extends Block implements IGrowable, ICropDataProvider
 		return Items.apple;
 	}
 
-	/************
-	 * DROPS
-	 ************/
 	@Override
-	public Item getItemDropped(int meta, Random random, int par3)
+	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{
 		return meta >= AppleStage.MATURE ? Items.apple : null;
 	}
@@ -202,13 +184,7 @@ public class BlockApple extends Block implements IGrowable, ICropDataProvider
 	@Override
 	public void dropBlockAsItemWithChance(World world, BlockPos pos, int par5, float par6, int par7)
 	{
-		super.dropBlockAsItemWithChance(world, x, y, z, par5, par6, 0);
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
-	{
-		return false;
+		super.dropBlockAsItemWithChance(world, pos, par5, par6, 0);
 	}
 
 	@Override
@@ -217,28 +193,25 @@ public class BlockApple extends Block implements IGrowable, ICropDataProvider
 		return false;
 	}
 
-	/************
-	 * BOXES
-	 ************/
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, BlockPos pos)
 	{
-		this.setBlockBoundsBasedOnState(world, x, y, z);
-		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
+		this.setBlockBoundsBasedOnState(world, pos);
+		return super.getCollisionBoundingBoxFromPool(world, pos);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, BlockPos pos)
 	{
-		this.setBlockBoundsBasedOnState(world, x, y, z);
-		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
+		this.setBlockBoundsBasedOnState(world, pos);
+		return super.getSelectedBoundingBoxFromPool(world, pos);
 	}
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos)
 	{
-		final int meta = world.getBlockMetadata(x, y, z);
+		final int meta = world.getBlockMetadata(pos);
 		final float f = 0.0625F;
 
 		if (meta == AppleStage.YOUNG)

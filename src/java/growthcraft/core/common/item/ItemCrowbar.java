@@ -74,7 +74,7 @@ public class ItemCrowbar extends GrcItemBase implements IToolWrench
 	}
 
 	@Override
-	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing dir, float hitX, float hitY, float hitZ)
 	{
 		final Block block = world.getBlock(x, y, z);
 		if (block == null) return false;
@@ -88,18 +88,18 @@ public class ItemCrowbar extends GrcItemBase implements IToolWrench
 	}
 
 	@Override
-	public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
+	public boolean doesSneakBypassUse(World world, BlockPos pos, EntityPlayer player) {
 		return true;
 	}
 
 	@Override
-	public boolean canWrench(EntityPlayer player, int x, int y, int z)
+	public boolean canWrench(EntityPlayer player, BlockPos pos)
 	{
 		return true;
 	}
 
 	@Override
-	public void wrenchUsed(EntityPlayer player, int x, int y, int z)
+	public void wrenchUsed(EntityPlayer player, BlockPos pos)
 	{
 		player.swingItem();
 	}

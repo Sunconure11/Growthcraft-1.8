@@ -9,15 +9,14 @@ import growthcraft.api.core.util.BlockFlags;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -31,9 +30,6 @@ public class BlockAppleLeaves extends BlockLeavesBase implements IShearable, IGr
 
 		private LeavesStage() {}
 	}
-
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
 
 	private final int growth = GrowthCraftApples.getConfig().appleLeavesGrowthRate;
 	private int[] adjacentTreeBlocks;
@@ -49,23 +45,21 @@ public class BlockAppleLeaves extends BlockLeavesBase implements IShearable, IGr
 		this.setCreativeTab(GrowthCraftApples.creativeTab);
 	}
 
-	/* Bonemeal? Client side */
 	@Override
-	public boolean func_149851_a(World world, int x, int y, int z, boolean isClient)
+	public boolean canGrow(World world, int x, int y, int z, boolean isClient)
 	{
 		return world.isAirBlock(x, y - 1, z) && (world.getBlockMetadata(x, y, z) & 3) == 0;
 	}
 
-	/* SideOnly(Side.SERVER) Can this apply bonemeal effect? */
 	@Override
-	public boolean func_149852_a(World world, Random random, int x, int y, int z)
+	public boolean canUseBonemeal(World world, Random random, int x, int y, int z)
 	{
 		return true;
 	}
 
 	/* Apply bonemeal effect */
 	@Override
-	public void func_149853_b(World world, Random random, int x, int y, int z)
+	public void grow(World world, Random random, int x, int y, int z)
 	{
 		growApple(world, random, x, y, z);
 	}
@@ -84,11 +78,8 @@ public class BlockAppleLeaves extends BlockLeavesBase implements IShearable, IGr
 		world.setBlockToAir(x, y, z);
 	}
 
-	/************
-	 * TICK
-	 ************/
 	@Override
-	public void updateTick(World world, int x, int y, int z, Random random)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
 		if (!world.isRemote)
 		{
@@ -290,7 +281,7 @@ public class BlockAppleLeaves extends BlockLeavesBase implements IShearable, IGr
 	 * DROPS
 	 ************/
 	@Override
-	public Item getItemDropped(int meta, Random random, int par3)
+	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{
 		return GrowthCraftApples.appleSapling.getItem();
 	}
@@ -325,29 +316,6 @@ public class BlockAppleLeaves extends BlockLeavesBase implements IShearable, IGr
 		}
 	}
 
-	/************
-	 * TEXTURES
-	 ************/
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg)
-	{
-		this.icons = new IIcon[2];
-
-		icons[0] = reg.registerIcon("leaves_oak");
-		icons[1] = reg.registerIcon("leaves_oak_opaque");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		return icons[isOpaqueCube() ? 1 : 0];
-	}
-
-	/************
-	 * RENDERS
-	 ************/
 	@Override
 	public boolean isOpaqueCube()
 	{
@@ -361,9 +329,6 @@ public class BlockAppleLeaves extends BlockLeavesBase implements IShearable, IGr
 		return true;
 	}
 
-	/************
-	 * COLORS
-	 ************/
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getBlockColor()
@@ -404,9 +369,6 @@ public class BlockAppleLeaves extends BlockLeavesBase implements IShearable, IGr
 		return (r / 9 & 255) << 16 | (g / 9 & 255) << 8 | b / 9 & 255;
 	}
 
-	/************
-	 * SHEARS
-	 ************/
 	@Override
 	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z)
 	{

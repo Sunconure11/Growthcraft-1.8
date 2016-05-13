@@ -218,7 +218,7 @@ public class ComponentVillageApiarist extends StructureVillagePieces.Village imp
 
 	public void placeBlockAtCurrentPositionPub(World world, Block block, int meta, int x, int y, int z, StructureBoundingBox box)
 	{
-		placeBlockAtCurrentPosition(world, block, meta, x, y, z, box);
+		setBlockState(world, block, meta, x, y, z, box);
 	}
 
 	public boolean addComponentParts(World world, Random random, StructureBoundingBox box)
@@ -315,16 +315,16 @@ public class ComponentVillageApiarist extends StructureVillagePieces.Village imp
 		SchemaToVillage.drawSchema(this, world, random, box, apiaristInteriorSchema, map, 1, 1, 2);
 
 		// Place torches
-		this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 5, 3, 2, box);
-		this.placeBlockAtCurrentPosition(world, Blocks.torch, 0, 4, 3, 5, box);
+		this.setBlockState(world, Blocks.torch, 0, 5, 3, 2, box);
+		this.setBlockState(world, Blocks.torch, 0, 4, 3, 5, box);
 
 		/*
 			TODO:
 				place signs beside stairs to form a chair -
 				If you happen to be a sign rotation expert, PLEASE DO FIX THIS.
 		 */
-		//this.placeBlockAtCurrentPosition(world, Blocks.wall_sign, 2, 4, 1, 5, box);
-		//this.placeBlockAtCurrentPosition(world, Blocks.wall_sign, 2, 6, 1, 5, box);
+		//this.setBlockState(world, Blocks.wall_sign, 2, 4, 1, 5, box);
+		//this.setBlockState(world, Blocks.wall_sign, 2, 6, 1, 5, box);
 
 		// Drop in the front door
 		this.placeDoorAtCurrentPosition(world, box, random, 5, 1, 1, this.getMetadataWithOffset(Blocks.wooden_door, 1));
@@ -332,7 +332,7 @@ public class ComponentVillageApiarist extends StructureVillagePieces.Village imp
 		this.placeDoorAtCurrentPosition(world, box, random, 3, 1, 6, this.getMetadataWithOffset(Blocks.wooden_door, 1));
 
 		// Slap that nicely placed flower pot on the counter
-		this.placeBlockAtCurrentPosition(world, Blocks.flower_pot, 3, 2, 2, 2, box);
+		this.setBlockState(world, Blocks.flower_pot, 3, 2, 2, 2, box);
 
 		// Shove a chest behind the counter, filled with goodies
 		this.generateStructureChestContents(world, box, random, 1, 2, 5, apiaristChestContents, 3 + random.nextInt(6));
@@ -344,7 +344,7 @@ public class ComponentVillageApiarist extends StructureVillagePieces.Village imp
 			for (int col = 0; col < 9; ++col)
 			{
 				this.clearCurrentPositionBlocksUpwards(world, col, 8, row, box);
-				this.func_151554_b(world, Blocks.cobblestone, 0, col, -1, row, box);
+				this.replaceAirAndLiquidDownwards(world, Blocks.cobblestone, 0, col, -1, row, box);
 			}
 		}
 

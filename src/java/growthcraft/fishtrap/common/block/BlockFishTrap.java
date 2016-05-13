@@ -13,6 +13,7 @@ import growthcraft.fishtrap.GrowthCraftFishTrap;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -138,7 +139,7 @@ public class BlockFishTrap extends GrcBlockContainer
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, Random random)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
 		super.updateTick(world, pos, random);
 
@@ -153,9 +154,6 @@ public class BlockFishTrap extends GrcBlockContainer
 		}
 	}
 
-	/************
-	 * TRIGGERS
-	 ************/
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float par7, float par8, float par9)
 	{
@@ -168,12 +166,6 @@ public class BlockFishTrap extends GrcBlockContainer
 
 	@Override
 	public boolean isOpaqueCube()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
 	{
 		return false;
 	}
@@ -193,9 +185,6 @@ public class BlockFishTrap extends GrcBlockContainer
 		return 0;
 	}
 
-	/************
-	 * COMPARATOR
-	 ************/
 	@Override
 	public boolean hasComparatorInputOverride()
 	{

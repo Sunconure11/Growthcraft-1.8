@@ -6,7 +6,6 @@ import java.util.List;
 import growthcraft.apples.GrowthCraftApples;
 
 import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
-import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -16,7 +15,7 @@ import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.gen.structure.StructureVillagePieces.PieceWeight;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
 
-public class VillageHandlerApples implements IVillageTradeHandler, IVillageCreationHandler
+public class VillageHandlerApples implements IVillageCreationHandler
 {
 	private boolean generateAppleFarms = GrowthCraftApples.getConfig().generateAppleFarms;
 

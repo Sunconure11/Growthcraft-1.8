@@ -13,6 +13,7 @@ import growthcraft.api.core.util.BlockFlags;
 import growthcraft.hops.GrowthCraftHops;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -86,11 +87,8 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 		return BlockCheck.isRope(world.getBlock(x, y + 1, z)) && this.canBlockStay(world, x, y + 1, z);
 	}
 
-	/************
-	 * TICK
-	 ************/
 	@Override
-	public void updateTick(World world, BlockPos pos, Random random)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
 		if (!this.canBlockStay(world, x, y, z))
 		{
@@ -131,7 +129,7 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 
 	/* Both side */
 	@Override
-	public boolean func_149851_a(World world, BlockPos pos, boolean isClient)
+	public boolean canGrow(World world, BlockPos pos, boolean isClient)
 	{
 		final int meta = world.getBlockMetadata(x, y, z);
 		return (meta < HopsStage.FRUIT) || canSpreadLeaves(world, x, y, z);
@@ -139,14 +137,14 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 
 	/* SideOnly(Side.SERVER) Can this apply bonemeal effect? */
 	@Override
-	public boolean func_149852_a(World world, Random random, BlockPos pos)
+	public boolean canUseBonemeal(World world, Random random, BlockPos pos)
 	{
 		return true;
 	}
 
 	/* Apply bonemeal effect */
 	@Override
-	public void func_149853_b(World world, Random random, BlockPos pos)
+	public void grow(World world, Random random, BlockPos pos)
 	{
 		final int meta = world.getBlockMetadata(x, y, z);
 		if (meta < HopsStage.BIG)
@@ -330,7 +328,7 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 	 * DROPS
 	 ************/
 	@Override
-	public Item getItemDropped(int meta, Random par2Random, int par3)
+	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{
 		return null;
 	}
@@ -351,12 +349,6 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 			ret.add(GrowthCraftHops.hops.asStack(1 + world.rand.nextInt(8)));
 		}
 		return ret;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
-	{
-		return false;
 	}
 
 	@Override
@@ -515,14 +507,8 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 	}
 
 	@Override
-	public Block getPlant(IBlockAccess world, BlockPos pos)
+	public IBlockState getPlant(IBlockAccess world, BlockPos pos)
 	{
-		return this;
-	}
-
-	@Override
-	public int getPlantMetadata(IBlockAccess world, BlockPos pos)
-	{
-		return world.getBlockMetadata(x, y, z);
+		return getDefaultState();
 	}
 }

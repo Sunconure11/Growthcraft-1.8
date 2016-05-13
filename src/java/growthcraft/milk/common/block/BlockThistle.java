@@ -33,6 +33,7 @@ import growthcraft.milk.GrowthCraftMilk;
 
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -72,7 +73,7 @@ public class BlockThistle extends BlockBush implements ISpreadablePlant, IGrowab
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, Random random)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
 		super.updateTick(world, pos, random);
 		if (!world.isRemote)
@@ -97,21 +98,21 @@ public class BlockThistle extends BlockBush implements ISpreadablePlant, IGrowab
 
 	/* Can this accept bonemeal? */
 	@Override
-	public boolean func_149851_a(World world, BlockPos pos, boolean isClient)
+	public boolean canGrow(World world, BlockPos pos, boolean isClient)
 	{
 		return true;
 	}
 
 	/* SideOnly(Side.SERVER) Can this apply bonemeal effect? */
 	@Override
-	public boolean func_149852_a(World world, Random random, BlockPos pos)
+	public boolean canUseBonemeal(World world, Random random, BlockPos pos)
 	{
 		return true;
 	}
 
 	/* Apply bonemeal effect */
 	@Override
-	public void func_149853_b(World world, Random random, BlockPos pos)
+	public void grow(World world, Random random, BlockPos pos)
 	{
 		runSpread(world, pos, random);
 	}

@@ -23,8 +23,11 @@
  */
 package growthcraft.core.common.block;
 
+import growthcraft.core.common.block.GrcBlockBase;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
@@ -35,16 +38,14 @@ public class GrcBlockBase extends Block
 		super(material);
 	}
 
-	/**
-	 * Drops the block as an item and replaces it with air
-	 * @param world - world to drop in
-	 * @param x - x Coord
-	 * @param y - y Coord
-	 * @param z - z Coord
-	 */
+	public void fellBlockAsItem(World world, BlockPos pos, IBlockState state)
+	{
+		dropBlockAsItem(world, pos, state, 0);
+		world.setBlockToAir(pos);
+	}
+
 	public void fellBlockAsItem(World world, BlockPos pos)
 	{
-		dropBlockAsItem(world, pos, world.getBlockState(pos), 0);
-		world.setBlockToAir(pos);
+		fellBlockAsItem(world, pos, world.getBlockState(pos));
 	}
 }

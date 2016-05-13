@@ -7,18 +7,13 @@ import growthcraft.grapes.GrowthCraftGrapes;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 
 public class ItemGrapes extends GrcItemFoodBase
 {
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
 	public ItemGrapes()
 	{
 		super(2, 0.3F, false);
@@ -38,24 +33,6 @@ public class ItemGrapes extends GrcItemFoodBase
 	{
 		final EnumGrapes en = getEnumGrapes(stack);
 		return super.getUnlocalizedName(stack) + "." + en.name;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg)
-	{
-		this.icons = new IIcon[EnumGrapes.VALUES.length];
-		for (EnumGrapes grape : EnumGrapes.VALUES)
-		{
-			this.icons[grape.meta] = reg.registerIcon(String.format("grcgrapes:grapes/%s", grape.name));
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int meta)
-	{
-		return icons[MathHelper.clamp_int(meta, 0, icons.length - 1)];
 	}
 
 	@Override

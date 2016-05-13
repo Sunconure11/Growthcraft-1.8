@@ -36,6 +36,7 @@ import growthcraft.milk.common.tileentity.TileEntityHangingCurds;
 import growthcraft.milk.GrowthCraftMilk;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -184,7 +185,7 @@ public class BlockHangingCurds extends GrcBlockContainer
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, Random random)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
 		super.updateTick(world, x, y, z, random);
 		if (!world.isRemote)
@@ -211,12 +212,6 @@ public class BlockHangingCurds extends GrcBlockContainer
 
 	@Override
 	public boolean isOpaqueCube()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
 	{
 		return false;
 	}
