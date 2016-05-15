@@ -48,7 +48,7 @@ public class BlockBeeBoxBamboo extends BlockBeeBox
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void getSubBlocks(Item block, CreativeTabs tab, List list)
+	public void getSubBlocks(Item block, CreativeTabs tab, List<ItemStack> list)
 	{
 		list.add(new ItemStack(block, 1, 0));
 	}

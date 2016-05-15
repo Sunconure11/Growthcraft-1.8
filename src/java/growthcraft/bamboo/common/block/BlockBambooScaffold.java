@@ -40,7 +40,8 @@ public class BlockBambooScaffold extends GrcBlockBase
 		onNeighborBlockChange(world, pos, state, null);
 	}
 
-	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float float7, float float8, float float9)
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		final ItemStack itemstack = player.inventory.getCurrentItem();
 		if (itemstack != null)
@@ -73,11 +74,11 @@ public class BlockBambooScaffold extends GrcBlockBase
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, Block par5)
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block)
 	{
-		if (!this.canBlockStay(world, pos))
+		if (!canBlockStay(world, pos))
 		{
-			this.dropBlockAsItem(world, pos, world.getBlockMetadata(pos), 0);
+			dropBlockAsItem(world, pos, world.getBlockMetadata(pos), 0);
 			world.setBlock(pos, Blocks.air, 0, 3);
 		}
 	}
@@ -143,10 +144,6 @@ public class BlockBambooScaffold extends GrcBlockBase
 		return false;
 	}
 
-	/************
-	 * STUFF
-	 ************/
-
 	@Override
 	public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side)
 	{
@@ -161,7 +158,7 @@ public class BlockBambooScaffold extends GrcBlockBase
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing facing)
 	{
 		return true;
 	}

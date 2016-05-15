@@ -193,7 +193,7 @@ public abstract class GrcGuiContainer<C extends Container, T extends TileEntity>
 		{
 			final IInventory inv = (IInventory)tileEntity;
 			final String invName = inv.getDisplayName();
-			final String s = inv.hasCustomInventoryName() ? invName : GrcI18n.translate(invName);
+			final String s = inv.hasCustomName() ? invName : GrcI18n.translate(invName);
 			fontRendererObj.drawString(s, xSize / 2 - fontRendererObj.getStringWidth(s) / 2, 6, 4210752);
 			fontRendererObj.drawString(GrcI18n.translate("container.inventory"), 8, ySize - 96 + 2, 4210752);
 		}

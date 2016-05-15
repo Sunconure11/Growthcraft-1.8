@@ -36,8 +36,8 @@ import growthcraft.milk.common.tileentity.TileEntityHangingCurds;
 import growthcraft.milk.GrowthCraftMilk;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -64,15 +64,14 @@ public class BlockHangingCurds extends GrcBlockContainer
 		setTileEntityType(TileEntityHangingCurds.class);
 		final BBox bb = BBox.newCube(4f, 0f, 4f, 8f, 16f, 8f).scale(1f / 16f);
 		setBlockBounds(bb.x0(), bb.y0(), bb.z0(), bb.x1(), bb.y1(), bb.z1());
-		setBlockTextureName("grcmilk:hanging_curds");
 		setCreativeTab(GrowthCraftMilk.creativeTab);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, EntityLivingBase entity, ItemStack stack)
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entity, ItemStack stack)
 	{
-		super.onBlockPlacedBy(world, x, y, z, entity, stack);
-		world.setBlockMetadataWithNotify(x, y, z, stack.getItemDamage(), BlockFlags.NONE);
+		super.onBlockPlacedBy(world, pos, state, entity, stack);
+		//world.setBlockMetadataWithNotify(pos, stack.getItemDamage(), BlockFlags.NONE);
 	}
 
 	@Override
@@ -90,7 +89,7 @@ public class BlockHangingCurds extends GrcBlockContainer
 	@Override
 	protected ItemStack createHarvestedBlockItemStack(World world, EntityPlayer player, BlockPos pos, int meta)
 	{
-		final TileEntityHangingCurds te = getTileEntity(world, x, y, z);
+		final TileEntityHangingCurds te = getTileEntity(world, pos);
 		if (te != null)
 		{
 			return te.asItemStack();
@@ -99,31 +98,31 @@ public class BlockHangingCurds extends GrcBlockContainer
 	}
 
 	@Override
-	protected void getTileItemStackDrops(List<ItemStack> ret, World world, BlockPos pos, int metadata, int fortune)
+	protected void getTileItemStackDrops(List<ItemStack> ret, World world, BlockPos pos, IBlockState state, int fortune)
 	{
-		final TileEntityHangingCurds te = getTileEntity(world, x, y, z);
+		final TileEntityHangingCurds te = getTileEntity(world, pos);
 		if (te != null)
 		{
 			ret.add(te.asItemStack());
 		}
 		else
 		{
-			super.getTileItemStackDrops(ret, world, x, y, z, metadata, fortune);
+			super.getTileItemStackDrops(ret, world, pos, state, fortune);
 		}
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if (super.onBlockActivated(world, x, y, z, player, meta, par7, par8, par9)) return true;
+		if (super.onBlockActivated(world, pos, player, meta, hitX, hitY, hitZ)) return true;
 		if (!player.isSneaking())
 		{
-			final TileEntityHangingCurds hangingCurd = getTileEntity(world, x, y, z);
+			final TileEntityHangingCurds hangingCurd = getTileEntity(world, pos);
 			if (hangingCurd != null)
 			{
 				if (hangingCurd.isDried())
 				{
-					fellBlockAsItem(world, x, y, z);
+					fellBlockAsItem(world, pos);
 					return true;
 				}
 			}
@@ -134,7 +133,7 @@ public class BlockHangingCurds extends GrcBlockContainer
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void getSubBlocks(Item item, CreativeTabs tab, List list)
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list)
 	{
 		if (item instanceof ItemBlockHangingCurds)
 		{
@@ -154,46 +153,46 @@ public class BlockHangingCurds extends GrcBlockContainer
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player)
 	{
-		final TileEntityHangingCurds teHangingCurds = getTileEntity(world, x, y, z);
+		final TileEntityHangingCurds teHangingCurds = getTileEntity(world, pos);
 		if (teHangingCurds != null)
 		{
 			return teHangingCurds.asItemStack();
 		}
-		return super.getPickBlock(target, world, x, y, z, player);
+		return super.getPickBlock(target, world, pos, player);
 	}
 
 	@Override
 	public boolean canBlockStay(World world, BlockPos pos)
 	{
-		return !world.isAirBlock(x, y + 1, z) &&
-			BlockCheck.isBlockPlacableOnSide(world, x, y + 1, z, EnumFacing.DOWN);
+		return !world.isAirBlock(pos.up()) &&
+			BlockCheck.isBlockPlacableOnSide(world, pos.up(), EnumFacing.DOWN);
 	}
 
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos)
 	{
-		return super.canPlaceBlockAt(world, x, y, z) && canBlockStay(world, x, y, z);
+		return super.canPlaceBlockAt(world, pos) && canBlockStay(world, pos);
 	}
 
 	@Override
 	public void onNeighborBlockChange(World world, BlockPos pos, Block block)
 	{
-		if (!this.canBlockStay(world, x, y, z))
+		if (!this.canBlockStay(world, pos))
 		{
-			fellBlockAsItem(world, x, y, z);
+			fellBlockAsItem(world, pos);
 		}
 	}
 
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
-		super.updateTick(world, x, y, z, random);
+		super.updateTick(world, pos, random);
 		if (!world.isRemote)
 		{
-			if (!canBlockStay(world, x, y, z))
+			if (!canBlockStay(world, pos))
 			{
-				dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-				world.setBlock(x, y, z, Blocks.air, 0, BlockFlags.UPDATE_AND_SYNC);
+				dropBlockAsItem(world, pos, world.getBlockMetadata(pos), 0);
+				world.setBlock(pos, Blocks.air, 0, BlockFlags.UPDATE_AND_SYNC);
 			}
 		}
 	}
@@ -205,12 +204,6 @@ public class BlockHangingCurds extends GrcBlockContainer
 	}
 
 	@Override
-	public int getRenderType()
-	{
-		return RenderType.NONE;
-	}
-
-	@Override
 	public boolean isOpaqueCube()
 	{
 		return false;
@@ -218,7 +211,7 @@ public class BlockHangingCurds extends GrcBlockContainer
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing facing)
 	{
 		return true;
 	}

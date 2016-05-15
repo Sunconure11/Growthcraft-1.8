@@ -35,7 +35,6 @@ public class BlockBeeBox extends GrcBlockContainer
 	public BlockBeeBox(Material material)
 	{
 		super(material);
-		setBlockTextureName("grcbees:beebox");
 		setTickRandomly(true);
 		setHardness(2.5F);
 		setStepSound(soundTypeWood);
@@ -85,7 +84,7 @@ public class BlockBeeBox extends GrcBlockContainer
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void getSubBlocks(Item block, CreativeTabs tab, List list)
+	public void getSubBlocks(Item block, CreativeTabs tab, List<ItemStack> list)
 	{
 		for (EnumMinecraftWoodType woodType : EnumMinecraftWoodType.VALUES)
 		{
@@ -123,7 +122,7 @@ public class BlockBeeBox extends GrcBlockContainer
 	 * TRIGGERS
 	 ************/
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumFacing dir, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		if (super.onBlockActivated(world, pos, player, dir, par7, par8, par9)) return true;
 		if (world.isRemote)
@@ -156,7 +155,7 @@ public class BlockBeeBox extends GrcBlockContainer
 				ItemUtils.spawnItemStack(world, pos, stack, world.rand);
 			}
 
-			world.func_147453_f(pos, par5);
+			world.updateComparatorOutputLevel(pos, par5);
 		}
 
 		super.breakBlock(world, pos, par5, par6);
@@ -200,7 +199,7 @@ public class BlockBeeBox extends GrcBlockContainer
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing facing)
 	{
 		return true;
 	}

@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockFruitPresser extends BlockContainer implements IWrenchable, IRotatableBlock
+public class BlockFruitPresser extends BlockCellarContainer implements IWrenchable, IRotatableBlock
 {
 	public BlockFruitPresser()
 	{
@@ -52,45 +52,41 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 		}
 	}
 
-	/************
-	 * TRIGGERS
-	 ************/
-
-	/* IRotatableBLock */
+	@Override
 	public boolean isRotatable(IBlockAccess world, BlockPos pos, EnumFacing side)
 	{
-		final Block below = world.getBlock(x, y - 1, z);
-		if (below instanceof IRotatableBlock)
+		final IBlockState below = world.getBlock(pos.down());
+		if (below.getBlock() instanceof IRotatableBlock)
 		{
-			return ((IRotatableBlock)below).isRotatable(world, x, y - 1, z, side);
+			return ((IRotatableBlock)below).isRotatable(world, pos.down(), side);
 		}
 		return false;
 	}
 
+	@Override
 	public boolean rotateBlock(World world, BlockPos pos, EnumFacing side)
 	{
-		if (isRotatable(world, x, y, z, side))
+		if (isRotatable(world, pos, side))
 		{
-			final Block below = world.getBlock(x, y - 1, z);
-			return below.rotateBlock(world, x, y - 1, z, side);
+			final IBlockState below = world.getBlockState(pos.down());
+			return below.getBlock().rotateBlock(world, pos.down(), side);
 		}
 		return false;
 	}
 
-	/* IWrenchable */
 	@Override
 	public boolean wrenchBlock(World world, BlockPos pos, EntityPlayer player, ItemStack wrench)
 	{
-		final Block below = world.getBlock(x, y - 1, z);
-		if (below instanceof BlockFruitPress)
+		final IBlockState below = world.getBlockState(pos.down());
+		if (below.getBlock() instanceof BlockFruitPress)
 		{
-			return ((BlockFruitPress)below).wrenchBlock(world, x, y - 1, z, player, wrench);
+			return ((BlockFruitPress)below).wrenchBlock(world, pos.down(), player, wrench);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumFacing dir, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		if (world.isRemote) return true;
 		final Block below = world.getBlock(pos.down());
@@ -105,12 +101,13 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 	public void onBlockAdded(World world, BlockPos pos)
 	{
 		super.onBlockAdded(world, pos);
-		final int m = world.getBlockMetadata(pos.down());
-		world.setBlockMetadataWithNotify(pos, m, BlockFlags.UPDATE_AND_SYNC);
+		final IBlockState state = world.getBlockState(pos);
+		final IBlockState bottomState = world.getBlockState(pos.down());
+		world.setBlockState(pos, state.withProperty(ROTATION, bottomState.getValue(ROTATION)), BlockFlags.UPDATE_AND_SYNC);
 
 		if (!world.isRemote)
 		{
-			this.updatePressState(world, pos);
+			updatePressState(world, pos);
 		}
 	}
 
@@ -122,21 +119,27 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 
 		if (!world.isRemote)
 		{
-			this.updatePressState(world, pos);
+			updatePressState(world, pos);
 		}
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, Block block)
+	public boolean canBlockStay(World world, BlockPos pos)
+	{
+		return GrowthCraftCellar.blocks.fruitPress.getBlock() == world.getBlock(pos.down());
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block)
 	{
 		if (!this.canBlockStay(world, pos))
 		{
-			world.func_147480_a(pos, true);
+			world.destroyBlock(pos, true);
 		}
 
 		if (!world.isRemote)
 		{
-			this.updatePressState(world, pos);
+			updatePressState(world, pos);
 		}
 	}
 
@@ -157,15 +160,6 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 		}
 
 		world.markBlockForUpdate(x, y, z);
-	}
-
-	/************
-	 * CONDITIONS
-	 ************/
-	@Override
-	public boolean canBlockStay(World world, BlockPos pos)
-	{
-		return GrowthCraftCellar.blocks.fruitPress.getBlock() == world.getBlock(x, y - 1, z);
 	}
 
 	@Override
@@ -224,7 +218,7 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing facing)
 	{
 		return true;
 	}

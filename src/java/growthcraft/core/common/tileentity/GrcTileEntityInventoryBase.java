@@ -34,16 +34,23 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.world.ILockableContainer;
+import net.minecraft.world.LockCode;
 
 /**
  * Extend this base class if you want a Tile with an `Inventory`
  */
-public abstract class GrcTileEntityInventoryBase extends GrcTileEntityCommonBase implements ISidedInventory, ICustomDisplayName, IInventoryWatcher, IInventoryFlagging
+public abstract class GrcTileEntityInventoryBase extends GrcTileEntityCommonBase implements ISidedInventory, ICustomDisplayName, IInventoryWatcher, IInventoryFlagging, ILockableContainer
 {
 	protected static final int[] NO_SLOTS = new int[]{};
 
 	protected String inventoryName;
 	protected GrcInternalInventory inventory;
+    private LockCode code = LockCode.EMPTY_CODE;
 
 	public GrcTileEntityInventoryBase()
 	{
@@ -75,14 +82,32 @@ public abstract class GrcTileEntityInventoryBase extends GrcTileEntityCommonBase
 		ItemUtils.spawnItemStack(worldObj, pos.getX(), pos.getY(), pos.getZ(), discarded, worldObj.rand);
 	}
 
-	@Override
-	public String getDisplayName()
-	{
-		return hasCustomInventoryName() ? inventoryName : getDefaultInventoryName();
-	}
+    @Override
+    public boolean isLocked()
+    {
+        return this.code != null && !this.code.isEmpty();
+    }
+
+    @Override
+    public LockCode getLockCode()
+    {
+        return this.code;
+    }
+
+    @Override
+    public void setLockCode(LockCode code)
+    {
+        this.code = code;
+    }
 
 	@Override
-	public boolean hasCustomInventoryName()
+    public IChatComponent getDisplayName()
+    {
+        return (IChatComponent)(this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatComponentTranslation(this.getName(), new Object[0]));
+    }
+
+	@Override
+	public boolean hasCustomName()
 	{
 		return inventoryName != null && inventoryName.length() > 0;
 	}
@@ -212,69 +237,86 @@ public abstract class GrcTileEntityInventoryBase extends GrcTileEntityCommonBase
 		return 0;
 	}
 
-	private void readInventoryFromNBT(NBTTagCompound nbt)
+	private void readInventoryFromNBT(NBTTagCompound compound)
 	{
-		if (nbt.hasKey("items"))
+		if (compound.hasKey("items"))
 		{
-			inventory.readFromNBT(nbt, "items");
+			inventory.readFromNBT(compound, "items");
 		}
-		else if (nbt.hasKey("inventory"))
+		else if (compound.hasKey("inventory"))
 		{
-			inventory.readFromNBT(nbt, "inventory");
+			inventory.readFromNBT(compound, "inventory");
 		}
 	}
 
-	private void readInventoryNameFromNBT(NBTTagCompound nbt)
+	private void readInventoryNameFromNBT(NBTTagCompound compound)
 	{
-		if (nbt.hasKey("name"))
+		if (compound.hasKey("name"))
 		{
-			this.inventoryName = nbt.getString("name");
+			this.inventoryName = compound.getString("name");
 		}
-		else if (nbt.hasKey("inventory_name"))
+		else if (compound.hasKey("inventory_name"))
 		{
-			this.inventoryName = nbt.getString("inventory_name");
+			this.inventoryName = compound.getString("inventory_name");
 		}
+	}
+
+	private void readLockCodeFromNBT(NBTTagCompound compound)
+	{
+        this.code = LockCode.fromNBT(compound);
 	}
 
 	@Override
-	public void readFromNBTForItem(NBTTagCompound nbt)
+	public void readFromNBTForItem(NBTTagCompound compound)
 	{
-		super.readFromNBTForItem(nbt);
-		readInventoryFromNBT(nbt);
+		super.readFromNBTForItem(compound);
+		readInventoryFromNBT(compound);
 		// Do not reload the inventory name from NBT, allow the ItemStack to do that
-		//readInventoryNameFromNBT(nbt);
+		//readInventoryNameFromNBT(compound);
+		readLockCodeFromNBT(compound);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt)
+	public void readFromNBT(NBTTagCompound compound)
 	{
-		super.readFromNBT(nbt);
-		readInventoryFromNBT(nbt);
-		readInventoryNameFromNBT(nbt);
+		super.readFromNBT(compound);
+		readInventoryFromNBT(compound);
+		readInventoryNameFromNBT(compound);
+		readLockCodeFromNBT(compound);
 	}
 
-	private void writeInventoryToNBT(NBTTagCompound nbt)
+	private void writeInventoryToNBT(NBTTagCompound compound)
 	{
-		inventory.writeToNBT(nbt, "inventory");
+		inventory.writeToNBT(compound, "inventory");
 		// NAME
-		if (hasCustomInventoryName())
+		if (hasCustomName())
 		{
-			nbt.setString("inventory_name", inventoryName);
+			compound.setString("inventory_name", inventoryName);
 		}
-		nbt.setInteger("inventory_tile_version", 3);
+		compound.setInteger("inventory_tile_version", 3);
+	}
+
+	private void writeLockCodeToNBT(NBTTagCompound compound)
+	{
+		if (code != null)
+        {
+            code.toNBT(compound);
+        }
 	}
 
 	@Override
-	public void writeToNBTForItem(NBTTagCompound nbt)
+	public void writeToNBTForItem(NBTTagCompound compound)
 	{
-		super.writeToNBTForItem(nbt);
-		writeInventoryToNBT(nbt);
+		super.writeToNBTForItem(compound);
+		writeInventoryToNBT(compound);
+		writeLockCodeToNBT(compound);
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public void writeToNBT(NBTTagCompound compound)
 	{
-		super.writeToNBT(nbt);
-		writeInventoryToNBT(nbt);
+		super.writeToNBT(compound);
+		writeInventoryToNBT(compound);
+		writeLockCodeToNBT(compound);
 	}
 }

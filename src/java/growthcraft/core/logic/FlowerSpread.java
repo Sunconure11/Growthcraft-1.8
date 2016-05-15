@@ -50,21 +50,22 @@ public class FlowerSpread
 		}
 		else
 		{
-			return world.isAirBlock(pos) && block.canBlockStay(world, pos);
+			//return world.isAirBlock(pos) && block.canBlockStay(world, pos);
+			return world.isAirBlock(pos);
 		}
 	}
 
 	public boolean run(Block block, int meta, World world, BlockPos pos, Random random)
 	{
-		final int fx = x + random.nextInt(spreadCube.w) + spreadCube.x;
-		final int fz = z + random.nextInt(spreadCube.l) + spreadCube.z;
+		final int fx = pos.getX() + random.nextInt(spreadCube.w) + spreadCube.x;
+		final int fz = pos.getZ() + random.nextInt(spreadCube.l) + spreadCube.z;
 		for (int i = spreadCube.y; i <= spreadCube.y2(); ++i)
 		{
-			final int fy = y + i;
+			final int fy = pos.getY() + i;
 			final BlockPos fpos = new BlockPos(fx, fy, fz);
 			if (canSpreadTo(block, world, fpos))
 			{
-				world.setBlock(fpos, block, meta, BlockFlags.UPDATE_AND_SYNC);
+				//world.setBlockState(fpos, block, meta, BlockFlags.UPDATE_AND_SYNC);
 				return true;
 			}
 		}

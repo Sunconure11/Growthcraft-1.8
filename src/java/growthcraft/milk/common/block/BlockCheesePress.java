@@ -53,14 +53,15 @@ public class BlockCheesePress extends GrcBlockContainer
 		setUnlocalizedName("grcmilk.CheesePress");
 		setCreativeTab(GrowthCraftMilk.creativeTab);
 		setTileEntityType(TileEntityCheesePress.class);
-		setBlockTextureName("grcmilk:cheese_press");
 	}
 
+	@Override
 	public boolean isRotatable(IBlockAccess world, BlockPos pos, EnumFacing side)
 	{
 		return true;
 	}
 
+	@Override
 	public void doRotateBlock(World world, BlockPos pos, EnumFacing side)
 	{
 		world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) ^ 1, BlockFlags.SYNC);
@@ -123,7 +124,7 @@ public class BlockCheesePress extends GrcBlockContainer
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		if (super.onBlockActivated(world, x, y, z, player, meta, par7, par8, par9)) return true;
 		if (GrowthCraftMilk.getConfig().cheesePressHandOperated)
@@ -178,7 +179,7 @@ public class BlockCheesePress extends GrcBlockContainer
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing facing)
 	{
 		return true;
 	}

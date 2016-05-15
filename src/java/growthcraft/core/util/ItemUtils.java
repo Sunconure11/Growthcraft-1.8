@@ -206,6 +206,11 @@ public class ItemUtils
 		}
 	}
 
+	public static void spawnItemStack(World world, BlockPos pos, ItemStack stack, Random random)
+	{
+		spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack, random);
+	}
+
 	public static void spawnBrokenItemStack(World world, int x, int y, int z, ItemStack stack, Random random)
 	{
 		if (stack != null)

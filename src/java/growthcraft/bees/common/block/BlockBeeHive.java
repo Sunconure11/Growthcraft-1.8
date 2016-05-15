@@ -40,7 +40,7 @@ public class BlockBeeHive extends GrcBlockBase
 	 ************/
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(World world, int x, int y, int z, Random random)
+	public void randomDisplayTick(World world, BlockPos pos, Random random)
 	{
 		if (random.nextInt(24) == 0)
 		{
@@ -53,13 +53,13 @@ public class BlockBeeHive extends GrcBlockBase
 	 * TRIGGERS
 	 ************/
 	@Override
-	public void onBlockAdded(World world, int x, int y, int z)
+	public void onBlockAdded(World world, BlockPos pos)
 	{
 		super.onBlockAdded(world, x, y, z);
 		this.setDefaultDirection(world, x, y, z);
 	}
 
-	private void setDefaultDirection(World world, int x, int y, int z)
+	private void setDefaultDirection(World world, BlockPos pos)
 	{
 		if (!world.isRemote)
 		{
@@ -94,41 +94,41 @@ public class BlockBeeHive extends GrcBlockBase
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack)
+	public void onBlockPlacedBy(World world, BlockPos pos, EntityLivingBase entity, ItemStack stack)
 	{
-		super.onBlockPlacedBy(world, x, y, z, entity, stack);
+		super.onBlockPlacedBy(world, pos, entity, stack);
 		final int face = MathHelper.floor_double((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 
 		if (face == 0)
 		{
-			world.setBlockMetadataWithNotify(x, y, z, 2, BlockFlags.SYNC);
+			world.setBlockMetadataWithNotify(pos, 2, BlockFlags.SYNC);
 		}
 
 		if (face == 1)
 		{
-			world.setBlockMetadataWithNotify(x, y, z, 5, BlockFlags.SYNC);
+			world.setBlockMetadataWithNotify(pos, 5, BlockFlags.SYNC);
 		}
 
 		if (face == 2)
 		{
-			world.setBlockMetadataWithNotify(x, y, z, 3, BlockFlags.SYNC);
+			world.setBlockMetadataWithNotify(pos, 3, BlockFlags.SYNC);
 		}
 
 		if (face == 3)
 		{
-			world.setBlockMetadataWithNotify(x, y, z, 4, BlockFlags.SYNC);
+			world.setBlockMetadataWithNotify(pos, 4, BlockFlags.SYNC);
 		}
 	}
 
 	/************
 	 * CONDITIONS
 	 ************/
-	public boolean canPlaceBlockAt(World world, int x, int y, int z)
+	public boolean canPlaceBlockAt(World world, BlockPos pos)
 	{
 		return super.canPlaceBlockAt(world, x, y, z) && canBlockStay(world, x, y, z);
 	}
 
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block par5)
+	public void onNeighborBlockChange(World world, BlockPos pos, Block par5)
 	{
 		super.onNeighborBlockChange(world, x, y, z, par5);
 		if (!this.canBlockStay(world, x, y, z))
@@ -138,7 +138,7 @@ public class BlockBeeHive extends GrcBlockBase
 		}
 	}
 
-	public boolean canBlockStay(World world, int x, int y, int z)
+	public boolean canBlockStay(World world, BlockPos pos)
 	{
 		if (world.isAirBlock(x, y + 1, z))
 		{
@@ -147,11 +147,8 @@ public class BlockBeeHive extends GrcBlockBase
 		return world.getBlock(x, y + 1, z).isLeaves(world, x, y + 1, z);
 	}
 
-	/************
-	 * STUFF
-	 ************/
 	@Override
-	public boolean canSilkHarvest(World world, EntityPlayer player, int x, int y, int z, int metadata)
+	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player)
 	{
 		return true;
 	}
@@ -172,7 +169,7 @@ public class BlockBeeHive extends GrcBlockBase
 	}
 
 	@Override
-	public void dropBlockAsItemWithChance(World world, int x, int y, int z, int par5, float par6, int par7)
+	public void dropBlockAsItemWithChance(World world, BlockPos pos, int par5, float par6, int par7)
 	{
 		super.dropBlockAsItemWithChance(world, x, y, z, par5, par6, 0);
 		if (!world.isRemote)
@@ -203,7 +200,7 @@ public class BlockBeeHive extends GrcBlockBase
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing facing)
 	{
 		return true;
 	}

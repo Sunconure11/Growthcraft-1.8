@@ -36,6 +36,7 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
@@ -48,7 +49,6 @@ public class BlockThistle extends BlockBush implements ISpreadablePlant, IGrowab
 	{
 		super(Material.plants);
 		setTickRandomly(true);
-		setBlockTextureName("grcmilk:thistle/flower_thistle");
 		setUnlocalizedName("grcmilk.Thistle");
 		setStepSound(soundTypeGrass);
 		setCreativeTab(GrowthCraftMilk.creativeTab);
@@ -60,7 +60,8 @@ public class BlockThistle extends BlockBush implements ISpreadablePlant, IGrowab
 	@Override
 	public boolean canSpreadTo(World world, BlockPos pos)
 	{
-		if (world.isAirBlock(pos) && canBlockStay(world, pos))
+		//if (world.isAirBlock(pos) && canBlockStay(world, pos))
+		if (world.isAirBlock(pos))
 		{
 			return true;
 		}
@@ -75,7 +76,7 @@ public class BlockThistle extends BlockBush implements ISpreadablePlant, IGrowab
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
-		super.updateTick(world, pos, random);
+		super.updateTick(world, pos, state, random);
 		if (!world.isRemote)
 		{
 			if (random.nextInt(GrowthCraftMilk.getConfig().thistleSpreadChance) == 0)
@@ -98,21 +99,21 @@ public class BlockThistle extends BlockBush implements ISpreadablePlant, IGrowab
 
 	/* Can this accept bonemeal? */
 	@Override
-	public boolean canGrow(World world, BlockPos pos, boolean isClient)
+	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient)
 	{
 		return true;
 	}
 
 	/* SideOnly(Side.SERVER) Can this apply bonemeal effect? */
 	@Override
-	public boolean canUseBonemeal(World world, Random random, BlockPos pos)
+	public boolean canUseBonemeal(World world, Random random, BlockPos pos, IBlockState state)
 	{
 		return true;
 	}
 
 	/* Apply bonemeal effect */
 	@Override
-	public void grow(World world, Random random, BlockPos pos)
+	public void grow(World world, Random random, BlockPos pos, IBlockState state)
 	{
 		runSpread(world, pos, random);
 	}

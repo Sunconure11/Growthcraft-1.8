@@ -69,28 +69,21 @@ public class BlockApple extends GrcBlockBase implements IGrowable, ICropDataProv
 		AppleCore.announceGrowthTick(this, world, pos, meta);
 	}
 
-	/* IGrowable interface
-	 *	Check: http://www.minecraftforge.net/forum/index.php?topic=22571.0
-	 *	if you have no idea what this stuff means
-	 */
-
-	/* Can this accept bonemeal? */
 	@Override
-	public boolean canGrow(World world, BlockPos pos, boolean isClient)
+	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient)
 	{
 		return world.getBlockMetadata(pos) < AppleStage.MATURE;
 	}
 
-	/* SideOnly(Side.SERVER) Can this apply bonemeal effect? */
 	@Override
-	public boolean canUseBonemeal(World world, Random random, BlockPos pos)
+	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state)
 	{
 		return true;
 	}
 
 	/* Apply bonemeal effect */
 	@Override
-	public void grow(World world, Random random, BlockPos pos)
+	public void grow(World world, Random rand, BlockPos pos, IBlockState state)
 	{
 		incrementGrowth(world, pos, world.getBlockState(pos));
 	}
@@ -128,7 +121,7 @@ public class BlockApple extends GrcBlockBase implements IGrowable, ICropDataProv
 	 * TRIGGERS
 	 ************/
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumFacing dir, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		if (world.getBlockMetadata(pos) >= AppleStage.MATURE)
 		{
@@ -142,7 +135,7 @@ public class BlockApple extends GrcBlockBase implements IGrowable, ICropDataProv
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, Block block)
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block)
 	{
 		if (!this.canBlockStay(world, pos))
 		{
@@ -150,14 +143,11 @@ public class BlockApple extends GrcBlockBase implements IGrowable, ICropDataProv
 		}
 	}
 
-	/************
-	 * CONDITIONS
-	 ************/
 	@Override
 	public boolean canBlockStay(World world, BlockPos pos)
 	{
-		return GrowthCraftApples.appleLeaves.getBlock() == world.getBlock(x, y + 1, z) &&
-			(world.getBlockMetadata(x, y + 1, z) & 3) == 0;
+		return GrowthCraftApples.appleLeaves.equals(world.getBlockState(pos.up()).getBlock()) &&
+			(world.getBlockMetadata(pos.up()) & 3) == 0;
 	}
 
 	/************

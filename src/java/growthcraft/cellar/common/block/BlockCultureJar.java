@@ -5,10 +5,12 @@ import growthcraft.cellar.GrowthCraftCellar;
 import growthcraft.cellar.util.CellarGuiType;
 import growthcraft.api.core.util.BBox;
 
+import net.minecraft.block.material.Material;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.block.material.Material;
-import net.minecraft.world.IBlockAccess;
 
 public class BlockCultureJar extends BlockCellarContainer
 {
@@ -34,7 +36,7 @@ public class BlockCultureJar extends BlockCellarContainer
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing facing)
 	{
 		return true;
 	}

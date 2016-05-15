@@ -38,7 +38,6 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 		setStepSound(soundTypeGrass);
 		setHardness(0.0F);
 		setTickRandomly(true);
-		setBlockTextureName("grcbamboo:shoot");
 		final float f = 0.4F;
 		setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f * 2.0F, 0.5F + f);
 		setUnlocalizedName("grc.bambooShoot");
@@ -50,9 +49,6 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 		return (float)(meta / 1.0);
 	}
 
-	/************
-	 * TICK
-	 ************/
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
@@ -67,13 +63,10 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 		}
 	}
 
-	/************
-	 * EVENTS
-	 ************/
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, Block par5)
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block)
 	{
-		super.onNeighborBlockChange(world, pos, par5);
+		super.onNeighborBlockChange(world, pos, state, block);
 		checkShootChange(world, pos);
 	}
 
@@ -142,23 +135,20 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 		}
 	}
 
-	/* Both side */
 	@Override
-	public boolean canGrow(World world, BlockPos pos, boolean isClient)
+	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient)
 	{
 		return true;
 	}
 
-	/* SideOnly(Side.SERVER) Can this apply bonemeal effect? */
 	@Override
-	public boolean canUseBonemeal(World world, Random random, BlockPos pos)
+	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state)
 	{
 		return true;
 	}
 
-	/* Apply bonemeal effect */
 	@Override
-	public void grow(World world, Random random, BlockPos pos)
+	public void grow(World world, Random rand, BlockPos pos, IBlockState state)
 	{
 		if (random.nextFloat() < 0.45D)
 		{
@@ -167,7 +157,7 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 	}
 
 	@Override
-	public boolean canSilkHarvest(World world, EntityPlayer player, BlockPos pos, int metadata)
+	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player)
 	{
 		return false;
 	}

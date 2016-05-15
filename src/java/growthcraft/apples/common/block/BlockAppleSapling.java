@@ -75,19 +75,19 @@ public class BlockAppleSapling extends BlockBush implements IGrowable
 	}
 
 	@Override
-	public boolean canGrow(World world, BlockPos pos, boolean isClient)
+	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient)
 	{
 		return (world.getBlockMetadata(pos) & 8) == 0;
 	}
 
 	@Override
-	public boolean canUseBonemeal(World world, Random random, BlockPos pos)
+	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state)
 	{
 		return true;
 	}
 
 	@Override
-	public void grow(World world, Random random, BlockPos pos)
+	public void grow(World world, Random rand, BlockPos pos, IBlockState state)
 	{
 		if (random.nextFloat() < 0.45D)
 		{

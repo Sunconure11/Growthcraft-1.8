@@ -28,6 +28,7 @@ public class BlockGrapeBlock extends GrcBlockBase
 	protected int bayanusDropRarity = GrowthCraftGrapes.getConfig().bayanusDropRarity;
 	protected int grapesDropMin = GrowthCraftGrapes.getConfig().grapesDropMin;
 	protected int grapesDropMax = GrowthCraftGrapes.getConfig().grapesDropMax;
+	private Random rand = new Random();
 
 	public BlockGrapeBlock()
 	{
@@ -56,7 +57,7 @@ public class BlockGrapeBlock extends GrcBlockBase
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumFacing dir, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		if (!world.isRemote)
 		{
@@ -103,15 +104,15 @@ public class BlockGrapeBlock extends GrcBlockBase
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
 		final List<ItemStack> ret = new ArrayList<ItemStack>();
-		final int count = quantityDropped(state, fortune, world.rand);
+		final int count = quantityDropped(state, fortune, rand);
 		for(int i = 0; i < count; ++i)
 		{
-			final Item item = getItemDropped(state, world.rand, fortune);
+			final Item item = getItemDropped(state, rand, fortune);
 			if (item != null)
 			{
 				ret.add(new ItemStack(item, 1, damageDropped(state)));
 			}
-			if (world.rand.nextInt(bayanusDropRarity) == 0)
+			if (rand.nextInt(bayanusDropRarity) == 0)
 			{
 				ret.add(EnumYeast.BAYANUS.asStack(1));
 			}

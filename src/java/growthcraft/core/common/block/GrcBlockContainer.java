@@ -38,9 +38,10 @@ import growthcraft.core.util.ItemUtils;
 import growthcraft.core.Utils;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -64,6 +65,8 @@ import net.minecraftforge.fluids.IFluidHandler;
  */
 public abstract class GrcBlockContainer extends GrcBlockBase implements IDroppableBlock, IRotatableBlock, IWrenchable, ITileEntityProvider
 {
+	public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 15);
+
 	protected Random rand = new Random();
 	protected Class<? extends TileEntity> tileEntityType;
 
@@ -127,78 +130,37 @@ public abstract class GrcBlockContainer extends GrcBlockBase implements IDroppab
 
 	/* IRotatableBlock */
 	@Override
-	public boolean isRotatable(IBlockAccess world, BlockPos pos, EnumFacing side)
+	public boolean isRotatable(IBlockAccess world, BlockPos pos, EnumFacing axis)
 	{
 		return false;
 	}
 
-	public void doRotateBlock(World world, BlockPos pos, EnumFacing side)
+	public void doRotateBlock(World world, BlockPos pos, EnumFacing axis)
 	{
-		final int meta = world.getBlockMetadata(pos);
-		final EnumFacing current = EnumFacing.getOrientation(meta);
+		final IBlockState state = world.getBlockState(pos);
+		final int rotation = state.getValue(ROTATION);
+		final EnumFacing current = EnumFacing.getFront(rotation);
 		EnumFacing newDirection = current;
-		if (current == side)
+		if (current == axis)
 		{
-			switch (current)
-			{
-				case UP:
-					newDirection = EnumFacing.NORTH;
-					break;
-				case DOWN:
-					newDirection = EnumFacing.SOUTH;
-					break;
-				case NORTH:
-				case EAST:
-					newDirection = EnumFacing.UP;
-					break;
-				case SOUTH:
-				case WEST:
-					newDirection = EnumFacing.DOWN;
-					break;
-				default:
-					// some invalid state
-					break;
-			}
+			newDirection = current.rotateY();
 		}
 		else
 		{
-			switch (current)
-			{
-				case UP:
-					newDirection = EnumFacing.DOWN;
-					break;
-				case DOWN:
-					newDirection = EnumFacing.UP;
-					break;
-				case WEST:
-					newDirection = EnumFacing.SOUTH;
-					break;
-				case EAST:
-					newDirection = EnumFacing.NORTH;
-					break;
-				case NORTH:
-					newDirection = EnumFacing.WEST;
-					break;
-				case SOUTH:
-					newDirection = EnumFacing.EAST;
-					break;
-				default:
-					// yet another invalid state
-					break;
-			}
+			newDirection = current.rotateAround(axis.getAxis());
 		}
 		if (newDirection != current)
 		{
-			world.setBlockMetadataWithNotify(pos, newDirection.ordinal(), BlockFlags.UPDATE_AND_SYNC);
+			world.setBlockState(pos, state.withProperty(ROTATION, newDirection.ordinal()), BlockFlags.UPDATE_AND_SYNC);
 		}
 	}
 
 	@Override
-	public boolean rotateBlock(World world, BlockPos pos, EnumFacing side)
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
 	{
-		if (isRotatable(world, pos, side))
+		if (isRotatable(world, pos, axis))
 		{
-			doRotateBlock(world, pos, side);
+			doRotateBlock(world, pos, axis);
 			world.markBlockForUpdate(pos);
 			return true;
 		}
@@ -232,19 +194,19 @@ public abstract class GrcBlockContainer extends GrcBlockBase implements IDroppab
 		return wrenchBlock(world, pos, player, is);
 	}
 
-	protected void placeBlockByEntityDirection(World world, BlockPos pos, EntityLivingBase entity, ItemStack stack)
+	protected void placeBlockByEntityDirection(World world, BlockPos pos, IBlockState state, EntityLivingBase entity, ItemStack stack)
 	{
-		if (isRotatable(world, pos, EnumFacing.UNKNOWN))
+		final int l = MathHelper.floor_double((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		EnumFacing facing = EnumFacing.NORTH;
+
+		if (l == 0) facing = EnumFacing.SOUTH;
+		else if (l == 1) facing = EnumFacing.WEST;
+		else if (l == 2) facing = EnumFacing.NORTH;
+		else if (l == 3) facing = EnumFacing.EAST;
+
+		if (isRotatable(world, pos, EnumFacing.UP))
 		{
-			final int l = MathHelper.floor_double((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-
-			int meta = 2;
-
-			if (l == 0) meta = 1;
-			else if (l == 1) meta = 2;
-			else if (l == 2) meta = 0;
-			else if (l == 3) meta = 3;
-			world.setBlockMetadataWithNotify(pos, meta, BlockFlags.SYNC);
+			world.setBlockState(pos, state.withProperty(ROTATION, facing.ordinal()), BlockFlags.SYNC);
 		}
 	}
 
@@ -289,14 +251,14 @@ public abstract class GrcBlockContainer extends GrcBlockBase implements IDroppab
 		}
 	}
 
-	protected boolean shouldRestoreBlockState(World world, BlockPos pos, ItemStack stack)
+	protected boolean shouldRestoreBlockState(World world, BlockPos pos, IBlockState state, ItemStack stack)
 	{
 		return false;
 	}
 
-	protected void restoreBlockStateFromStack(World world, BlockPos pos, ItemStack stack)
+	protected void restoreBlockStateFromStack(World world, BlockPos pos, IBlockState state, ItemStack stack)
 	{
-		if (shouldRestoreBlockState(world, pos, stack))
+		if (shouldRestoreBlockState(world, pos, state, stack))
 		{
 			final TileEntity te = getTileEntity(world, pos);
 			if (te instanceof INBTItemSerializable)
@@ -315,10 +277,10 @@ public abstract class GrcBlockContainer extends GrcBlockBase implements IDroppab
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, EntityLivingBase entity, ItemStack stack)
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
-		super.onBlockPlacedBy(world, pos, entity, stack);
-		restoreBlockStateFromStack(world, pos, stack);
+		super.onBlockPlacedBy(world, pos, state, placer, stack);
+		restoreBlockStateFromStack(world, pos, state, stack);
 		setupCustomDisplayName(world, pos, stack);
 	}
 
@@ -335,7 +297,7 @@ public abstract class GrcBlockContainer extends GrcBlockBase implements IDroppab
 					final ItemStack stack = inventory.getStackInSlot(index);
 					ItemUtils.spawnItemStack(world, pos, stack, rand);
 				}
-				world.func_147453_f(pos, block);
+				world.updateComparatorOutputLevel(pos, block);
 			}
 		}
 	}
@@ -353,56 +315,57 @@ public abstract class GrcBlockContainer extends GrcBlockBase implements IDroppab
 		world.removeTileEntity(pos);
 	}
 
-	protected ItemStack createHarvestedBlockItemStack(World world, EntityPlayer player, BlockPos pos, int meta)
+	protected ItemStack createHarvestedBlockItemStack(World world, EntityPlayer player, BlockPos pos, IBlockState state)
 	{
-		return createStackedBlock(meta);
+		return createStackedBlock(state);
 	}
 
 	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, int meta)
+	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te)
 	{
 		player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
 		player.addExhaustion(0.025F);
 
-		if (this.canSilkHarvest(world, player, pos, meta) && EnchantmentHelper.getSilkTouchModifier(player))
+		if (this.canSilkHarvest(world, pos, state, player) && EnchantmentHelper.getSilkTouchModifier(player))
 		{
 			final ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-			final ItemStack itemstack = createHarvestedBlockItemStack(world, player, pos, meta);
+			final ItemStack itemstack = createHarvestedBlockItemStack(world, player, pos, state);
 
 			if (itemstack != null)
 			{
 				items.add(itemstack);
 			}
 
-			ForgeEventFactory.fireBlockHarvesting(items, world, this, pos, meta, 0, 1.0f, true, player);
+			ForgeEventFactory.fireBlockHarvesting(items, world, this, pos, world.getBlockState(pos), 0, 1.0f, true, player);
 			for (ItemStack is : items)
 			{
-				dropBlockAsItem(world, pos, is);
+				GrowthCraftCore.getLogger().error("Unimplemented harvestBlock dropBlockAsItem(World, BlockPos, IBlockState, ItemStack)");
+				//dropBlockAsItem(world, pos, state, fortune);
 			}
 		}
 		else
 		{
 			harvesters.set(player);
 			final int fortune = EnchantmentHelper.getFortuneModifier(player);
-			dropBlockAsItem(world, pos, meta, fortune);
+			dropBlockAsItem(world, pos, state, fortune);
 			harvesters.set(null);
 		}
 	}
 
-	protected boolean shouldDropTileStack(World world, BlockPos pos, int metadata, int fortune)
+	protected boolean shouldDropTileStack(World world, BlockPos pos, IBlockState state, int fortune)
 	{
 		return false;
 	}
 
-	private void getDefaultDrops(List<ItemStack> ret, World world, BlockPos pos, int metadata, int fortune)
+	private void getDefaultDrops(List<ItemStack> ret, World world, BlockPos pos, IBlockState state, int fortune)
 	{
-		final int count = quantityDropped(metadata, fortune, world.rand);
+		final int count = quantityDropped(state, fortune, world.rand);
 		for (int i = 0; i < count; ++i)
 		{
-			final Item item = getItemDropped(metadata, world.rand, fortune);
+			final Item item = getItemDropped(state, world.rand, fortune);
 			if (item != null)
 			{
-				ret.add(new ItemStack(item, 1, damageDropped(metadata)));
+				ret.add(new ItemStack(item, 1, damageDropped(state)));
 			}
 		}
 	}
@@ -414,7 +377,7 @@ public abstract class GrcBlockContainer extends GrcBlockBase implements IDroppab
 		{
 			final NBTTagCompound tag = new NBTTagCompound();
 			((INBTItemSerializable)te).writeToNBTForItem(tag);
-			final ItemStack stack = new ItemStack(this, 1, metadata);
+			final ItemStack stack = new ItemStack(this, 1, 0);
 			setTileTagCompound(world, pos, stack, tag);
 			ret.add(stack);
 		}
@@ -523,7 +486,7 @@ public abstract class GrcBlockContainer extends GrcBlockBase implements IDroppab
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		if (tryWrenchItem(player, world, pos)) return true;
 		if (handleIFluidHandler(world, pos, player, meta)) return true;

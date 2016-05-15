@@ -155,7 +155,7 @@ public class BlockFishTrap extends GrcBlockContainer
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		if (!world.isRemote)
 		{
@@ -168,14 +168,6 @@ public class BlockFishTrap extends GrcBlockContainer
 	public boolean isOpaqueCube()
 	{
 		return false;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int side)
-	{
-		if (this == world.getBlock(pos)) return false;
-		return super.shouldSideBeRendered(world, pos, side);
 	}
 
 	@Override

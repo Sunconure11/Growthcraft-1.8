@@ -162,7 +162,7 @@ public abstract class BlockPaddyBase extends GrcBlockBase implements IPaddy
 	}
 
 	@Override
-	public boolean canSilkHarvest(World world, EntityPlayer player, BlockPos pos, int metadata)
+	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player)
 	{
 		return false;
 	}

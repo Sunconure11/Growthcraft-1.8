@@ -195,7 +195,7 @@ public class TileEntityFishTrap extends GrcTileEntityBase implements IInventory
 
 		nbt.setTag("items", nbttaglist);
 
-		if (this.hasCustomInventoryName())
+		if (this.hasCustomName())
 		{
 			nbt.setString("name", this.name);
 		}
@@ -204,11 +204,11 @@ public class TileEntityFishTrap extends GrcTileEntityBase implements IInventory
 	@Override
 	public String getDisplayName()
 	{
-		return this.hasCustomInventoryName() ? this.name : "container.grc.fishTrap";
+		return this.hasCustomName() ? this.name : "container.grc.fishTrap";
 	}
 
 	@Override
-	public boolean hasCustomInventoryName()
+	public boolean hasCustomName()
 	{
 		return this.name != null && this.name.length() > 0;
 	}

@@ -30,13 +30,10 @@ public class BlockBambooSlab extends BlockSlab
 		setCreativeTab(GrowthCraftBamboo.creativeTab);
 	}
 
-	/************
-	 * STUFF
-	 ************/
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void getSubBlocks(Item item, CreativeTabs tab, List list)
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list)
 	{
 		if (item != Item.getItemFromBlock(GrowthCraftBamboo.blocks.bambooDoubleSlab.getBlock()))
 		{
@@ -63,9 +60,6 @@ public class BlockBambooSlab extends BlockSlab
 		return Item.getItemFromBlock(GrowthCraftBamboo.blocks.bambooSingleSlab.getBlock());
 	}
 
-	/************
-	 * DROPS
-	 ************/
 	@Override
 	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{

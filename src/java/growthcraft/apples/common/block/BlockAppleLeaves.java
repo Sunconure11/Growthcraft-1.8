@@ -48,20 +48,20 @@ public class BlockAppleLeaves extends BlockLeavesBase implements IShearable, IGr
 	}
 
 	@Override
-	public boolean canGrow(World world, BlockPos pos, boolean isClient)
+	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient)
 	{
 		return world.isAirBlock(x, y - 1, z) && (world.getBlockMetadata(x, y, z) & 3) == 0;
 	}
 
 	@Override
-	public boolean canUseBonemeal(World world, Random random, BlockPos pos)
+	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state)
 	{
 		return true;
 	}
 
 	/* Apply bonemeal effect */
 	@Override
-	public void grow(World world, Random random, BlockPos pos)
+	public void grow(World world, Random rand, BlockPos pos, IBlockState state)
 	{
 		growApple(world, random, x, y, z);
 	}
@@ -274,7 +274,7 @@ public class BlockAppleLeaves extends BlockLeavesBase implements IShearable, IGr
 	}
 
 	@Override
-	public boolean canSilkHarvest(World world, EntityPlayer player, BlockPos pos, int metadata)
+	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player)
 	{
 		return false;
 	}
@@ -326,7 +326,7 @@ public class BlockAppleLeaves extends BlockLeavesBase implements IShearable, IGr
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing facing)
 	{
 		return true;
 	}
@@ -342,7 +342,7 @@ public class BlockAppleLeaves extends BlockLeavesBase implements IShearable, IGr
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getRenderColor(int meta)
+	public int getRenderColor(IBlockState state)
 	{
 		return ColorizerFoliage.getFoliageColorBasic();
 	}
@@ -351,8 +351,6 @@ public class BlockAppleLeaves extends BlockLeavesBase implements IShearable, IGr
 	@SideOnly(Side.CLIENT)
 	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass)
 	{
-		final int meta = world.getBlockMetadata(x, y, z);
-
 		int r = 0;
 		int g = 0;
 		int b = 0;

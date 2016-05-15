@@ -3,6 +3,7 @@ package growthcraft.grapes.common.block;
 import java.util.Random;
 
 import growthcraft.api.core.util.BlockFlags;
+import growthcraft.core.util.BlockCheck;
 import growthcraft.grapes.GrowthCraftGrapes;
 
 import net.minecraft.block.IGrowable;
@@ -33,17 +34,18 @@ public class BlockGrapeVine0 extends BlockGrapeVineBase implements IGrowable
 	}
 
 	@Override
-	protected boolean canUpdateGrowth(World world, BlockPos pos)
+	protected boolean canUpdateGrowth(World world, BlockPos pos, IBlockState state)
 	{
 		return getLightValue(world, pos.up()) >= 9;
 	}
 
 	@Override
-	protected void doGrowth(World world, BlockPos pos, int meta)
+	protected void doGrowth(World world, BlockPos pos, IBlockState state)
 	{
+		final int meta = state.getValue(GROWTH);
 		if (meta == 0)
 		{
-			incrementGrowth(world, pos, meta);
+			incrementGrowth(world, pos, state);
 		}
 		else
 		{
@@ -59,15 +61,10 @@ public class BlockGrapeVine0 extends BlockGrapeVineBase implements IGrowable
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, BlockPos pos)
-	{
-		return null;
-	}
-
-	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos)
 	{
-		final int meta = world.getBlockMetadata(pos);
+		final IBlockState state = world.getBlockState(pos);
+		final int meta = state.getValue(GROWTH);
 		final float f = 0.0625F;
 
 		if (meta == 0)
@@ -83,38 +80,39 @@ public class BlockGrapeVine0 extends BlockGrapeVineBase implements IGrowable
 	@Override
 	public void grow(World world, Random rand, BlockPos pos, IBlockState state)
 	{
-		final int meta = world.getBlockMetadata(pos);
+		final int meta = state.getValue(GROWTH);
 
 		if (!world.isRemote)
 		{
 			final int i = MathHelper.getRandomIntegerInRange(world.rand, 1, 2);
+			final IBlockState vine1State = GrowthCraftGrapes.blocks.grapeVine1.getBlock().getDefaultState();
 			if (meta == 0)
 			{
 				if (i == 1)
 				{
-					vine.incrementGrowth(world, pos, meta);
+					incrementGrowth(world, pos, state);
 				}
 				else if (i == 2)
 				{
-					world.setBlock(pos, GrowthCraftGrapes.blocks.grapeVine1.getBlock(), 0, BlockFlags.ALL);
+					world.setBlockState(pos, vine1State, BlockFlags.ALL);
 				}
 			}
 			else if (meta == 1)
 			{
 				if (i == 1)
 				{
-					world.setBlock(pos, GrowthCraftGrapes.blocks.grapeVine1.getBlock(), 0, BlockFlags.ALL);
+					world.setBlockState(pos, vine1State, BlockFlags.ALL);
 				}
 				else if (i == 2)
 				{
-					if (BlockCheck.isRope(world.getBlock(pos.up())))
+					if (BlockCheck.isRope(world.getBlockState(pos.up())))
 					{
-						world.setBlock(pos, GrowthCraftGrapes.blocks.grapeVine1.getBlock(), 1, BlockFlags.ALL);
-						world.setBlock(pos.up(), GrowthCraftGrapes.blocks.grapeLeaves.getBlock(), 0, BlockFlags.ALL);
+						world.setBlockState(pos, vine1State.withProperty(GROWTH, 1), BlockFlags.ALL);
+						world.setBlockState(pos.up(), GrowthCraftGrapes.blocks.grapeLeaves.getBlock().getDefaultState(), BlockFlags.ALL);
 					}
 					else
 					{
-						world.setBlock(pos, GrowthCraftGrapes.blocks.grapeVine1.getBlock(), 0, BlockFlags.ALL);
+						world.setBlockState(pos, vine1State, BlockFlags.ALL);
 					}
 				}
 			}

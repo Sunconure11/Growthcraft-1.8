@@ -36,10 +36,11 @@ import growthcraft.milk.GrowthCraftMilk;
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 
-public enum EnumCheeseType implements IItemStackFactory, IFluidStackFactory
+public enum EnumCheeseType implements IItemStackFactory, IFluidStackFactory, IStringSerializable
 {
 	CHEDDAR("cheddar", 0xed9200,
 		new EnumCheeseFeature[]{EnumCheeseFeature.HAS_BLOCK},
@@ -82,6 +83,12 @@ public enum EnumCheeseType implements IItemStackFactory, IFluidStackFactory
 		this.meta = ordinal();
 		this.features = Arrays.asList(fets);
 		this.stages = Arrays.asList(stgs);
+	}
+
+	@Override
+	public String getName()
+	{
+		return name;
 	}
 
 	public boolean canWax(ItemStack stack)

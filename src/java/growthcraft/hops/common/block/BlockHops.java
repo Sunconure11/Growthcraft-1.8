@@ -45,6 +45,8 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 		private HopsStage() {}
 	}
 
+	public static final PropertyInteger GROWTH = PropertyInteger.create("growth", 0, HopsStage.FRUIT);
+
 	private final float hopVineGrowthRate = GrowthCraftHops.getConfig().hopVineGrowthRate;
 	private final float hopVineFlowerSpawnRate = GrowthCraftHops.getConfig().hopVineFlowerSpawnRate;
 
@@ -56,72 +58,73 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 		setStepSound(soundTypeGrass);
 		setUnlocalizedName("grc.hopVine");
 		setCreativeTab(null);
+		setDefaultState(blockState.getBaseState().withProperty(GROWTH, HopsStage.BINE));
 	}
 
-	public boolean isMature(IBlockAccess world, BlockPos pos)
+	public boolean isMature(IBlockAccess world, BlockPos pos, IBlockState state)
 	{
-		final int meta = world.getBlockMetadata(x, y, z);
+		final int meta = state.getValue(GROWTH);
 		return meta >= HopsStage.FRUIT;
 	}
 
 	public float getGrowthProgress(IBlockAccess world, BlockPos pos, IBlockState state)
 	{
-		return (float)meta / (float)HopsStage.FRUIT;
+		return (float)state.getValue(GROWTH) / (float)HopsStage.FRUIT;
 	}
 
-	protected void incrementGrowth(World world, BlockPos pos, int meta)
+	protected void incrementGrowth(World world, BlockPos pos, IBlockState state)
 	{
-		final int previousMetadata = meta;
-		++meta;
-		world.setBlockMetadataWithNotify(x, y, z, meta, BlockFlags.SYNC);
-		AppleCore.announceGrowthTick(this, world, x, y, z, previousMetadata);
+		final int meta = state.getValue(GROWTH);
+		world.setBlockState(pos, state.withProperty(GROWTH, meta + 1), BlockFlags.UPDATE_AND_SYNC);
+		AppleCore.announceGrowthTick(this, world, pos, meta);
 	}
 
 	public void spreadLeaves(World world, BlockPos pos)
 	{
-		world.setBlock(x, y + 1, z, this, HopsStage.SMALL, BlockFlags.UPDATE_AND_SYNC);
+		world.setBlockState(pos.up(), getDefaultState().withProperty(GROWTH, HopsStage.SMALL), BlockFlags.UPDATE_AND_SYNC);
 	}
 
 	public boolean canSpreadLeaves(World world, BlockPos pos)
 	{
-		return BlockCheck.isRope(world.getBlock(x, y + 1, z)) && this.canBlockStay(world, x, y + 1, z);
+		return BlockCheck.isRope(world.getBlock(pos.up())) &&
+			canBlockStay(world, pos.up());
 	}
 
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
-		if (!this.canBlockStay(world, x, y, z))
+		if (!this.canBlockStay(world, pos))
 		{
-			world.setBlock(x, y, z, GrowthCraftCore.blocks.ropeBlock.getBlock());
+			world.setBlock(pos, GrowthCraftCore.blocks.ropeBlock.getBlock());
 		}
 		else
 		{
-			final Event.Result allowGrowthResult = AppleCore.validateGrowthTick(this, world, x, y, z, random);
+			final Event.Result allowGrowthResult = AppleCore.validateGrowthTick(this, world, pos, random);
 			if (allowGrowthResult == Event.Result.DENY)
 				return;
 
-			final int meta = world.getBlockMetadata(x, y, z);
-			final float f = this.getGrowthRateLoop(world, x, y, z);
+			final int meta = state.getValue(GROWTH);
+			final float f = this.getGrowthRateLoop(world, pos);
 
 			if (meta < HopsStage.BIG)
 			{
 				if (allowGrowthResult == Event.Result.ALLOW || (random.nextInt((int)(this.hopVineGrowthRate / f) + 1) == 0))
 				{
-					incrementGrowth(world, x, y, z, meta);
+					incrementGrowth(world, pos, state);
 				}
 			}
-			else if ((meta >= HopsStage.BIG) && canSpreadLeaves(world, x, y, z))
+			else if ((meta >= HopsStage.BIG) && canSpreadLeaves(world, pos))
 			{
 				if (allowGrowthResult == Event.Result.ALLOW || (random.nextInt((int)(this.hopVineGrowthRate / f) + 1) == 0))
 				{
-					spreadLeaves(world, x, y, z);
+					spreadLeaves(world, pos);
 				}
 			}
 			else
 			{
 				if (allowGrowthResult == Event.Result.ALLOW || (random.nextInt((int)(this.hopVineFlowerSpawnRate / f) + 1) == 0))
 				{
-					incrementGrowth(world, x, y, z, meta);
+					incrementGrowth(world, pos, state);
 				}
 			}
 		}
@@ -129,7 +132,7 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 
 	/* Both side */
 	@Override
-	public boolean canGrow(World world, BlockPos pos, boolean isClient)
+	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient)
 	{
 		final int meta = world.getBlockMetadata(x, y, z);
 		return (meta < HopsStage.FRUIT) || canSpreadLeaves(world, x, y, z);
@@ -137,14 +140,14 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 
 	/* SideOnly(Side.SERVER) Can this apply bonemeal effect? */
 	@Override
-	public boolean canUseBonemeal(World world, Random random, BlockPos pos)
+	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state)
 	{
 		return true;
 	}
 
 	/* Apply bonemeal effect */
 	@Override
-	public void grow(World world, Random random, BlockPos pos)
+	public void grow(World world, Random rand, BlockPos pos, IBlockState state)
 	{
 		final int meta = world.getBlockMetadata(x, y, z);
 		if (meta < HopsStage.BIG)
@@ -240,11 +243,8 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 		world.setBlockMetadataWithNotify(x, y, z, HopsStage.BIG, BlockFlags.UPDATE_AND_SYNC);
 	}
 
-	/************
-	 * TRIGGERS
-	 ************/
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int dir, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		if (world.getBlockMetadata(x, y, z) >= HopsStage.FRUIT)
 		{
@@ -258,9 +258,6 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 		return false;
 	}
 
-	/************
-	 * CONDITIONS
-	 ************/
 	@Override
 	public boolean canBlockStay(World world, BlockPos pos)
 	{
@@ -309,7 +306,7 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 	}
 
 	@Override
-	public boolean canSilkHarvest(World world, EntityPlayer player, BlockPos pos, int metadata)
+	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player)
 	{
 		return false;
 	}
@@ -371,7 +368,7 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getRenderColor(int meta)
+	public int getRenderColor(IBlockState state)
 	{
 		return ColorizerFoliage.getFoliageColorBasic();
 	}

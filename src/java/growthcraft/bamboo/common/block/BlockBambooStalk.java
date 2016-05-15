@@ -119,29 +119,26 @@ public class BlockBambooStalk extends GrcBlockBase
 		}
 	}
 
-	/************
-	 * TRIGGERS
-	 ************/
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, Block s)
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block)
 	{
 		boolean flag = false;
 
-		if (world.getBlock(x, y - 1, z) != this)
+		if (world.getBlock(pos.down()) != this)
 		{
-			if (!isBambooOnGround(world, x, y, z))
+			if (!isBambooOnGround(world, pos))
 			{
 				flag = true;
 			}
 		}
 
-		if (flag && world.getBlockMetadata(x, y, z) == 0)
+		if (flag && world.getBlockMetadata(pos) == 0)
 		{
-			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-			world.setBlockToAir(x, y, z);
+			dropBlockAsItem(world, pos, state, 0);
+			world.setBlockToAir(pos);
 		}
 
-		super.onNeighborBlockChange(world, x, y, z, s);
+		super.onNeighborBlockChange(world, pos, state, block);
 	}
 
 	@Override
@@ -199,12 +196,12 @@ public class BlockBambooStalk extends GrcBlockBase
 
 	public boolean isBambooOnGround(World world, BlockPos pos)
 	{
-		if (!BlockCheck.canSustainPlant(world, x, y - 1, z, EnumFacing.UP, GrowthCraftBamboo.blocks.bambooShoot.getBlock())) return false;
+		if (!BlockCheck.canSustainPlant(world, pos.down(), EnumFacing.UP, GrowthCraftBamboo.blocks.bambooShoot.getBlock())) return false;
 		return this == world.getBlock(x, y, z);
 	}
 
 	@Override
-	public boolean canSilkHarvest(World world, EntityPlayer player, BlockPos pos, int metadata)
+	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player)
 	{
 		return false;
 	}
@@ -246,7 +243,7 @@ public class BlockBambooStalk extends GrcBlockBase
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int s)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing facing)
 	{
 		return true;
 	}
@@ -262,9 +259,10 @@ public class BlockBambooStalk extends GrcBlockBase
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getRenderColor(int par1)
+	public int getRenderColor(IBlockState state)
 	{
-		return par1 == 0 ? 0xFFFFFF : ColorizerFoliage.getFoliageColorBasic();
+		//return par1 == 0 ? 0xFFFFFF : ColorizerFoliage.getFoliageColorBasic();
+		return 0xFFFFFF;
 	}
 
 	@Override

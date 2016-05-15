@@ -245,7 +245,7 @@ public class BlockBambooLeaves extends BlockLeavesBase implements IShearable
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing facing)
 	{
 		return true;
 	}
@@ -261,7 +261,7 @@ public class BlockBambooLeaves extends BlockLeavesBase implements IShearable
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getRenderColor(int meta)
+	public int getRenderColor(IBlockState state)
 	{
 		return ColorizerFoliage.getFoliageColorBasic();
 	}
@@ -270,7 +270,6 @@ public class BlockBambooLeaves extends BlockLeavesBase implements IShearable
 	@SideOnly(Side.CLIENT)
 	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass)
 	{
-		final int meta = world.getBlockState(pos);
 		int r = 0;
 		int g = 0;
 		int b = 0;

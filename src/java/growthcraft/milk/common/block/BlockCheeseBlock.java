@@ -38,13 +38,15 @@ import growthcraft.milk.GrowthCraftMilk;
 import growthcraft.core.util.ItemUtils;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -53,6 +55,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCheeseBlock extends GrcBlockContainer
 {
+	public static final PropertyEnum<EnumCheeseType> TYPE = PropertyEnum.<EnumCheeseType>create("type", EnumCheeseType.class);
+
 	public BlockCheeseBlock()
 	{
 		super(Material.cake);
@@ -63,6 +67,7 @@ public class BlockCheeseBlock extends GrcBlockContainer
 		setTileEntityType(TileEntityCheeseBlock.class);
 		final BBox bb = BBox.newCube(4f, 0f, 4f, 8f, 8f, 8f).scale(1f / 16f);
 		setBlockBounds(bb.x0(), bb.y0(), bb.z0(), bb.x1(), bb.y1(), bb.z1());
+		setDefaultState(blockState.getBaseState().withProperty(TYPE, EnumCheeseType.CHEDDAR));
 	}
 
 	@Override
@@ -72,33 +77,33 @@ public class BlockCheeseBlock extends GrcBlockContainer
 	}
 
 	@Override
-	protected boolean shouldDropTileStack(World world, BlockPos pos, int metadata, int fortune)
+	protected boolean shouldDropTileStack(World world, BlockPos pos, IBlockState state, int fortune)
 	{
 		return false;
 	}
 
 	@Override
-	protected ItemStack createHarvestedBlockItemStack(World world, EntityPlayer player, BlockPos pos, int meta)
+	protected ItemStack createHarvestedBlockItemStack(World world, EntityPlayer player, BlockPos pos, IBlockState state)
 	{
-		final TileEntityCheeseBlock te = getTileEntity(world, x, y, z);
+		final TileEntityCheeseBlock te = getTileEntity(world, pos);
 		if (te != null)
 		{
 			return te.asItemStack();
 		}
-		return new ItemStack(this, 1, meta);
+		return new ItemStack(this, 1, ((EnumCheeseType)state.getValue(TYPE)).meta);
 	}
 
 	@Override
-	protected void getTileItemStackDrops(List<ItemStack> ret, World world, BlockPos pos, int metadata, int fortune)
+	protected void getTileItemStackDrops(List<ItemStack> ret, World world, BlockPos pos, IBlockState state, int fortune)
 	{
-		final TileEntityCheeseBlock te = getTileEntity(world, x, y, z);
+		final TileEntityCheeseBlock te = getTileEntity(world, pos);
 		if (te != null)
 		{
 			ret.add(te.asItemStack());
 		}
 		else
 		{
-			super.getTileItemStackDrops(ret, world, x, y, z, metadata, fortune);
+			super.getTileItemStackDrops(ret, world, pos, state, fortune);
 		}
 	}
 
@@ -111,14 +116,14 @@ public class BlockCheeseBlock extends GrcBlockContainer
 	@Override
 	protected void scatterInventory(World world, BlockPos pos, Block block)
 	{
-		final TileEntityCheeseBlock te = getTileEntity(world, x, y, z);
+		final TileEntityCheeseBlock te = getTileEntity(world, pos);
 		if (te != null)
 		{
 			final List<ItemStack> drops = new ArrayList<ItemStack>();
 			te.populateDrops(drops);
 			for (ItemStack stack : drops)
 			{
-				ItemUtils.spawnItemStack(world, x, y, z, stack, rand);
+				ItemUtils.spawnItemStack(world, pos, stack, rand);
 			}
 		}
 	}
@@ -126,12 +131,12 @@ public class BlockCheeseBlock extends GrcBlockContainer
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player)
 	{
-		final TileEntityCheeseBlock teCheeseBlock = getTileEntity(world, x, y, z);
+		final TileEntityCheeseBlock teCheeseBlock = getTileEntity(world, pos);
 		if (teCheeseBlock != null)
 		{
 			return teCheeseBlock.asItemStack();
 		}
-		return super.getPickBlock(target, world, x, y, z, player);
+		return super.getPickBlock(target, world, pos, player);
 	}
 
 	@Override
@@ -149,7 +154,7 @@ public class BlockCheeseBlock extends GrcBlockContainer
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void getSubBlocks(Item item, CreativeTabs tab, List list)
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list)
 	{
 		if (item instanceof ItemBlockCheeseBlock)
 		{
@@ -175,7 +180,7 @@ public class BlockCheeseBlock extends GrcBlockContainer
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing facing)
 	{
 		return true;
 	}

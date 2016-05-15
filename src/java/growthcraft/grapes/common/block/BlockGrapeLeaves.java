@@ -141,7 +141,7 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope, IGr
 	}
 
 	@Override
-	public void grow(World world, Random rand, BlockPos pos, IBlockState state)
+	public void grow(World world, Random random, BlockPos pos, IBlockState state)
 	{
 		final BlockPos belowPos = pos.down();
 		if (world.isAirBlock(belowPos) && (random.nextInt(grapeSpawnRate) == 0))
@@ -173,7 +173,7 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope, IGr
 		}
 		else
 		{
-			grow(world, pos, random);
+			grow(world, random, pos, state);
 		}
 	}
 
@@ -205,7 +205,7 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope, IGr
 				for (int i = 1; i <= grapeVineSupportedLength; ++i)
 				{
 					final BlockPos newPos = pos.offset(dir, i);
-					final IBlockState state = world.getBlock(pos);
+					final IBlockState state = world.getBlockState(pos);
 					if (state == null || state.getBlock() != this)
 					{
 						break;
@@ -234,7 +234,7 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope, IGr
 	}
 
 	@Override
-	public boolean canSilkHarvest(World world, EntityPlayer player, BlockPos pos, int metadata)
+	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player)
 	{
 		return false;
 	}
@@ -242,7 +242,7 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope, IGr
 	@Override
 	public boolean canConnectRopeTo(IBlockAccess world, BlockPos pos)
 	{
-		if (world.getBlock(pos) instanceof IBlockRope)
+		if (world.getBlockState(pos).getBlock() instanceof IBlockRope)
 		{
 			return true;
 		}
@@ -269,7 +269,7 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope, IGr
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, int side)
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing facing)
 	{
 		return true;
 	}
@@ -285,7 +285,7 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope, IGr
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getRenderColor(int meta)
+	public int getRenderColor(IBlockState state)
 	{
 		return ColorizerFoliage.getFoliageColorBasic();
 	}
@@ -294,7 +294,6 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope, IGr
 	@SideOnly(Side.CLIENT)
 	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass)
 	{
-		final int meta = world.getBlockMetadata(pos);
 		int r = 0;
 		int g = 0;
 		int b = 0;
@@ -302,7 +301,7 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope, IGr
 		{
 			for (int i2 = -1; i2 <= 1; ++i2)
 			{
-				final BlockPos leafPos = new BlockPos(pos.getX() + i2, y, pos.getZ() + l1);
+				final BlockPos leafPos = new BlockPos(pos.getX() + i2, pos.getY(), pos.getZ() + l1);
 				final int j2 = world.getBiomeGenForCoords(pos.getX(), pos.getZ()).getBiomeFoliageColor(leafPos);
 				r += (j2 & 16711680) >> 16;
 				g += (j2 & 65280) >> 8;

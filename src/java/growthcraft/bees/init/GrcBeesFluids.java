@@ -78,7 +78,7 @@ public class GrcBeesFluids extends GrcModuleBase
 		if (honey != null)
 		{
 			honey.setCreativeTab(GrowthCraftBees.tab);
-			honey.block.getBlock().setBlockTextureName("grcbees:fluids/honey");
+			//honey.block.getBlock().setBlockTextureName("grcbees:fluids/honey");
 			honey.refreshItemColor();
 		}
 	}
