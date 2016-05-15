@@ -191,8 +191,7 @@ public class BlockHangingCurds extends GrcBlockContainer
 		{
 			if (!canBlockStay(world, pos))
 			{
-				dropBlockAsItem(world, pos, world.getBlockMetadata(pos), 0);
-				world.setBlock(pos, Blocks.air, 0, BlockFlags.UPDATE_AND_SYNC);
+				fellBlockAsItem(world, pos, state);
 			}
 		}
 	}

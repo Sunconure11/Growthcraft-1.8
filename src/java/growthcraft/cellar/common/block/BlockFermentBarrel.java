@@ -135,7 +135,7 @@ public class BlockFermentBarrel extends BlockCellarContainer
 	}
 
 	@Override
-	public int getComparatorInputOverride(World world, BlockPos pos, int par5)
+	public int getComparatorInputOverride(World world, BlockPos pos)
 	{
 		final TileEntityFermentBarrel te = getTileEntity(world, pos);
 		if (te != null)

@@ -248,7 +248,7 @@ public class BlockBeeBox extends GrcBlockContainer
 	}
 
 	@Override
-	public int getComparatorInputOverride(World world, BlockPos pos, int par5)
+	public int getComparatorInputOverride(World world, BlockPos pos)
 	{
 		final TileEntityBeeBox te = (TileEntityBeeBox)world.getTileEntity(pos);
 		return te.countHoney() * 15 / 27;

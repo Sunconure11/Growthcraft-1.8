@@ -30,6 +30,7 @@ import growthcraft.milk.GrowthCraftMilk;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -64,24 +65,24 @@ public class BlockCheesePress extends GrcBlockContainer
 	@Override
 	public void doRotateBlock(World world, BlockPos pos, EnumFacing side)
 	{
-		world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) ^ 1, BlockFlags.SYNC);
+		//world.setBlockMetadataWithNotify(pos, world.getBlockMetadata(pos) ^ 1, BlockFlags.SYNC);
 	}
 
 	@Override
 	public void onBlockAdded(World world, BlockPos pos)
 	{
-		super.onBlockAdded(world, x, y, z);
-		this.setDefaultDirection(world, x, y, z);
+		super.onBlockAdded(world, pos);
+		this.setDefaultDirection(world, pos);
 	}
 
 	private void setDefaultDirection(World world, BlockPos pos)
 	{
 		if (!world.isRemote)
 		{
-			final Block block = world.getBlock(x, y, z - 1);
-			final Block block1 = world.getBlock(x, y, z + 1);
-			final Block block2 = world.getBlock(x - 1, y, z);
-			final Block block3 = world.getBlock(x + 1, y, z);
+			final Block block = world.getBlockState(pos.north()).getBlock();
+			final Block block1 = world.getBlockState(pos.south()).getBlock();
+			final Block block2 = world.getBlockState(pos.west()).getBlock();
+			final Block block3 = world.getBlockState(pos.east()).getBlock();
 			byte meta = 3;
 
 			if (block.func_149730_j() && !block1.func_149730_j())
@@ -104,39 +105,39 @@ public class BlockCheesePress extends GrcBlockContainer
 				meta = 4;
 			}
 
-			world.setBlockMetadataWithNotify(x, y, z, meta, BlockFlags.UPDATE_AND_SYNC);
+			//world.setBlockMetadataWithNotify(pos, meta, BlockFlags.UPDATE_AND_SYNC);
 		}
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, EntityLivingBase entity, ItemStack stack)
 	{
-		super.onBlockPlacedBy(world, x, y, z, entity, stack);
-		final int a = MathHelper.floor_double((entity.rotationYaw * 4.0D / 360.0D) + 0.5D) & 3;
-		if (a == 0 || a == 2)
-		{
-			world.setBlockMetadataWithNotify(x, y, z, 0, BlockFlags.SYNC);
-		}
-		else if (a == 1 || a == 3)
-		{
-			world.setBlockMetadataWithNotify(x, y, z, 1, BlockFlags.SYNC);
-		}
+		super.onBlockPlacedBy(world, pos, entity, stack);
+		//final int a = MathHelper.floor_double((entity.rotationYaw * 4.0D / 360.0D) + 0.5D) & 3;
+		//if (a == 0 || a == 2)
+		//{
+		//	world.setBlockMetadataWithNotify(pos, 0, BlockFlags.SYNC);
+		//}
+		//else if (a == 1 || a == 3)
+		//{
+		//	world.setBlockMetadataWithNotify(pos, 1, BlockFlags.SYNC);
+		//}
 	}
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if (super.onBlockActivated(world, x, y, z, player, meta, par7, par8, par9)) return true;
+		if (super.onBlockActivated(world, pos, state, player, hitX, hitY, hitZ)) return true;
 		if (GrowthCraftMilk.getConfig().cheesePressHandOperated)
 		{
 			if (!player.isSneaking())
 			{
-				final TileEntityCheesePress cheesePress = getTileEntity(world, x, y, z);
+				final TileEntityCheesePress cheesePress = getTileEntity(world, pos);
 				if (cheesePress != null)
 				{
 					if (cheesePress.toggle())
 					{
-						world.playSoundEffect((double)x, (double)y, (double)z, "random.wood_click", 0.3f, 0.5f);
+						world.playSoundEffect((double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), "random.wood_click", 0.3f, 0.5f);
 					}
 					return true;
 				}
@@ -147,26 +148,26 @@ public class BlockCheesePress extends GrcBlockContainer
 
 	private void updatePressState(World world, BlockPos pos)
 	{
-		final boolean isPowered = world.isBlockIndirectlyGettingPowered(x, y, z);
-		final TileEntityCheesePress cheesePress = getTileEntity(world, x, y, z);
+		final int isPowered = world.isBlockIndirectlyGettingPowered(pos);
+		final TileEntityCheesePress cheesePress = getTileEntity(world, pos);
 		if (cheesePress != null)
 		{
-			if (cheesePress.toggle(isPowered))
+			if (cheesePress.toggle(isPowered > 0))
 			{
-				world.playSoundEffect((double)x, (double)y, (double)z, "random.wood_click", 0.3f, 0.5f);
+				world.playSoundEffect((double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), "random.wood_click", 0.3f, 0.5f);
 			}
 		}
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, Block block)
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block)
 	{
-		super.onNeighborBlockChange(world, x, y, z, block);
+		super.onNeighborBlockChange(world, pos, state, block);
 		if (!world.isRemote)
 		{
 			if (GrowthCraftMilk.getConfig().cheesePressRedstoneOperated)
 			{
-				this.updatePressState(world, x, y, z);
+				updatePressState(world, pos);
 			}
 		}
 	}
@@ -191,9 +192,9 @@ public class BlockCheesePress extends GrcBlockContainer
 	}
 
 	@Override
-	public int getComparatorInputOverride(World world, BlockPos pos, int par5)
+	public int getComparatorInputOverride(World world, BlockPos pos)
 	{
-		final TileEntityCheesePress te = getTileEntity(world, x, y, z);
+		final TileEntityCheesePress te = getTileEntity(world, pos);
 		if (te != null)
 		{
 			return Container.calcRedstoneFromInventory(te);

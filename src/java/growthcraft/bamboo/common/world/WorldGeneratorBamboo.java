@@ -17,7 +17,7 @@ public class WorldGeneratorBamboo implements IWorldGenerator
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
 	{
-		if (world.provider.dimensionId == 0)
+		if (world.provider.getDimensionId() == 0)
 		{
 			generateSurface(world, random, chunkX, chunkZ);
 		}

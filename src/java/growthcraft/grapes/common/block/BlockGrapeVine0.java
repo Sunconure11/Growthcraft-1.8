@@ -49,7 +49,7 @@ public class BlockGrapeVine0 extends BlockGrapeVineBase implements IGrowable
 		}
 		else
 		{
-			world.setBlock(pos, GrowthCraftGrapes.blocks.grapeVine1.getBlock(), 0, BlockFlags.UPDATE_AND_SYNC);
+			world.setBlockState(pos, GrowthCraftGrapes.blocks.grapeVine1.getBlock().getDefaultState(), BlockFlags.UPDATE_AND_SYNC);
 		}
 	}
 

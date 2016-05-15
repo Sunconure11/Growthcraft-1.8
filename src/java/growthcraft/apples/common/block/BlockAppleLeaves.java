@@ -17,6 +17,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -213,7 +215,7 @@ public class BlockAppleLeaves extends BlockLeavesBase implements IShearable, IGr
 			final double d0 = (double)((float)x + random.nextFloat());
 			final double d1 = (double)y - 0.05D;
 			final double d2 = (double)((float)z + random.nextFloat());
-			world.spawnParticle("dripWater", d0, d1, d2, 0.0D, 0.0D, 0.0D);
+			world.spawnParticle(EnumParticleTypes.DRIP_WATER, d0, d1, d2, 0.0D, 0.0D, 0.0D);
 		}
 	}
 

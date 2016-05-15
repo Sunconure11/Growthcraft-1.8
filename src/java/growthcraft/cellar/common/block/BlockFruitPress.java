@@ -167,9 +167,6 @@ public class BlockFruitPress extends BlockCellarContainer
 		return true;
 	}
 
-	/************
-	 * COMPARATOR
-	 ************/
 	@Override
 	public boolean hasComparatorInputOverride()
 	{
@@ -177,7 +174,7 @@ public class BlockFruitPress extends BlockCellarContainer
 	}
 
 	@Override
-	public int getComparatorInputOverride(World world, BlockPos pos, int par5)
+	public int getComparatorInputOverride(World world, BlockPos pos)
 	{
 		final TileEntityFruitPress te = getTileEntity(world, x, y, z);
 		if (te != null)

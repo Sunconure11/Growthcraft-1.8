@@ -17,6 +17,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -184,7 +185,7 @@ public class BlockFishTrap extends GrcBlockContainer
 	}
 
 	@Override
-	public int getComparatorInputOverride(World world, BlockPos pos, int par5)
+	public int getComparatorInputOverride(World world, BlockPos pos)
 	{
 		final TileEntityFishTrap te = getTileEntity(world, pos);
 		if (te != null)

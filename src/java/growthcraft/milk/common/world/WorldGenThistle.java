@@ -3,6 +3,7 @@ package growthcraft.milk.common.world;
 import java.util.Random;
 
 import growthcraft.api.core.util.BiomeUtils;
+import growthcraft.api.core.util.BlockFlags;
 import growthcraft.milk.GrowthCraftMilk;
 
 import net.minecraft.init.Blocks;
@@ -22,7 +23,7 @@ public class WorldGenThistle implements IWorldGenerator
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
 	{
-		if (world.provider.dimensionId == 0)
+		if (world.provider.getDimensionId() == 0)
 		{
 			final BiomeGenBase biome = world.getBiomeGenForCoords(chunkX, chunkZ);
 			if (GrowthCraftMilk.getConfig().thistleUseBiomeDict)
@@ -46,9 +47,9 @@ public class WorldGenThistle implements IWorldGenerator
 			final int x = chunk_x * 16 + rand.nextInt(16);
 			final int z = chunk_z * 16 + rand.nextInt(16);
 			final int y = minHeight + rand.nextInt(heightDiff);
-			if (world.getBlock(x, y - 1, z) == Blocks.grass)
+			if (world.getBlockState(pos.down()) == Blocks.grass)
 			{
-				world.setBlock(x, y, z, GrowthCraftMilk.blocks.thistle.getBlock());
+				world.setBlockState(pos, GrowthCraftMilk.blocks.thistle.getBlock().getDefaultState(), BlockFlags.SYNC);
 			}
 		}
 	}
