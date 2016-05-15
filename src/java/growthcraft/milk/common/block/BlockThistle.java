@@ -49,7 +49,7 @@ public class BlockThistle extends BlockBush implements ISpreadablePlant, IGrowab
 		super(Material.plants);
 		setTickRandomly(true);
 		setBlockTextureName("grcmilk:thistle/flower_thistle");
-		setBlockName("grcmilk.Thistle");
+		setUnlocalizedName("grcmilk.Thistle");
 		setStepSound(soundTypeGrass);
 		setCreativeTab(GrowthCraftMilk.creativeTab);
 		final BBox bb = BBox.newCube(2f, 0f, 2f, 12f, 16f, 12f).scale(1f / 16f);

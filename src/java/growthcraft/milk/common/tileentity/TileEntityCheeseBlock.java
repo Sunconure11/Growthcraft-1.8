@@ -40,8 +40,9 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
 
-public class TileEntityCheeseBlock extends GrcTileEntityBase implements IItemHandler, INBTItemSerializable
+public class TileEntityCheeseBlock extends GrcTileEntityBase implements ITickable, IItemHandler, INBTItemSerializable
 {
 	private Cheese cheese = new Cheese();
 
@@ -136,10 +137,8 @@ public class TileEntityCheeseBlock extends GrcTileEntityBase implements IItemHan
 	}
 
 	@Override
-	public void updateEntity()
+	public void update()
 	{
-		super.updateEntity();
-
 		if (!worldObj.isRemote)
 		{
 			cheese.update();
@@ -152,7 +151,7 @@ public class TileEntityCheeseBlock extends GrcTileEntityBase implements IItemHan
 				}
 				else
 				{
-					worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+					worldObj.setBlockToAir(pos);
 				}
 			}
 		}

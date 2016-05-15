@@ -24,9 +24,11 @@
 package growthcraft.rice.util;
 
 import growthcraft.rice.GrowthCraftRice;
+import growthcraft.core.common.block.BlockPaddyBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 public class RiceBlockCheck
@@ -74,8 +76,7 @@ public class RiceBlockCheck
 		final IBlockState state = world.getBlockState(pos);
 		if (isPaddy(state))
 		{
-			final int meta = world.getBlockMetadata(x, y, z);
-			return meta >= amount;
+			return state.getValue(BlockPaddyBase.FLUID_LEVEL) >= amount;
 		}
 		return false;
 	}

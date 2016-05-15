@@ -3,28 +3,27 @@ package growthcraft.bamboo.common.block;
 import java.util.List;
 import java.util.Random;
 
-import growthcraft.bamboo.client.renderer.RenderBamboo;
 import growthcraft.bamboo.GrowthCraftBamboo;
 import growthcraft.core.common.block.GrcBlockBase;
 import growthcraft.core.util.BlockCheck;
-import growthcraft.core.util.RenderUtils;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockBambooStalk extends GrcBlockBase
 {
@@ -36,7 +35,7 @@ public class BlockBambooStalk extends GrcBlockBase
 		setStepSound(soundTypeWood);
 		setHardness(2.0F);
 		setTickRandomly(true);
-		setBlockName("grc.bambooStalk");
+		setUnlocalizedName("grc.bambooStalk");
 		setCreativeTab(null);
 	}
 
@@ -270,7 +269,7 @@ public class BlockBambooStalk extends GrcBlockBase
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int colorMultiplier(IBlockAccess world, BlockPos pos)
+	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass)
 	{
 		if (world.getBlockMetadata(x, y, z) == 0)
 		{
@@ -333,7 +332,7 @@ public class BlockBambooStalk extends GrcBlockBase
 
 	@Override
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void addCollisionBoxesToList(World world, BlockPos pos, AxisAlignedBB axis, List list, Entity entity)
+	public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB axis, List<AxisAlignedBB> list, Entity entity)
 	{
 		final float x1 = 0.25F;
 		final float x2 = 0.75F;
@@ -341,60 +340,60 @@ public class BlockBambooStalk extends GrcBlockBase
 		final float z2 = 0.75F;
 
 		this.setBlockBounds(x1, 0.0F, z1, x2, 1.0F, z2);
-		super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, state, axis, list, entity);
 
 		if (world.getBlockMetadata(x, y, z) != 0)
 		{
 			if (this.canFence(world, x, y, z - 1))
 			{
-				renderFence(world, axis, list, entity, x, y, z, RenderUtils.Face.ZNEG);
+				renderFence(world, axis, list, entity, x, y, z, EnumFacing.NORTH);
 			}
 			else if (this.canWall(world, x, y, z - 1))
 			{
-				renderWall(world, axis, list, entity, x, y, z, RenderUtils.Face.ZNEG);
+				renderWall(world, axis, list, entity, x, y, z, EnumFacing.NORTH);
 			}
 			else if (this.canDoor(world, x, y, z - 1))
 			{
-				renderDoor(world, axis, list, entity, x, y, z, RenderUtils.Face.ZNEG);
+				renderDoor(world, axis, list, entity, x, y, z, EnumFacing.NORTH);
 			}
 
 			if (this.canFence(world, x, y, z + 1))
 			{
-				renderFence(world, axis, list, entity, x, y, z, RenderUtils.Face.ZPOS);
+				renderFence(world, axis, list, entity, x, y, z, EnumFacing.SOUTH);
 			}
 			else if (this.canWall(world, x, y, z + 1))
 			{
-				renderWall(world, axis, list, entity, x, y, z, RenderUtils.Face.ZPOS);
+				renderWall(world, axis, list, entity, x, y, z, EnumFacing.SOUTH);
 			}
 			else if (this.canDoor(world, x, y, z + 1))
 			{
-				renderDoor(world, axis, list, entity, x, y, z, RenderUtils.Face.ZPOS);
+				renderDoor(world, axis, list, entity, x, y, z, EnumFacing.SOUTH);
 			}
 
 			if (this.canFence(world, x - 1, y, z))
 			{
-				renderFence(world, axis, list, entity, x, y, z, RenderUtils.Face.XNEG);
+				renderFence(world, axis, list, entity, x, y, z, EnumFacing.WEST);
 			}
 			else if (this.canWall(world, x - 1, y, z))
 			{
-				renderWall(world, axis, list, entity, x, y, z, RenderUtils.Face.XNEG);
+				renderWall(world, axis, list, entity, x, y, z, EnumFacing.WEST);
 			}
 			else if (this.canDoor(world, x - 1, y, z))
 			{
-				renderDoor(world, axis, list, entity, x, y, z, RenderUtils.Face.XNEG);
+				renderDoor(world, axis, list, entity, x, y, z, EnumFacing.WEST);
 			}
 
 			if (this.canFence(world, x + 1, y, z))
 			{
-				renderFence(world, axis, list, entity, x, y, z, RenderUtils.Face.XPOS);
+				renderFence(world, axis, list, entity, x, y, z, EnumFacing.EAST);
 			}
 			else if (this.canWall(world, x + 1, y, z))
 			{
-				renderWall(world, axis, list, entity, x, y, z, RenderUtils.Face.XPOS);
+				renderWall(world, axis, list, entity, x, y, z, EnumFacing.EAST);
 			}
 			else if (this.canDoor(world, x + 1, y, z))
 			{
-				renderDoor(world, axis, list, entity, x, y, z, RenderUtils.Face.XPOS);
+				renderDoor(world, axis, list, entity, x, y, z, EnumFacing.EAST);
 			}
 		}
 
@@ -402,7 +401,7 @@ public class BlockBambooStalk extends GrcBlockBase
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void renderFence(World world, AxisAlignedBB axis, List list, Entity entity, BlockPos pos, RenderUtils.Face m)
+	private void renderFence(World world, AxisAlignedBB axis, List list, Entity entity, BlockPos pos, EnumFacing m)
 	{
 		float x1 = x;
 		float x2 = x + 1.0F;
@@ -412,28 +411,28 @@ public class BlockBambooStalk extends GrcBlockBase
 		float y1 = 0.75F;
 		float y2 = 0.9375F;
 
-		if (m == RenderUtils.Face.ZNEG)
+		if (m == EnumFacing.NORTH)
 		{
 			x1 = 0.4375F;
 			x2 = 0.5625F;
 			z1 = 0.0F;
 			z2 = 0.25F;
 		}
-		else if (m == RenderUtils.Face.ZPOS)
+		else if (m == EnumFacing.SOUTH)
 		{
 			x1 = 0.4375F;
 			x2 = 0.5625F;
 			z1 = 0.75F;
 			z2 = 1.0F;
 		}
-		else if (m == RenderUtils.Face.XNEG)
+		else if (m == EnumFacing.WEST)
 		{
 			z1 = 0.4375F;
 			z2 = 0.5625F;
 			x1 = 0.0F;
 			x2 = 0.25F;
 		}
-		else if (m == RenderUtils.Face.XPOS)
+		else if (m == EnumFacing.EAST)
 		{
 			z1 = 0.4375F;
 			z2 = 0.5625F;
@@ -447,28 +446,28 @@ public class BlockBambooStalk extends GrcBlockBase
 		y1 = 0.375F;
 		y2 = 0.5625F;
 
-		if (m == RenderUtils.Face.ZNEG)
+		if (m == EnumFacing.NORTH)
 		{
 			x1 = 0.4375F;
 			x2 = 0.5625F;
 			z1 = 0.0F;
 			z2 = 0.25F;
 		}
-		else if (m == RenderUtils.Face.ZPOS)
+		else if (m == EnumFacing.SOUTH)
 		{
 			x1 = 0.4375F;
 			x2 = 0.5625F;
 			z1 = 0.75F;
 			z2 = 1.0F;
 		}
-		else if (m == RenderUtils.Face.XNEG)
+		else if (m == EnumFacing.WEST)
 		{
 			z1 = 0.4375F;
 			z2 = 0.5625F;
 			x1 = 0.0F;
 			x2 = 0.25F;
 		}
-		else if (m == RenderUtils.Face.XPOS)
+		else if (m == EnumFacing.EAST)
 		{
 			z1 = 0.4375F;
 			z2 = 0.5625F;
@@ -481,7 +480,7 @@ public class BlockBambooStalk extends GrcBlockBase
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void renderWall(World world, AxisAlignedBB axis, List list, Entity entity, BlockPos pos, RenderUtils.Face m)
+	private void renderWall(World world, AxisAlignedBB axis, List list, Entity entity, BlockPos pos, EnumFacing m)
 	{
 		float x1 = x;
 		float x2 = x + 1.0F;
@@ -491,28 +490,28 @@ public class BlockBambooStalk extends GrcBlockBase
 		final double y1 = 0.0F;
 		final double y2 = 1.0F;
 
-		if (m == RenderUtils.Face.ZNEG)
+		if (m == EnumFacing.NORTH)
 		{
 			x1 = 0.375F;
 			x2 = 0.625F;
 			z1 = 0.0F;
 			z2 = 0.25F;
 		}
-		else if (m == RenderUtils.Face.ZPOS)
+		else if (m == EnumFacing.SOUTH)
 		{
 			x1 = 0.375F;
 			x2 = 0.625F;
 			z1 = 0.75F;
 			z2 = 1.0F;
 		}
-		else if (m == RenderUtils.Face.XNEG)
+		else if (m == EnumFacing.WEST)
 		{
 			z1 = 0.375F;
 			z2 = 0.625F;
 			x1 = 0.0F;
 			x2 = 0.25F;
 		}
-		else if (m == RenderUtils.Face.XPOS)
+		else if (m == EnumFacing.EAST)
 		{
 			z1 = 0.375F;
 			z2 = 0.625F;
@@ -525,7 +524,7 @@ public class BlockBambooStalk extends GrcBlockBase
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void renderDoor(World world, AxisAlignedBB axis, List list, Entity entity, BlockPos pos, RenderUtils.Face m)
+	private void renderDoor(World world, AxisAlignedBB axis, List list, Entity entity, BlockPos pos, EnumFacing m)
 	{
 		float x1 = x;
 		float x2 = x + 1.0F;
@@ -538,7 +537,7 @@ public class BlockBambooStalk extends GrcBlockBase
 		int tm0;
 		int tm;
 
-		if (m == RenderUtils.Face.ZNEG)
+		if (m == EnumFacing.NORTH)
 		{
 			tm0 = world.getBlockMetadata(x, y, z - 1);
 			if ((tm0 & 8) > 7)
@@ -568,7 +567,7 @@ public class BlockBambooStalk extends GrcBlockBase
 				super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
 			}
 		}
-		else if (m == RenderUtils.Face.ZPOS)
+		else if (m == EnumFacing.SOUTH)
 		{
 			tm0 = world.getBlockMetadata(x, y, z + 1);
 			if ((tm0 & 8) > 7)
@@ -599,7 +598,7 @@ public class BlockBambooStalk extends GrcBlockBase
 				super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
 			}
 		}
-		else if (m == RenderUtils.Face.XNEG)
+		else if (m == EnumFacing.WEST)
 		{
 			tm0 = world.getBlockMetadata(x - 1, y, z);
 			if ((tm0 & 8) > 7)
@@ -631,7 +630,7 @@ public class BlockBambooStalk extends GrcBlockBase
 				super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
 			}
 		}
-		else if (m == RenderUtils.Face.XPOS)
+		else if (m == EnumFacing.EAST)
 		{
 			tm0 = world.getBlockMetadata(x + 1, y, z);
 			if ((tm0 & 8) > 7)

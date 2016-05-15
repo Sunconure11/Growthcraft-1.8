@@ -40,15 +40,16 @@ import growthcraft.milk.GrowthCraftMilk;
 
 import io.netty.buffer.ByteBuf;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.MathHelper;
-import net.minecraft.inventory.IInventory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityCheesePress extends GrcTileEntityInventoryBase implements IItemHandler, ITileProgressiveDevice
+public class TileEntityCheesePress extends GrcTileEntityInventoryBase implements ITickable, IItemHandler, ITileProgressiveDevice
 {
 	private static int[][] accessibleSlots = {
 		{ 0 },
@@ -155,25 +156,25 @@ public class TileEntityCheesePress extends GrcTileEntityInventoryBase implements
 	}
 
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side)
+	public int[] getSlotsForFace(EnumFacing side)
 	{
-		return accessibleSlots[side];
+		return accessibleSlots[side.ordinal()];
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack stack, int side)
+	public boolean canInsertItem(int index, ItemStack stack, EnumFacing side)
 	{
 		return isUnpressed() && index == 0;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, int side)
+	public boolean canExtractItem(int index, ItemStack stack, EnumFacing side)
 	{
 		return isUnpressed() && index == 0;
 	}
 
 	@SideOnly(Side.CLIENT)
-	private void updateEntityClient()
+	private void updateClient()
 	{
 		final float step = 1.0f / 20.0f;
 		if (isUnpressed())
@@ -201,7 +202,7 @@ public class TileEntityCheesePress extends GrcTileEntityInventoryBase implements
 		}
 	}
 
-	private void updateEntityServer()
+	private void updateServer()
 	{
 		if (needRecipeRecheck)
 		{
@@ -242,17 +243,15 @@ public class TileEntityCheesePress extends GrcTileEntityInventoryBase implements
 	}
 
 	@Override
-	public void updateEntity()
+	public void update()
 	{
-		super.updateEntity();
-
 		if (worldObj.isRemote)
 		{
-			updateEntityClient();
+			updateClient();
 		}
 		else
 		{
-			updateEntityServer();
+			updateServer();
 		}
 	}
 

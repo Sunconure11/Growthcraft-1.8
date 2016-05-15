@@ -81,11 +81,4 @@ public class ItemBucketFluid extends GrcItemBucketBase implements IFluidItem
 	{
 		return pass == 1 ? getColor(stack) : 0xFFFFFF;
 	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean requiresMultipleRenderPasses()
-	{
-		return true;
-	}
 }

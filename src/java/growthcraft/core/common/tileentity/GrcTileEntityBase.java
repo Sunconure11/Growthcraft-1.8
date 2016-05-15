@@ -65,43 +65,19 @@ public abstract class GrcTileEntityBase extends TileEntity implements IBlockUpda
 
 	protected static Map<Class<? extends GrcTileEntityBase>, HandlerMap> HANDLERS = new HashMap<Class<? extends GrcTileEntityBase>, HandlerMap>();
 
-	protected boolean needBlockUpdate = true;
 
 	@Override
 	public void markForBlockUpdate()
 	{
-		needBlockUpdate = true;
+		if (shouldMarkForBlockUpdate())
+		{
+			worldObj.markBlockForUpdate(getPos());
+		}
 	}
 
 	public boolean shouldMarkForBlockUpdate()
 	{
 		return true;
-	}
-
-	private void doMarkForUpdate()
-	{
-		if (shouldMarkForBlockUpdate())
-		{
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		}
-	}
-
-	protected void preMarkForUpdate()
-	{
-
-	}
-
-	@Override
-	public void updateEntity()
-	{
-		if (needBlockUpdate)
-		{
-			this.needBlockUpdate = false;
-			preMarkForUpdate();
-			doMarkForUpdate();
-		}
-
-		super.updateEntity();
 	}
 
 	protected void addHandler(@Nonnull HandlerMap handlerMap, @Nonnull EventHandler.EventType type, @Nonnull Method method)
@@ -174,7 +150,7 @@ public abstract class GrcTileEntityBase extends TileEntity implements IBlockUpda
 		// P, for payload
 		data.setByteArray("P", stream.array());
 
-		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 127, data);
+		return new S35PacketUpdateTileEntity(getPos(), 127, data);
 	}
 
 	@Override
@@ -198,15 +174,15 @@ public abstract class GrcTileEntityBase extends TileEntity implements IBlockUpda
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
 	{
-		if (packet.func_148853_f() == 127)
+		if (packet.getTileEntityType() == 127)
 		{
-			final NBTTagCompound tag = packet.func_148857_g();
+			final NBTTagCompound tag = packet.getNbtCompound();
 			if (tag != null)
 			{
 				final ByteBuf stream = Unpooled.copiedBuffer(tag.getByteArray("P"));
 				if (readFromStream(stream))
 				{
-					doMarkForUpdate();
+					markForBlockUpdate();
 				}
 			}
 		}

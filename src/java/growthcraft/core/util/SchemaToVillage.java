@@ -27,8 +27,9 @@ import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.world.World;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraft.world.World;
 
 /**
  * Utility class for drawing Schema String Arrays as structures
@@ -39,7 +40,7 @@ public class SchemaToVillage
 
 	public static interface IVillage
 	{
-		public void placeBlockAtCurrentPositionPub(World world, Block block, int meta, int x, int y, int z, StructureBoundingBox box);
+		public void placeBlockAtCurrentPositionPub(World world, IBlockState block, int meta, int x, int y, int z, StructureBoundingBox box);
 	}
 
 	public static interface IBlockEntries
@@ -49,18 +50,11 @@ public class SchemaToVillage
 
 	public static class BlockEntry implements IBlockEntries
 	{
-		private Block block;
-		private int meta;
+		private IBlockState state;
 
-		public BlockEntry(Block blok, int met)
+		public BlockEntry(IBlockState st)
 		{
-			this.block = blok;
-			this.meta = met;
-		}
-
-		public BlockEntry(Block blok)
-		{
-			this(blok, 0);
+			this.state = st;
 		}
 
 		public BlockEntry getBlockEntry(Random random)
@@ -68,14 +62,9 @@ public class SchemaToVillage
 			return this;
 		}
 
-		public Block getBlock()
+		public IBlockState getBlockState()
 		{
-			return this.block;
-		}
-
-		public int getMetadata()
-		{
-			return this.meta;
+			return this.state;
 		}
 	}
 
@@ -111,8 +100,7 @@ public class SchemaToVillage
 				// finally loop by schema layer-row-cell
 				for (int x = 0; x < row.length(); ++x)
 				{
-					int meta = 0;
-					Block block = null;
+					IBlockState state = null;
 					final IBlockEntries entries = map.get(row.charAt(x));
 					// look out for null entries, though by right we should
 					// warn about these.
@@ -122,13 +110,12 @@ public class SchemaToVillage
 						// a null entry is possible, for "Ignore the this block"
 						if (entry != null)
 						{
-							block = entry.getBlock();
-							meta = entry.getMetadata();
+							state = entry.getBlockState();
 						}
 					}
 					// null blocks are not placed
-					if (block != null) {
-						village.placeBlockAtCurrentPositionPub(world, block, meta, offx + x, offy + y, offz + z, box);
+					if (state != null) {
+						village.placeBlockAtCurrentPositionPub(world, state, offx + x, offy + y, offz + z, box);
 					}
 				}
 			}

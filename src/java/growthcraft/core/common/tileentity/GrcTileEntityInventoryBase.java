@@ -72,11 +72,11 @@ public abstract class GrcTileEntityInventoryBase extends GrcTileEntityCommonBase
 	{
 		final ItemStack discarded = stack.copy();
 		discarded.stackSize = discardedAmount;
-		ItemUtils.spawnItemStack(worldObj, xCoord, yCoord, zCoord, discarded, worldObj.rand);
+		ItemUtils.spawnItemStack(worldObj, pos.getX(), pos.getY(), pos.getZ(), discarded, worldObj.rand);
 	}
 
 	@Override
-	public String getInventoryName()
+	public String getDisplayName()
 	{
 		return hasCustomInventoryName() ? inventoryName : getDefaultInventoryName();
 	}
@@ -122,9 +122,9 @@ public abstract class GrcTileEntityInventoryBase extends GrcTileEntityCommonBase
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int index)
+	public ItemStack removeStackFromSlot(int index)
 	{
-		return inventory.getStackInSlotOnClosing(index);
+		return inventory.removeStackFromSlot(index);
 	}
 
 	@Override
@@ -148,20 +148,20 @@ public abstract class GrcTileEntityInventoryBase extends GrcTileEntityCommonBase
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player)
 	{
-		if (worldObj.getTileEntity(xCoord, yCoord, zCoord) != this)
+		if (worldObj.getTileEntity(pos) != this)
 		{
 			return false;
 		}
-		return player.getDistanceSq((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D) <= 64.0D;
+		return player.getDistanceSq((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	@Override
-	public void openInventory()
+	public void openInventory(EntityPlayer player)
 	{
 	}
 
 	@Override
-	public void closeInventory()
+	public void closeInventory(EntityPlayer player)
 	{
 	}
 
@@ -172,19 +172,44 @@ public abstract class GrcTileEntityInventoryBase extends GrcTileEntityCommonBase
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, int side)
+	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side)
 	{
 		return InventoryProcessor.instance().canInsertItem(this, stack, slot);
 	}
 
-	public boolean canExtractItem(int slot, ItemStack stack, int side)
+	@Override
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side)
 	{
 		return InventoryProcessor.instance().canExtractItem(this, stack, slot);
 	}
 
-	public int[] getAccessibleSlotsFromSide(int side)
+	@Override
+	public int[] getSlotsForFace(EnumFacing side)
 	{
 		return NO_SLOTS;
+	}
+
+	@Override
+	public void clear()
+	{
+		inventory.clear();
+	}
+
+	@Override
+	public int getField(int id)
+	{
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value)
+	{
+	}
+
+	@Override
+	public int getFieldCount()
+	{
+		return 0;
 	}
 
 	private void readInventoryFromNBT(NBTTagCompound nbt)

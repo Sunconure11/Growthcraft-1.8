@@ -39,15 +39,17 @@ import growthcraft.milk.GrowthCraftMilk;
 
 import io.netty.buffer.ByteBuf;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraft.nbt.NBTTagCompound;
 
-public class TileEntityHangingCurds extends GrcTileEntityBase implements INBTItemSerializable
+public class TileEntityHangingCurds extends GrcTileEntityBase implements ITickable, INBTItemSerializable
 {
 	// SpatialRandom instance
 	private SpatialRandom sprand = new SpatialRandom();
@@ -71,14 +73,15 @@ public class TileEntityHangingCurds extends GrcTileEntityBase implements INBTIte
 	{
 		for (int i = 1; i < 3; ++i)
 		{
-			final TileEntity te = worldObj.getTileEntity(xCoord, yCoord - i, zCoord);
+			final BlockPos downPos = getPos().down(i);
+			final TileEntity te = worldObj.getTileEntity(downPos);
 			if (te instanceof IPancheonTile)
 			{
 				return (IPancheonTile)te;
 			}
 			else
 			{
-				if (!worldObj.isAirBlock(xCoord, yCoord - i, zCoord)) break;
+				if (!worldObj.isAirBlock(downPos)) break;
 			}
 		}
 		return null;
@@ -100,10 +103,8 @@ public class TileEntityHangingCurds extends GrcTileEntityBase implements INBTIte
 	}
 
 	@Override
-	public void updateEntity()
+	public void update()
 	{
-		super.updateEntity();
-
 		if (!worldObj.isRemote)
 		{
 			if (cheeseCurd.needClientUpdate)
@@ -140,9 +141,10 @@ public class TileEntityHangingCurds extends GrcTileEntityBase implements INBTIte
 			if (animPulsar.update() == PulseStepper.State.PULSE)
 			{
 				final Pair<Double, Double> p = sprand.nextCenteredD2();
-				final double px = xCoord + 0.5 + p.left * 0.5;
-				final double py = yCoord;
-				final double pz = zCoord + 0.5 + p.right * 0.5;
+				final BlockPos pos = getPos();
+				final double px = pos.getX() + 0.5 + p.left * 0.5;
+				final double py = pos.getY();
+				final double pz = pos.getZ() + 0.5 + p.right * 0.5;
 				FXHelper.dropParticle(worldObj, px, py, pz, GrowthCraftMilk.fluids.whey.getItemColor());
 			}
 		}

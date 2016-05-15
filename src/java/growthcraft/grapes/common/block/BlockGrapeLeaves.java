@@ -10,6 +10,7 @@ import growthcraft.grapes.GrowthCraftGrapes;
 import growthcraft.grapes.util.GrapeBlockCheck;
 
 import net.minecraft.block.BlockLeavesBase;
+import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,13 +18,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope
+public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope, IGrowable
 {
 	private final int grapeLeavesGrowthRate = GrowthCraftGrapes.getConfig().grapeLeavesGrowthRate;
 	private final int grapeSpawnRate = GrowthCraftGrapes.getConfig().grapeSpawnRate;
@@ -37,7 +39,7 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope
 		setHardness(0.2F);
 		setLightOpacity(1);
 		setStepSound(soundTypeGrass);
-		setBlockName("grc.grapeLeaves");
+		setUnlocalizedName("grc.grapeLeaves");
 		setCreativeTab(null);
 	}
 
@@ -62,19 +64,19 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope
 	 */
 	public boolean canGrowOutwardsOnRope(World world, BlockPos pos)
 	{
-		if (BlockCheck.isRope(world.getBlock(pos.west()))) return true;
-		if (BlockCheck.isRope(world.getBlock(pos.east()))) return true;
-		if (BlockCheck.isRope(world.getBlock(pos.north()))) return true;
-		if (BlockCheck.isRope(world.getBlock(pos.south()))) return true;
+		if (BlockCheck.isRope(world.getBlockState(pos.west()))) return true;
+		if (BlockCheck.isRope(world.getBlockState(pos.east()))) return true;
+		if (BlockCheck.isRope(world.getBlockState(pos.north()))) return true;
+		if (BlockCheck.isRope(world.getBlockState(pos.south()))) return true;
 		return false;
 	}
 
 	public boolean canGrowOutwards(World world, BlockPos pos)
 	{
-		final boolean leavesTotheSouth = world.getBlock(pos.south()) == this;
-		final boolean leavesToTheNorth = world.getBlock(pos.north()) == this;
-		final boolean leavesToTheEast = world.getBlock(pos.east()) == this;
-		final boolean leavesToTheWest = world.getBlock(pos.west()) == this;
+		final boolean leavesTotheSouth = world.getBlockState(pos.south()).getBlock() == this;
+		final boolean leavesToTheNorth = world.getBlockState(pos.north()).getBlock() == this;
+		final boolean leavesToTheEast = world.getBlockState(pos.east()).getBlock() == this;
+		final boolean leavesToTheWest = world.getBlockState(pos.west()).getBlock() == this;
 
 		if (!leavesTotheSouth && !leavesToTheNorth && !leavesToTheEast && !leavesToTheWest) return false;
 
@@ -100,7 +102,7 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope
 	 */
 	public boolean canGrowHere(World world, BlockPos pos)
 	{
-		if (BlockCheck.isRope(world.getBlock(pos)))
+		if (BlockCheck.isRope(world.getBlockState(pos)))
 		{
 			return canGrowOutwards(world, pos);
 		}
@@ -109,7 +111,7 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope
 
 	private void setGrapeBlock(World world, BlockPos pos)
 	{
-		world.setBlock(pos, GrowthCraftGrapes.blocks.grapeBlock.getBlock(), 0, BlockFlags.UPDATE_AND_SYNC);
+		world.setBlockState(pos, GrowthCraftGrapes.blocks.grapeBlock.getBlock().getDefaultState(), BlockFlags.UPDATE_AND_SYNC);
 	}
 
 	public boolean growGrapeBlock(World world, BlockPos pos)
@@ -126,23 +128,36 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope
 		return false;
 	}
 
-	private void grow(World world, BlockPos pos, Random random)
+	@Override
+	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient)
 	{
-		final BlockPos dpos = pos.down();
-		if (world.isAirBlock(dpos) && (random.nextInt(this.grapeSpawnRate) == 0))
+		return false;
+	}
+
+	@Override
+	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state)
+	{
+		return true;
+	}
+
+	@Override
+	public void grow(World world, Random rand, BlockPos pos, IBlockState state)
+	{
+		final BlockPos belowPos = pos.down();
+		if (world.isAirBlock(belowPos) && (random.nextInt(grapeSpawnRate) == 0))
 		{
-			setGrapeBlock(world, dpos);
+			setGrapeBlock(world, belowPos);
 		}
 
-		if (world.rand.nextInt(this.grapeLeavesGrowthRate) == 0)
+		if (world.rand.nextInt(grapeLeavesGrowthRate) == 0)
 		{
 			if (canGrowOutwards(world, pos))
 			{
-				final EnumFacing dir = BlockCheck.DIR4[random.nextInt(4)];
-
-				if (canGrowHere(world, x + dir.offsetX, y, z + dir.offsetZ))
+				final EnumFacing dir = BlockCheck.randomDirection4(random);
+				final BlockPos growPos = pos.offset(dir);
+				if (canGrowHere(world, growPos))
 				{
-					world.setBlock(x + dir.offsetX, y, z + dir.offsetZ, this, 0, BlockFlags.UPDATE_AND_SYNC);
+					world.setBlockState(growPos, getDefaultState(), BlockFlags.UPDATE_AND_SYNC);
 				}
 			}
 		}
@@ -152,9 +167,9 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
 		super.updateTick(world, pos, state, random);
-		if (!this.canBlockStay(world, pos))
+		if (!canBlockStay(world, pos))
 		{
-			world.setBlock(pos, GrowthCraftCore.blocks.ropeBlock.getBlock());
+			world.setBlockState(pos, GrowthCraftCore.blocks.ropeBlock.getBlock().getDefaultState());
 		}
 		else
 		{
@@ -164,20 +179,18 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(World world, BlockPos pos, Random random)
+	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
+		super.randomDisplayTick(world, pos, state, random);
 		if (world.canLightningStrikeAt(pos.up()) && !World.doesBlockHaveSolidTopSurface(world, pos.down()) && random.nextInt(15) == 1)
 		{
-			final double d0 = (double)((float)x + random.nextFloat());
-			final double d1 = (double)y - 0.05D;
-			final double d2 = (double)((float)z + random.nextFloat());
-			world.spawnParticle("dripWater", d0, d1, d2, 0.0D, 0.0D, 0.0D);
+			final double d0 = (double)((float)pos.getX() + random.nextFloat());
+			final double d1 = (double)pos.getY() - 0.05D;
+			final double d2 = (double)((float)pos.getZ() + random.nextFloat());
+			world.spawnParticle(EnumParticleTypes.DRIP_WATER, d0, d1, d2, 0.0D, 0.0D, 0.0D);
 		}
 	}
 
-	/************
-	 * CONDITIONS
-	 ************/
 	@Override
 	public boolean canBlockStay(World world, BlockPos pos)
 	{
@@ -191,14 +204,13 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope
 			{
 				for (int i = 1; i <= grapeVineSupportedLength; ++i)
 				{
-					final int bx = x + dir.offsetX * i;
-					final int bz = z + dir.offsetZ * i;
-					final IBlockState state = world.getBlock(new BlockPos(bx, y, bz));
+					final BlockPos newPos = pos.offset(dir, i);
+					final IBlockState state = world.getBlock(pos);
 					if (state == null || state.getBlock() != this)
 					{
 						break;
 					}
-					else if (isSupportedByTrunk(world, bx, y, bz))
+					else if (isSupportedByTrunk(world, pos))
 					{
 						return true;
 					}
@@ -280,26 +292,23 @@ public class BlockGrapeLeaves extends BlockLeavesBase implements IBlockRope
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int colorMultiplier(IBlockAccess world, BlockPos pos)
+	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass)
 	{
 		final int meta = world.getBlockMetadata(pos);
-
 		int r = 0;
 		int g = 0;
 		int b = 0;
-
 		for (int l1 = -1; l1 <= 1; ++l1)
 		{
 			for (int i2 = -1; i2 <= 1; ++i2)
 			{
-				final BlockPos leafPos = new BlockPos(x + i2, y, z + l1);
-				final int j2 = world.getBiomeGenForCoords(x + i2, z + l1).getBiomeFoliageColor(leafPos);
+				final BlockPos leafPos = new BlockPos(pos.getX() + i2, y, pos.getZ() + l1);
+				final int j2 = world.getBiomeGenForCoords(pos.getX(), pos.getZ()).getBiomeFoliageColor(leafPos);
 				r += (j2 & 16711680) >> 16;
 				g += (j2 & 65280) >> 8;
 				b += j2 & 255;
 			}
 		}
-
 		return (r / 9 & 255) << 16 | (g / 9 & 255) << 8 | b / 9 & 255;
 	}
 }

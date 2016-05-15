@@ -7,6 +7,7 @@ import growthcraft.core.GrowthCraftCore;
 import growthcraft.grapes.GrowthCraftGrapes;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -18,22 +19,11 @@ public class ComponentVillageGrapeVineyard extends StructureVillagePieces.Villag
 {
 	public ComponentVillageGrapeVineyard() {}
 
-	public ComponentVillageGrapeVineyard(Start startPiece, int type, Random random, StructureBoundingBox boundingBox, int par5)
+	public ComponentVillageGrapeVineyard(Start startPiece, int type, Random random, StructureBoundingBox boundingBox, EnumFacing facing)
 	{
 		super(startPiece, type);
-		this.coordBaseMode = par5;
+		this.coordBaseMode = facing;
 		this.boundingBox = boundingBox;
-	}
-
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public static ComponentVillageGrapeVineyard buildComponent(Start startPiece, List list, Random random, int par3, int par4, int par5, int par6, int par7)
-	{
-		final StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(par3, par4, par5, 0, 0, 0, 13, 6, 9, par6);
-		if (canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(list, structureboundingbox) == null)
-		{
-			return new ComponentVillageGrapeVineyard(startPiece, par7, random, structureboundingbox, par6);
-		}
-		return null;
 	}
 
 	public boolean addComponentParts(World world, Random random, StructureBoundingBox box)
@@ -56,10 +46,8 @@ public class ComponentVillageGrapeVineyard extends StructureVillagePieces.Villag
 		fillWithBlocks(world, box, 1, 0, 0, 11, 0, 0, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
 		fillWithBlocks(world, box, 1, 0, 8, 11, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
 		fillWithBlocks(world, box, 1, 0, 1, 11, 0, 7, Blocks.grass.getDefaultState(), Blocks.grass.getDefaultState(), false);
-		int loop;
-		int loop2;
 
-		for (loop = 1; loop < 12; loop = loop + 2)
+		for (int loop = 1; loop < 12; loop = loop + 2)
 		{
 			fillWithBlocks(world, box, loop, 0, 2, loop, 0, 6, Blocks.water.getDefaultState(), Blocks.water.getDefaultState(), false);
 			fillWithBlocks(world, box, loop, 0, 4, loop, 0, 4, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
@@ -73,23 +61,34 @@ public class ComponentVillageGrapeVineyard extends StructureVillagePieces.Villag
 			setBlockState(world, GrowthCraftGrapes.blocks.grapeVine1.getBlock().getDefaultState(), loop, 2, 4, box);
 			for (loop2 = 2; loop2 <= 6; ++loop2)
 			{
-				setBlockState(world, GrowthCraftGrapes.blocks.grapeLeaves.getBlock().getDefaultState(), 0, loop, 3, loop2, box);
+				setBlockState(world, GrowthCraftGrapes.blocks.grapeLeaves.getBlock().getDefaultState(), loop, 3, loop2, box);
 				if (MathHelper.getRandomIntegerInRange(random, 0, 2) != 0 && loop2 != 4)
 				{
-					setBlockState(world, GrowthCraftGrapes.blocks.grapeBlock.getBlock().getDefaultState(), 0, loop, 2, loop2, box);
+					setBlockState(world, GrowthCraftGrapes.blocks.grapeBlock.getBlock().getDefaultState(), loop, 2, loop2, box);
 				}
 			}
 		}
 
-		for (loop = 0; loop < 9; ++loop)
+		for (int zl = 0; zl < 9; ++zl)
 		{
-			for (loop2 = 0; loop2 < 13; ++loop2)
+			for (int xl = 0; xl < 13; ++xl)
 			{
-				clearCurrentPositionBlocksUpwards(world, loop2, 6, loop, box);
-				replaceAirAndLiquidDownwards(world, Blocks.dirt, 0, loop2, -1, loop, box);
+				clearCurrentPositionBlocksUpwards(world, xl, 6, zl, box);
+				replaceAirAndLiquidDownwards(world, Blocks.dirt.getDefaultState(), xl, -1, zl, box);
 			}
 		}
 
 		return true;
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public static ComponentVillageGrapeVineyard buildComponent(Start startPiece, List list, Random random, int par3, int par4, int par5, EnumFacing dir, int par7)
+	{
+		final StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(par3, par4, par5, 0, 0, 0, 13, 6, 9, dir);
+		if (canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(list, structureboundingbox) == null)
+		{
+			return new ComponentVillageGrapeVineyard(startPiece, par7, random, structureboundingbox, dir);
+		}
+		return null;
 	}
 }

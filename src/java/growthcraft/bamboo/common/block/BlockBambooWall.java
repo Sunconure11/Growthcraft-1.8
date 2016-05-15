@@ -28,7 +28,7 @@ public class BlockBambooWall extends GrcBlockBase
 		setStepSound(soundTypeWood);
 		setResistance(5.0F / 3.0F);
 		setHardness(2.0F);
-		setBlockName("grc.bambooWall");
+		setUnlocalizedName("grc.bambooWall");
 		setCreativeTab(GrowthCraftBamboo.creativeTab);
 	}
 
@@ -222,7 +222,7 @@ public class BlockBambooWall extends GrcBlockBase
 
 	@Override
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axis, List list, Entity entity)
+	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axis, List<AxisAlignedBB> list, Entity entity)
 	{
 		int tm;
 
@@ -247,7 +247,7 @@ public class BlockBambooWall extends GrcBlockBase
 		float z2 = 0.625F;
 
 		this.setBlockBounds(x1, 0.0F, z1, x2, 1.0F, z2);
-		super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, state, axis, list, entity);
 
 		//XNEG
 		if (flagXneg)

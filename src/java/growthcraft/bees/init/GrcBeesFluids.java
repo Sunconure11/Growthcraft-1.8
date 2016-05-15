@@ -36,7 +36,6 @@ import growthcraft.core.common.definition.ItemDefinition;
 import growthcraft.core.common.definition.ItemTypeDefinition;
 import growthcraft.core.common.GrcModuleBase;
 import growthcraft.core.common.item.ItemFoodBottleFluid;
-import growthcraft.core.integration.forestry.ForestryFluids;
 import growthcraft.core.util.FluidFactory;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -93,10 +92,6 @@ public class GrcBeesFluids extends GrcModuleBase
 		{
 			honey.registerObjects("grc", "Honey");
 			CoreRegistry.instance().fluidDictionary().addFluidTags(honey.getFluid(), BeesFluidTag.HONEY);
-		}
-		if (ForestryFluids.HONEY.exists())
-		{
-			CoreRegistry.instance().fluidDictionary().addFluidTags(ForestryFluids.HONEY.getFluid(), BeesFluidTag.HONEY);
 		}
 	}
 

@@ -48,7 +48,9 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -332,12 +334,12 @@ public class ItemWaterBag extends GrcItemBase implements IFluidContainerItem, IE
 	}
 
 	@Override
-	public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player)
+	public ItemStack onItemUseFinish(ItemStack stack, World world, EntityPlayer player)
 	{
 		if (hasEnoughToDrink(stack))
 		{
 			// This is not an ItemFood, and therefore, NOT FOOD. ;_;
-			//player.getFoodStats().func_151686_a(this, stack);
+			//player.getFoodStats().addStats(this, stack);
 
 			final boolean cancelled = GrowthCraftCellar.CELLAR_BUS.post(new EventWaterBag.PreDrink(stack, world, player));
 			if (!cancelled)

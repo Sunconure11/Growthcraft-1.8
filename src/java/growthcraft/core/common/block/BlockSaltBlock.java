@@ -30,6 +30,7 @@ import growthcraft.core.GrowthCraftCore;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
+import net.minecraft.block.state.IBlockState;
 
 public class BlockSaltBlock extends GrcBlockBase
 {
@@ -39,7 +40,7 @@ public class BlockSaltBlock extends GrcBlockBase
 		setHardness(2.0F);
 		setResistance(10.0F);
 		setStepSound(soundTypePiston);
-		setBlockName("grccore.salt_block");
+		setUnlocalizedName("grccore.salt_block");
 		setCreativeTab(GrowthCraftCore.creativeTab);
 	}
 

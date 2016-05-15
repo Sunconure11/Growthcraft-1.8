@@ -9,22 +9,23 @@ import growthcraft.core.util.BlockCheck;
 import growthcraft.api.core.util.BlockFlags;
 import growthcraft.api.core.util.RenderType;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.terraingen.TerrainGen;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IGrowable
 {
@@ -40,11 +41,11 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 		setBlockTextureName("grcbamboo:shoot");
 		final float f = 0.4F;
 		setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f * 2.0F, 0.5F + f);
-		setBlockName("grc.bambooShoot");
+		setUnlocalizedName("grc.bambooShoot");
 		setCreativeTab(null);
 	}
 
-	public float getGrowthProgress(IBlockAccess world, BlockPos pos, int meta)
+	public float getGrowthProgress(IBlockAccess world, BlockPos pos, IBlockState state)
 	{
 		return (float)(meta / 1.0);
 	}
@@ -59,7 +60,7 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 		{
 			super.updateTick(world, pos, rand);
 
-			if (world.getBlockLightValue(pos.up()) >= 9 && rand.nextInt(this.growth) == 0)
+			if (getLightValue(world, pos.up()) >= 9 && rand.nextInt(this.growth) == 0)
 			{
 				markOrGrowMarked(world, pos, rand);
 			}
@@ -98,7 +99,7 @@ public class BlockBambooShoot extends BlockBush implements ICropDataProvider, IG
 	@Override
 	public boolean canBlockStay(World world, BlockPos pos)
 	{
-		return (world.getFullBlockLightValue(pos) >= 8 || world.canBlockSeeTheSky(pos)) &&
+		return (world.getFullBlockLightValue(pos) >= 8 || world.canBlockSeeSky(pos)) &&
 			BlockCheck.canSustainPlant(world, x, y - 1, z, EnumFacing.UP, this);
 	}
 

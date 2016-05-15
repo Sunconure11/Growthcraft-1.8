@@ -212,7 +212,7 @@ public class InventoryProcessor
 		boolean clearedAnything = false;
 		for (int slot : src)
 		{
-			clearedAnything |= inv.getStackInSlotOnClosing(slot) != null;
+			clearedAnything |= inv.removeStackFromSlot(slot) != null;
 		}
 		return clearedAnything;
 	}
@@ -228,7 +228,7 @@ public class InventoryProcessor
 		boolean clearedAnything = false;
 		for (int i = 0; i < inv.getSizeInventory(); ++i)
 		{
-			clearedAnything |= inv.getStackInSlotOnClosing(i) != null;
+			clearedAnything |= inv.removeStackFromSlot(i) != null;
 		}
 		return clearedAnything;
 	}

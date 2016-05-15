@@ -7,8 +7,9 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 
-public class TileEntityFruitPresser extends TileEntity
+public class TileEntityFruitPresser extends TileEntity implements ITickable
 {
 	public float trans;
 	public float transPrev;
@@ -17,13 +18,9 @@ public class TileEntityFruitPresser extends TileEntity
 	private float transMin;
 	private float transMax = 0.4375F;
 
-	/************
-	 * UPDATE
-	 ************/
-	public void updateEntity()
+	@Override
+	public void update()
 	{
-		super.updateEntity();
-
 		if (GrowthCraftCellar.blocks.fruitPresser.getBlock() != worldObj.getBlock(this.xCoord, this.yCoord, this.zCoord))
 		{
 			invalidate();
@@ -47,9 +44,6 @@ public class TileEntityFruitPresser extends TileEntity
 		return this.trans;
 	}
 
-	/************
-	 * NBT
-	 ************/
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
@@ -66,9 +60,6 @@ public class TileEntityFruitPresser extends TileEntity
 		nbt.setFloat("transprev", transPrev);
 	}
 
-	/************
-	 * PACKETS
-	 ************/
 	@Override
 	public Packet getDescriptionPacket()
 	{
@@ -80,7 +71,7 @@ public class TileEntityFruitPresser extends TileEntity
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
 	{
-		readFromNBT(packet.func_148857_g());
+		readFromNBT(packet.getNbtCompound());
 		this.worldObj.func_147479_m(this.xCoord, this.yCoord, this.zCoord);
 	}
 }

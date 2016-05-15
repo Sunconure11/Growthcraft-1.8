@@ -43,12 +43,13 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
-public class TileEntityCultureJar extends TileEntityCellarDevice implements ITileHeatedDevice, ITileProgressiveDevice
+public class TileEntityCultureJar extends TileEntityCellarDevice implements ITickable, ITileHeatedDevice, ITileProgressiveDevice
 {
 	public static enum CultureJarDataId
 	{
@@ -155,19 +156,19 @@ public class TileEntityCultureJar extends TileEntityCellarDevice implements ITil
 	}
 
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side)
+	public int[] getSlotsForFace(EnumFacing side)
 	{
 		return accessibleSlots;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, int side)
+	public boolean canExtractItem(int index, ItemStack stack, EnumFacing side)
 	{
 		return index == 0;
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack stack, int side)
+	public boolean canInsertItem(int index, ItemStack stack, EnumFacing side)
 	{
 		return false;
 	}
@@ -195,26 +196,29 @@ public class TileEntityCultureJar extends TileEntityCellarDevice implements ITil
 	}
 
 	@Override
-	protected void updateDevice()
+	public void update()
 	{
-		heatComponent.update();
-		final int lastState = jarDeviceState;
-		final DeviceProgressive prog = getActiveDevice();
-		if (prog == cultureGen)
+		if (!worldObj.isRemote)
 		{
-			this.jarDeviceState = 1;
-			yeastGen.resetTime();
-		}
-		else
-		{
-			this.jarDeviceState = 0;
-			cultureGen.resetTime();
-		}
-		getActiveDevice().update();
-		if (jarDeviceState != lastState)
-		{
-			GrowthCraftCellar.getLogger().info("Jar changed device state %d, {%s}", jarDeviceState, getActiveDevice());
-			markForBlockUpdate();
+			heatComponent.update();
+			final int lastState = jarDeviceState;
+			final DeviceProgressive prog = getActiveDevice();
+			if (prog == cultureGen)
+			{
+				this.jarDeviceState = 1;
+				yeastGen.resetTime();
+			}
+			else
+			{
+				this.jarDeviceState = 0;
+				cultureGen.resetTime();
+			}
+			getActiveDevice().update();
+			if (jarDeviceState != lastState)
+			{
+				GrowthCraftCellar.getLogger().info("Jar changed device state %d, {%s}", jarDeviceState, getActiveDevice());
+				markForBlockUpdate();
+			}
 		}
 	}
 

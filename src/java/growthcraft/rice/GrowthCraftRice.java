@@ -17,7 +17,6 @@ import growthcraft.rice.common.item.ItemRice;
 import growthcraft.rice.common.item.ItemRiceBall;
 import growthcraft.rice.common.village.ComponentVillageRiceField;
 import growthcraft.rice.common.village.VillageHandlerRice;
-import growthcraft.rice.event.BonemealEventRice;
 import growthcraft.rice.init.GrcRiceFluids;
 
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -121,8 +120,6 @@ public class GrowthCraftRice
 		//====================
 		GameRegistry.addRecipe(new ShapedOreRecipe(riceBall.asStack(1), "###", "###", '#', "cropRice"));
 
-		NEI.hideItem(riceBlock.asStack());
-
 		MinecraftForge.EVENT_BUS.register(this);
 
 		modules.register();
@@ -132,34 +129,16 @@ public class GrowthCraftRice
 	public void load(FMLInitializationEvent event)
 	{
 		PlayerInteractEventPaddy.paddyBlocks.put(Blocks.farmland, paddyField.getBlock());
-
-		CommonProxy.instance.initRenders();
-
 		final VillageHandlerRice handler = new VillageHandlerRice();
-		VillagerRegistry.instance().registerVillageTradeHandler(GrowthCraftCellar.getConfig().villagerBrewerID, handler);
+		//VillagerRegistry.instance().registerVillageTradeHandler(GrowthCraftCellar.getConfig().villagerBrewerID, handler);
 		VillagerRegistry.instance().registerVillageCreationHandler(handler);
 
 		modules.init();
 	}
 
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public void onTextureStitchPost(TextureStitchEvent.Post event)
-	{
-		if (event.map.getTextureType() == 0)
-		{
-			for (int i = 0; i < fluids.riceSakeBooze.length; ++i)
-			{
-				fluids.riceSakeBooze[i].setIcons(GrowthCraftCore.liquidSmoothTexture);
-			}
-		}
-	}
-
 	@EventHandler
 	public void postload(FMLPostInitializationEvent event)
 	{
-		MinecraftForge.EVENT_BUS.register(new BonemealEventRice());
-
 		modules.postInit();
 	}
 }

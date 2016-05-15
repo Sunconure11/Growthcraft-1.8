@@ -32,6 +32,7 @@ import growthcraft.api.core.stream.IStreamable;
 import growthcraft.core.common.inventory.IInventoryFlagging;
 import growthcraft.core.common.tileentity.IBlockUpdateFlagging;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.world.World;
 import net.minecraft.tileentity.TileEntity;
@@ -54,12 +55,12 @@ public class DeviceBase implements INBTSerializableContext, IStreamable
 
 	public World getWorld()
 	{
-		return parent.getWorldObj();
+		return parent.getWorld();
 	}
 
-	public int getMetadata()
+	public IBlockState getBlockState()
 	{
-		return getWorld().getBlockMetadata(parent.xCoord, parent.yCoord, parent.zCoord);
+		return getWorld().getBlockState(parent.getPos());
 	}
 
 	public IInventory getInventory()

@@ -19,12 +19,13 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
-public class TileEntityBrewKettle extends TileEntityCellarDevice implements ITileHeatedDevice, ITileProgressiveDevice
+public class TileEntityBrewKettle extends TileEntityCellarDevice implements ITickable, ITileHeatedDevice, ITileProgressiveDevice
 {
 	public static enum BrewKettleDataID
 	{
@@ -85,13 +86,13 @@ public class TileEntityBrewKettle extends TileEntityCellarDevice implements ITil
 		return brewKettle.getProgressScaled(scale);
 	}
 
-	/************
-	 * UPDATE
-	 ************/
 	@Override
-	protected void updateDevice()
+	public void update()
 	{
-		brewKettle.update();
+		if (!worldObj.isRemote)
+		{
+			brewKettle.update();
+		}
 	}
 
 	@Override
@@ -118,17 +119,17 @@ public class TileEntityBrewKettle extends TileEntityCellarDevice implements ITil
 	}
 
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side)
+	public int[] getSlotsForFace(EnumFacing side)
 	{
 		// 0 = raw
 		// 1 = residue
-		return side == 0 ? rawSlotIDs : residueSlotIDs;
+		return EnumFacing.DOWN == side ? rawSlotIDs : residueSlotIDs;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, int side)
+	public boolean canExtractItem(int index, ItemStack stack, EnumFacing side)
 	{
-		return side != 0 || index == 1;
+		return EnumFacing.DOWN != side || index == 1;
 	}
 
 	/************

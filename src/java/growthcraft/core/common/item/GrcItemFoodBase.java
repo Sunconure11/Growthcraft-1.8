@@ -43,7 +43,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GrcItemFoodBase extends ItemFood
 {
 	private IEffect effect;
-	private EnumAction action = EnumAction.eat;
+	private EnumAction action = EnumAction.EAT;
 
 	public GrcItemFoodBase(int hunger, float saturation, boolean isWolfFav)
 	{
@@ -97,7 +97,7 @@ public class GrcItemFoodBase extends ItemFood
 	}
 
 	@Override
-	public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player)
+	public ItemStack onItemUseFinish(ItemStack stack, World world, EntityPlayer player)
 	{
 		if (!player.capabilities.isCreativeMode)
 		{
@@ -108,7 +108,7 @@ public class GrcItemFoodBase extends ItemFood
 			}
 		}
 
-		player.getFoodStats().func_151686_a(this, stack);
+		player.getFoodStats().addStats(this, stack);
 		world.playSoundAtEntity(player, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 		this.onFoodEaten(stack, world, player);
 

@@ -42,66 +42,73 @@ public class InventorySlice implements IInventory
 		this.maxSize = accesible.length;
 	}
 
+	@Override
 	public int getSizeInventory()
 	{
 		return maxSize;
 	}
 
+	@Override
 	public ItemStack getStackInSlot(int index)
 	{
 		return parent.getStackInSlot(accesible[index]);
 	}
 
+	@Override
 	public ItemStack decrStackSize(int index, int amount)
 	{
 		return parent.decrStackSize(accesible[index], amount);
 	}
 
-	public ItemStack getStackInSlotOnClosing(int index)
+	@Override
+	public ItemStack removeStackFromSlot(int index)
 	{
-		return parent.getStackInSlotOnClosing(accesible[index]);
+		return parent.removeStackFromSlot(accesible[index]);
 	}
 
+	@Override
 	public void setInventorySlotContents(int index, ItemStack stack)
 	{
 		parent.setInventorySlotContents(accesible[index], stack);
 	}
 
-	public String getInventoryName()
+	@Override
+	public String getDisplayName()
 	{
-		return parent.getInventoryName();
+		return parent.getDisplayName();
 	}
 
-	public boolean hasCustomInventoryName()
-	{
-		return parent.hasCustomInventoryName();
-	}
-
+	@Override
 	public int getInventoryStackLimit()
 	{
 		return parent.getInventoryStackLimit();
 	}
 
+	@Override
 	public void markDirty()
 	{
 		parent.markDirty();
 	}
 
+	@Override
 	public boolean isUseableByPlayer(EntityPlayer player)
 	{
 		return parent.isUseableByPlayer(player);
 	}
 
+	@Override
 	public void openInventory()
 	{
 		parent.openInventory();
 	}
 
+	@Override
 	public void closeInventory()
 	{
 		parent.closeInventory();
 	}
 
+	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
 	{
 		return parent.isItemValidForSlot(accesible[index], stack);

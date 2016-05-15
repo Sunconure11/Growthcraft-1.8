@@ -9,6 +9,7 @@ import growthcraft.core.common.block.GrcBlockBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,7 +31,7 @@ public class BlockBeeHive extends GrcBlockBase
 		super(Material.plants);
 		this.setHardness(0.6F);
 		this.setStepSound(soundTypeGrass);
-		this.setBlockName("grc.beeHive");
+		this.setUnlocalizedName("grc.beeHive");
 		this.setCreativeTab(GrowthCraftBees.tab);
 	}
 
@@ -218,17 +220,17 @@ public class BlockBeeHive extends GrcBlockBase
 
 	@Override
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axis, List list, Entity entity)
+	public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB axis, List<AxisAlignedBB> list, Entity entity)
 	{
 		final float f = 0.0625F;
 		this.setBlockBounds(4*f, 0.0F, 4*f, 12*f, 14*f, 12*f);
-		super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, state, axis, list, entity);
 		this.setBlockBounds(3*f, 1*f, 3*f, 13*f, 13*f, 13*f);
-		super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, state, axis, list, entity);
 		this.setBlockBounds(2*f, 4*f, 2*f, 14*f, 10*f, 14*f);
-		super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, state, axis, list, entity);
 		this.setBlockBounds(7*f, 14*f, 7*f, 9*f, 1.0F, 9*f);
-		super.addCollisionBoxesToList(world, x, y, z, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, state, axis, list, entity);
 		this.setBlockBoundsForItemRender();
 	}
 }

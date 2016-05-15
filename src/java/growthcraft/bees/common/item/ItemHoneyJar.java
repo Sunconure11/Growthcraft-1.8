@@ -21,9 +21,9 @@ public class ItemHoneyJar extends GrcItemFoodBase
 		setMaxStackSize(1);
 	}
 
-	public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player)
+	public ItemStack onItemUseFinish(ItemStack stack, World world, EntityPlayer player)
 	{
-		super.onEaten(stack, world, player);
+		super.onItemUseFinish(stack, world, player);
 		return new ItemStack(Items.flower_pot);
 	}
 }

@@ -39,15 +39,17 @@ import growthcraft.bees.GrowthCraftBees;
 import growthcraft.core.common.tileentity.device.DeviceBase;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class DeviceBeeBox extends DeviceBase
 {
 	// Temp variable used by BlockBeeBox for storing flower lists
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public List<List> flowerList = new ArrayList<List>();
+	public List<IBlockState> flowerList = new ArrayList<IBlockState>();
 	private final float honeyCombSpawnRate = GrowthCraftBees.getConfig().beeBoxHoneyCombSpawnRate;
 	private final float honeySpawnRate = GrowthCraftBees.getConfig().beeBoxHoneySpawnRate;
 	private final float beeSpawnRate = GrowthCraftBees.getConfig().beeBoxBeeSpawnRate;
@@ -89,9 +91,11 @@ public class DeviceBeeBox extends DeviceBase
 	// for lack of a better name, can this BeeBox do any work?
 	private boolean canDoWork()
 	{
-		if (getWorld().canLightningStrikeAt(parent.xCoord, parent.yCoord + 1, parent.zCoord))
+		final BlockPos pos = parent.getPos();
+		if (getWorld().canLightningStrikeAt(pos.up()))
 			return false;
-		return getWorld().getBlockLightValue(parent.xCoord, parent.yCoord + 1, parent.zCoord) >= 7;
+		final IBlockState state = getWorld().getBlockState(pos);
+		return state.getBlock().getLightValue(world, pos) >= 7;
 	}
 
 	/**
@@ -101,33 +105,30 @@ public class DeviceBeeBox extends DeviceBase
 	 * @param meta - block's metadata
 	 * @return true, the block is a recognized flower, false otherwise
 	 */
-	private boolean isBlockFlower(Block block, int meta)
+	private boolean isBlockFlower(IBlockState state)
 	{
-		return BeesRegistry.instance().isBlockFlower(block, meta);
+		return BeesRegistry.instance().isBlockFlower(state.getBlock(), 0);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private List<List> gatherFlowersInRadius(World world, int x, int y, int z, int checkSize, List<List> list)
+	private List<List<IBlockState>> gatherFlowersInRadius(World world, BlockPos pos, int checkSize, List<List> list)
 	{
-		final int i = x - ((checkSize - 1) / 2);
-		final int k = z - ((checkSize - 1) / 2);
+		final int i = pos.getX() - ((checkSize - 1) / 2);
+		final int k = pos.getZ() - ((checkSize - 1) / 2);
 
 		for (int xLoop = -checkSize; xLoop < checkSize; xLoop++)
 		{
 			for (int yLoop = -checkSize; yLoop < checkSize; yLoop++)
 			{
-				final int fx = i + xLoop;
-				final int fy = y;
-				final int fz = k + yLoop;
-				if (!world.isAirBlock(fx, fy, fz))
+				final BlockPos flowerPos = new BlockPos(i + xLoop, pos.getY(), k + yLoop);
+				if (!world.isAirBlock(flowerPos))
 				{
-					final Block flower = world.getBlock(fx, y, fz);
-					final int fm = world.getBlockMetadata(fx, y, fz);
+					final IBlockState flower = world.getBlockState(flowerPos);
 					if (flower != null)
 					{
-						if (isBlockFlower(flower, fm))
+						if (isBlockFlower(flower))
 						{
-							list.add(Arrays.asList(flower, fm));
+							list.add(flower);
 						}
 					}
 				}
@@ -136,7 +137,7 @@ public class DeviceBeeBox extends DeviceBase
 		return list;
 	}
 
-	private float calcGrowthRate(World world, int x, int y, int z)
+	private float calcGrowthRate(World world, BlockPos pos)
 	{
 		final int checkSize = 5;
 		final int i = x - ((checkSize - 1) / 2);
@@ -210,10 +211,6 @@ public class DeviceBeeBox extends DeviceBase
 		final TileEntityBeeBox te = getParentTile();
 		if (!canDoWork() || !te.hasBees()) return;
 
-		final int x = te.xCoord;
-		final int y = te.yCoord;
-		final int z = te.zCoord;
-
 		float f = getGrowthRate();
 
 		if (te.countCombs() < 27)
@@ -277,23 +274,23 @@ public class DeviceBeeBox extends DeviceBase
 			final int checkSize = flowerRadius;
 
 			flowerList.clear();
-			gatherFlowersInRadius(getWorld(), x, y, z, checkSize, flowerList);
+			final BlockPos pos = te.getPos();
+			gatherFlowersInRadius(getWorld(), pos, checkSize, flowerList);
 
 			if (!flowerList.isEmpty())
 			{
-				final int random_x = x + random.nextInt(checkSize * 2) - checkSize;
-				final int random_z = z + random.nextInt(checkSize * 2) - checkSize;
-				final List randomList = RandomUtils.sample(random, flowerList);
-				if (randomList != null)
+				final int randomX = pos.getX() + random.nextInt(checkSize * 2) - checkSize;
+				final int randomZ = pos.getZ() + random.nextInt(checkSize * 2) - checkSize;
+				final BlockPos flowerPos = new BlockPos(randomX, pos.getY(), randomZ);
+				final IBlockState flowerState = RandomUtils.sample(random, flowerList);
+				if (flowerState != null)
 				{
-					final Block block = (Block)randomList.get(0);
-					final int meta = (int)randomList.get(1);
-					final IFlowerBlockEntry entry = BeesRegistry.instance().getFlowerBlockEntry(block, meta);
+					final IFlowerBlockEntry entry = BeesRegistry.instance().getFlowerBlockEntry(flowerState.getBlock(), 0);
 					if (entry != null)
 					{
-						if (entry.canPlaceAt(getWorld(), random_x, y, random_z))
+						if (entry.canPlaceAt(getWorld(), flowerPos))
 						{
-							getWorld().setBlock(random_x, y, random_z, block, meta, BlockFlags.SYNC);
+							getWorld().setBlockState(flowerPos, block.getDefaultState(), BlockFlags.SYNC);
 						}
 					}
 				}

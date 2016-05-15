@@ -38,6 +38,7 @@ import growthcraft.milk.GrowthCraftMilk;
 import growthcraft.core.util.ItemUtils;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,7 +58,7 @@ public class BlockCheeseBlock extends GrcBlockContainer
 		super(Material.cake);
 		setHardness(0.5F);
 		setStepSound(soundTypeCloth);
-		setBlockName("grcmilk.CheeseBlock");
+		setUnlocalizedName("grcmilk.CheeseBlock");
 		setCreativeTab(GrowthCraftMilk.creativeTab);
 		setTileEntityType(TileEntityCheeseBlock.class);
 		final BBox bb = BBox.newCube(4f, 0f, 4f, 8f, 8f, 8f).scale(1f / 16f);
@@ -134,10 +135,10 @@ public class BlockCheeseBlock extends GrcBlockContainer
 	}
 
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, BlockPos pos, int metadata, int fortune)
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
 		final ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		final TileEntityCheeseBlock te = getTileEntity(world, x, y, z);
+		final TileEntityCheeseBlock te = getTileEntity(world, pos);
 		if (te != null)
 		{
 			te.populateDrops(ret);

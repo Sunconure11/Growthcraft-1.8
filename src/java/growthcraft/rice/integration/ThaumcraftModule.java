@@ -48,8 +48,8 @@ public class ThaumcraftModule extends ThaumcraftModuleBase
 	{
 		FMLInterModComms.sendMessage(modID, "harvestStandardCrop", GrowthCraftRice.riceBlock.asStack(1, 7));
 
-		ThaumcraftApi.registerObjectTag(GrowthCraftRice.rice.asStack(), new AspectList().add(Aspect.CROP, 1));
-		ThaumcraftApi.registerObjectTag(GrowthCraftRice.riceBall.asStack(), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.PLANT, 1).add(Aspect.CRAFT, 1).add(Aspect.HUNGER, 1));
+		ThaumcraftApi.registerObjectTag(GrowthCraftRice.rice.asStack(), new AspectList().add(Aspect.PLANT, 1));
+		ThaumcraftApi.registerObjectTag(GrowthCraftRice.riceBall.asStack(), new AspectList().add(Aspect.ENTROPY, 1).add(Aspect.PLANT, 1).add(Aspect.CRAFT, 1));
 
 		final AspectList[] common = new AspectList[]
 		{
@@ -58,8 +58,8 @@ public class ThaumcraftModule extends ThaumcraftModuleBase
 			new AspectList().add(Aspect.FLIGHT, 2),
 			new AspectList().add(Aspect.FLIGHT, 1),
 			new AspectList().add(Aspect.MOTION, 2).add(Aspect.FLIGHT, 2),
-			new AspectList().add(Aspect.FLIGHT, 3).add(Aspect.POISON, 1),
-			new AspectList().add(Aspect.POISON, 2),
+			new AspectList().add(Aspect.FLIGHT, 3).add(Aspect.DEATH, 1),
+			new AspectList().add(Aspect.DEATH, 2),
 		};
 
 		for (int i = 0; i < common.length; ++i)

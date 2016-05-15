@@ -35,7 +35,7 @@ public class BlockFishTrap extends GrcBlockContainer
 		setTickRandomly(true);
 		setHardness(0.4F);
 		setStepSound(soundTypeWood);
-		setBlockName("grc.fishTrap");
+		setUnlocalizedName("grc.fishTrap");
 		setTileEntityType(TileEntityFishTrap.class);
 		setCreativeTab(GrowthCraftCore.creativeTab);
 	}

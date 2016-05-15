@@ -13,7 +13,7 @@ public class BlockBamboo extends Block
 		setStepSound(soundTypeWood);
 		setResistance(5.0F);
 		setHardness(2.0F);
-		setBlockName("grc.bambooBlock");
+		setUnlocalizedName("grc.bambooBlock");
 		setCreativeTab(GrowthCraftBamboo.creativeTab);
 	}
 }

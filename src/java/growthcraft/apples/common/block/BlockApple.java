@@ -18,6 +18,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -47,7 +48,7 @@ public class BlockApple extends GrcBlockBase implements IGrowable, ICropDataProv
 		this.setHardness(0.2F);
 		this.setResistance(5.0F);
 		this.setStepSound(soundTypeWood);
-		this.setBlockName("grc.appleBlock");
+		this.setUnlocalizedName("grc.appleBlock");
 		this.setCreativeTab(null);
 	}
 
@@ -57,7 +58,7 @@ public class BlockApple extends GrcBlockBase implements IGrowable, ICropDataProv
 		return meta >= AppleStage.MATURE;
 	}
 
-	public float getGrowthProgress(IBlockAccess world, BlockPos pos, int meta)
+	public float getGrowthProgress(IBlockAccess world, BlockPos pos, IBlockState state)
 	{
 		return (float)meta / (float)AppleStage.MATURE;
 	}
@@ -127,7 +128,7 @@ public class BlockApple extends GrcBlockBase implements IGrowable, ICropDataProv
 	 * TRIGGERS
 	 ************/
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int dir, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumFacing dir, float par7, float par8, float par9)
 	{
 		if (world.getBlockMetadata(pos) >= AppleStage.MATURE)
 		{

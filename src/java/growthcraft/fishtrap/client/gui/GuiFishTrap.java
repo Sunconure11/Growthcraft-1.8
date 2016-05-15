@@ -27,7 +27,7 @@ public class GuiFishTrap extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
-		final String s = this.te.hasCustomInventoryName() ? this.te.getInventoryName() : GrcI18n.translate(this.te.getInventoryName());
+		final String s = this.te.getDisplayName();
 		this.fontRendererObj.drawString(s, this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, 6, 4210752);
 		this.fontRendererObj.drawString(GrcI18n.translate("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}

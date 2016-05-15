@@ -75,7 +75,7 @@ public abstract class BlockGrapeVineBase extends GrcBlockBase implements IPlanta
 		return 1;
 	}
 
-	public float getGrowthProgress(IBlockAccess world, BlockPos pos, int meta)
+	public float getGrowthProgress(IBlockAccess world, BlockPos pos, IBlockState state)
 	{
 		return (float)meta / (float)getGrowthMax();
 	}

@@ -47,7 +47,7 @@ public class BlockCheeseVat extends GrcBlockContainer
 		setResistance(10.0F);
 		setHardness(5.0F);
 		setStepSound(soundTypeMetal);
-		setBlockName("grcmilk.CheeseVat");
+		setUnlocalizedName("grcmilk.CheeseVat");
 		setCreativeTab(GrowthCraftMilk.creativeTab);
 		setTileEntityType(TileEntityCheeseVat.class);
 		setBlockTextureName("grcmilk:cheese_vat");

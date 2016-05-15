@@ -30,7 +30,10 @@ import growthcraft.cellar.util.CellarGuiType;
 import growthcraft.core.common.block.GrcBlockContainer;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 /**
@@ -52,20 +55,20 @@ public abstract class BlockCellarContainer extends GrcBlockContainer
 		return this;
 	}
 
-	protected boolean openGui(EntityPlayer player, World world, int x, int y, int z)
+	protected boolean openGui(EntityPlayer player, World world, BlockPos pos)
 	{
 		if (guiType != CellarGuiType.NONE)
 		{
-			player.openGui(GrowthCraftCellar.instance, guiType.ordinal(), world, x, y, z);
+			player.openGui(GrowthCraftCellar.instance, guiType.ordinal(), world, pos);
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int meta, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if (super.onBlockActivated(world, x, y, z, player, meta, par7, par8, par9)) return true;
-		return !player.isSneaking() && openGui(player, world, x, y, z);
+		if (super.onBlockActivated(world, pos, player, facing, hitX, hitY, hitZ)) return true;
+		return !player.isSneaking() && openGui(player, world, pos);
 	}
 }

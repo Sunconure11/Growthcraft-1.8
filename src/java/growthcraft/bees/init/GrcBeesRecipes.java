@@ -30,7 +30,7 @@ import growthcraft.api.core.effect.EffectWeightedRandomList;
 import growthcraft.api.core.effect.SimplePotionEffectFactory;
 import growthcraft.api.core.fluids.TaggedFluidStacks;
 import growthcraft.api.core.item.OreItemStacks;
-import growthcraft.api.core.item.recipes.ShapelessMultiRecipe;
+//import growthcraft.api.core.item.recipes.ShapelessMultiRecipe;
 import growthcraft.api.core.util.TickUtils;
 import growthcraft.bees.common.item.EnumBeesWax;
 import growthcraft.bees.GrowthCraftBees;
@@ -142,10 +142,10 @@ public class GrcBeesRecipes extends GrcModuleBase
 	{
 		final ItemStack meadBucket = GrowthCraftBees.fluids.honeyMeadBuckets[0].asStack();
 
-		GameRegistry.addRecipe(new ShapelessMultiRecipe(
-				meadBucket,
-				Items.bucket,
-				new TaggedFluidStacks(1000, "honey"),
-				new FluidStack(FluidRegistry.WATER, 1000)));
+		//GameRegistry.addRecipe(new ShapelessMultiRecipe(
+		//		meadBucket,
+		//		Items.bucket,
+		//		new TaggedFluidStacks(1000, "honey"),
+		//		new FluidStack(FluidRegistry.WATER, 1000)));
 	}
 }

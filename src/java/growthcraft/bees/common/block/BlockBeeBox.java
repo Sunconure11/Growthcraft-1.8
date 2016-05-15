@@ -39,7 +39,7 @@ public class BlockBeeBox extends GrcBlockContainer
 		setTickRandomly(true);
 		setHardness(2.5F);
 		setStepSound(soundTypeWood);
-		setBlockName("grc.BeeBox.Minecraft");
+		setUnlocalizedName("grc.BeeBox.Minecraft");
 		setCreativeTab(GrowthCraftBees.tab);
 		setTileEntityType(TileEntityBeeBox.class);
 	}
@@ -123,9 +123,9 @@ public class BlockBeeBox extends GrcBlockContainer
 	 * TRIGGERS
 	 ************/
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumFacing dir, float par7, float par8, float par9)
 	{
-		if (super.onBlockActivated(world, pos, player, meta, par7, par8, par9)) return true;
+		if (super.onBlockActivated(world, pos, player, dir, par7, par8, par9)) return true;
 		if (world.isRemote)
 		{
 			return true;
@@ -216,26 +216,26 @@ public class BlockBeeBox extends GrcBlockContainer
 
 	@Override
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void addCollisionBoxesToList(World world, BlockPos pos, AxisAlignedBB axis, List list, Entity entity)
+	public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB axis, List<AxisAlignedBB> list, Entity entity)
 	{
 		final float f = 0.0625F;
 		// LEGS
 		setBlockBounds(3*f, 0.0F, 3*f, 5*f, 3*f, 5*f);
-		super.addCollisionBoxesToList(world, pos, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, state, axis, list, entity);
 		setBlockBounds(11*f, 0.0F, 3*f, 13*f, 3*f, 5*f);
-		super.addCollisionBoxesToList(world, pos, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, state, axis, list, entity);
 		setBlockBounds(3*f, 0.0F, 11*f, 5*f, 3*f, 13*f);
-		super.addCollisionBoxesToList(world, pos, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, state, axis, list, entity);
 		setBlockBounds(11*f, 0.0F, 11*f, 13*f, 3*f, 13*f);
-		super.addCollisionBoxesToList(world, pos, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, state, axis, list, entity);
 		// BODY
 		setBlockBounds(1*f, 3*f, 1*f, 15*f, 10*f, 15*f);
-		super.addCollisionBoxesToList(world, pos, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, state, axis, list, entity);
 		// ROOF
 		setBlockBounds(0.0F, 10*f, 0.0F, 1.0F, 13*f, 1.0F);
-		super.addCollisionBoxesToList(world, pos, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, state, axis, list, entity);
 		setBlockBounds(2*f, 13*f, 2*f, 14*f, 1.0F, 14*f);
-		super.addCollisionBoxesToList(world, pos, axis, list, entity);
+		super.addCollisionBoxesToList(world, pos, state, axis, list, entity);
 		setBlockBoundsForItemRender();
 	}
 

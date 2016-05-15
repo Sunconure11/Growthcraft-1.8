@@ -1,6 +1,7 @@
 package growthcraft.grapes.common.block;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import growthcraft.cellar.common.item.EnumYeast;
@@ -8,14 +9,16 @@ import growthcraft.core.common.block.GrcBlockBase;
 import growthcraft.grapes.GrowthCraftGrapes;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,23 +34,29 @@ public class BlockGrapeBlock extends GrcBlockBase
 		super(Material.plants);
 		setHardness(0.0F);
 		setStepSound(soundTypeGrass);
-		setBlockName("grc.grapeBlock");
+		setUnlocalizedName("grc.grapeBlock");
 		setBlockBounds(0.1875F, 0.5F, 0.1875F, 0.8125F, 1.0F, 0.8125F);
 		setCreativeTab(null);
+	}
+
+	public boolean canBlockStay(World world, BlockPos pos)
+	{
+		final IBlockState state = world.getBlockState(pos.up());
+		return GrowthCraftGrapes.blocks.grapeLeaves.equals(state.getBlock());
 	}
 
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
-		super.updateTick(world, pos, random);
-		if (!this.canBlockStay(world, pos))
+		super.updateTick(world, pos, state, random);
+		if (!canBlockStay(world, pos))
 		{
-			fellBlockAsItem(world, pos);
+			fellBlockAsItem(world, pos, state);
 		}
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int dir, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumFacing dir, float hitX, float hitY, float hitZ)
 	{
 		if (!world.isRemote)
 		{
@@ -57,19 +66,12 @@ public class BlockGrapeBlock extends GrcBlockBase
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, Block par5)
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block)
 	{
 		if (!this.canBlockStay(world, pos))
 		{
 			fellBlockAsItem(world, pos);
 		}
-	}
-
-	@Override
-	public boolean canBlockStay(World world, BlockPos pos)
-	{
-		final IBlockState state = world.getBlockState(pos.up());
-		return GrowthCraftGrapes.blocks.grapeLeaves.equals(state.getBlock());
 	}
 
 	@Override
@@ -80,7 +82,7 @@ public class BlockGrapeBlock extends GrcBlockBase
 	}
 
 	@Override
-	public boolean canSilkHarvest(World world, EntityPlayer player, BlockPos pos, int metadata)
+	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player)
 	{
 		return false;
 	}
@@ -98,16 +100,16 @@ public class BlockGrapeBlock extends GrcBlockBase
 	}
 
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, BlockPos pos, int metadata, int fortune)
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
-		final ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		final int count = quantityDropped(metadata, fortune, world.rand);
+		final List<ItemStack> ret = new ArrayList<ItemStack>();
+		final int count = quantityDropped(state, fortune, world.rand);
 		for(int i = 0; i < count; ++i)
 		{
-			final Item item = getItemDropped(metadata, world.rand, fortune);
+			final Item item = getItemDropped(state, world.rand, fortune);
 			if (item != null)
 			{
-				ret.add(new ItemStack(item, 1, damageDropped(metadata)));
+				ret.add(new ItemStack(item, 1, damageDropped(state)));
 			}
 			if (world.rand.nextInt(bayanusDropRarity) == 0)
 			{
@@ -121,11 +123,5 @@ public class BlockGrapeBlock extends GrcBlockBase
 	public boolean isOpaqueCube()
 	{
 		return false;
-	}
-
-	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, BlockPos pos)
-	{
-		return null;
 	}
 }

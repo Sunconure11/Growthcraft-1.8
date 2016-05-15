@@ -12,11 +12,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
@@ -31,7 +29,7 @@ public class BlockFermentBarrel extends BlockCellarContainer
 		setTileEntityType(TileEntityFermentBarrel.class);
 		setHardness(2.5F);
 		setStepSound(soundTypeWood);
-		setBlockName("grc.fermentBarrel");
+		setUnlocalizedName("grc.fermentBarrel");
 		setCreativeTab(GrowthCraftCellar.tab);
 		setGuiType(CellarGuiType.FERMENT_BARREL);
 	}

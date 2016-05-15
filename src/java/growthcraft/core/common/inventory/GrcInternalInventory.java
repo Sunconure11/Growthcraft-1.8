@@ -81,7 +81,7 @@ public class GrcInternalInventory implements IInventory, INBTSerializableContext
 		onSlotChanged(WILDCARD_SLOT);
 	}
 
-	public void clearInventory()
+	public void clear()
 	{
 		for (int i = 0; i < getMaxSize(); ++i)
 		{
@@ -131,12 +131,12 @@ public class GrcInternalInventory implements IInventory, INBTSerializableContext
 	}
 
 	@Override
-	public void openInventory()
+	public void openInventory(EntityPlayer player)
 	{
 	}
 
 	@Override
-	public void closeInventory()
+	public void closeInventory(EntityPlayer player)
 	{
 	}
 
@@ -158,12 +158,6 @@ public class GrcInternalInventory implements IInventory, INBTSerializableContext
 		return maxStackSize;
 	}
 
-	@Override
-	public boolean hasCustomInventoryName()
-	{
-		return false;
-	}
-
 	public GrcInternalInventory setInventoryName(String name)
 	{
 		this.inventoryName = name;
@@ -171,7 +165,7 @@ public class GrcInternalInventory implements IInventory, INBTSerializableContext
 	}
 
 	@Override
-	public String getInventoryName()
+	public String getDisplayName()
 	{
 		return inventoryName;
 	}
@@ -209,7 +203,7 @@ public class GrcInternalInventory implements IInventory, INBTSerializableContext
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int index)
+	public ItemStack removeStackFromSlot(int index)
 	{
 		final ItemStack stack = items[index];
 		items[index] = null;
@@ -242,5 +236,22 @@ public class GrcInternalInventory implements IInventory, INBTSerializableContext
 			return itemstack;
 		}
 		return null;
+	}
+
+	@Override
+	public int getField(int id)
+	{
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value)
+	{
+	}
+
+	@Override
+	public int getFieldCount()
+	{
+		return 0;
 	}
 }

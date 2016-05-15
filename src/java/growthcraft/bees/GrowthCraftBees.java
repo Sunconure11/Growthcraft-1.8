@@ -8,11 +8,9 @@ import growthcraft.api.bees.user.UserBeesConfig;
 import growthcraft.api.bees.user.UserFlowerEntry;
 import growthcraft.api.bees.user.UserFlowersConfig;
 import growthcraft.api.core.fluids.TaggedFluidStacks;
-import growthcraft.api.core.item.recipes.ShapelessMultiRecipe;
 import growthcraft.api.core.log.GrcLogger;
 import growthcraft.api.core.log.ILogger;
 import growthcraft.api.core.module.ModuleContainer;
-import growthcraft.bees.client.eventhandler.GrcBeesHandleTextureStitch;
 import growthcraft.bees.client.gui.GuiHandlerBees;
 import growthcraft.bees.common.block.BlockBeeBox;
 import growthcraft.bees.common.block.BlockBeeHive;
@@ -133,8 +131,6 @@ public class GrowthCraftBees
 
 		tab = new CreativeTabsGrowthcraftBees("creative_tab_grcbees");
 
-		MinecraftForge.EVENT_BUS.register(new GrcBeesHandleTextureStitch());
-
 		initBlocksAndItems();
 	}
 
@@ -197,10 +193,10 @@ public class GrowthCraftBees
 	{
 		GameRegistry.addRecipe(new ShapedOreRecipe(beeBox.asStack(), " A ", "A A", "AAA", 'A', "plankWood"));
 
-		GameRegistry.addRecipe(new ShapelessMultiRecipe(
-				items.honeyJar.asStack(),
-				new TaggedFluidStacks(1000, BeesFluidTag.HONEY.getName()),
-				Items.flower_pot));
+		//GameRegistry.addRecipe(new ShapelessMultiRecipe(
+		//		items.honeyJar.asStack(),
+		//		new TaggedFluidStacks(1000, BeesFluidTag.HONEY.getName()),
+		//		Items.flower_pot));
 	}
 
 	@EventHandler

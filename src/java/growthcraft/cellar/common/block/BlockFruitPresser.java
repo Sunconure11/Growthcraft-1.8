@@ -32,7 +32,7 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 		this.isBlockContainer = true;
 		setHardness(0.5F);
 		setStepSound(soundTypePiston);
-		setBlockName("grc.fruitPresser");
+		setUnlocalizedName("grc.fruitPresser");
 		setCreativeTab(null);
 		setBlockBounds(0.1875F, 0.0F, 0.1875F, 0.8125F, 0.9375F, 0.8125F);
 	}
@@ -90,13 +90,13 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, int meta, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumFacing dir, float par7, float par8, float par9)
 	{
 		if (world.isRemote) return true;
-		final Block below = world.getBlock(x, y - 1, z);
+		final Block below = world.getBlock(pos.down());
 		if (below instanceof BlockFruitPress)
 		{
-			return ((BlockFruitPress)below).tryWrenchItem(player, world, x, y - 1, z);
+			return ((BlockFruitPress)below).tryWrenchItem(player, world, pos.down());
 		}
 		return false;
 	}
@@ -104,46 +104,46 @@ public class BlockFruitPresser extends BlockContainer implements IWrenchable, IR
 	@Override
 	public void onBlockAdded(World world, BlockPos pos)
 	{
-		super.onBlockAdded(world, x, y, z);
-		final int m = world.getBlockMetadata(x,  y - 1, z);
-		world.setBlockMetadataWithNotify(x, y, z, m, BlockFlags.UPDATE_AND_SYNC);
+		super.onBlockAdded(world, pos);
+		final int m = world.getBlockMetadata(pos.down());
+		world.setBlockMetadataWithNotify(pos, m, BlockFlags.UPDATE_AND_SYNC);
 
 		if (!world.isRemote)
 		{
-			this.updatePressState(world, x, y, z);
+			this.updatePressState(world, pos);
 		}
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, EntityLivingBase entity, ItemStack stack)
 	{
-		final int m = world.getBlockMetadata(x,  y - 1, z);
-		world.setBlockMetadataWithNotify(x, y, z, m, BlockFlags.UPDATE_AND_SYNC);
+		final int m = world.getBlockMetadata(pos.down());
+		world.setBlockMetadataWithNotify(pos, m, BlockFlags.UPDATE_AND_SYNC);
 
 		if (!world.isRemote)
 		{
-			this.updatePressState(world, x, y, z);
+			this.updatePressState(world, pos);
 		}
 	}
 
 	@Override
 	public void onNeighborBlockChange(World world, BlockPos pos, Block block)
 	{
-		if (!this.canBlockStay(world, x, y, z))
+		if (!this.canBlockStay(world, pos))
 		{
-			world.func_147480_a(x, y, z, true);
+			world.func_147480_a(pos, true);
 		}
 
 		if (!world.isRemote)
 		{
-			this.updatePressState(world, x, y, z);
+			this.updatePressState(world, pos);
 		}
 	}
 
 	private void updatePressState(World world, BlockPos pos)
 	{
-		final int     meta = world.getBlockMetadata(x, y, z);
-		final boolean flag = world.isBlockIndirectlyGettingPowered(x, y, z);
+		final int     meta = world.getBlockMetadata(pos);
+		final boolean flag = world.isBlockIndirectlyGettingPowered(pos);
 
 		if (flag && (meta == 0 || meta == 1))
 		{

@@ -12,11 +12,12 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
-public class TileEntityFruitPress extends TileEntityCellarDevice implements ITileProgressiveDevice
+public class TileEntityFruitPress extends TileEntityCellarDevice implements ITickable, ITileProgressiveDevice
 {
 	public static class FruitPressDataID
 	{
@@ -64,13 +65,16 @@ public class TileEntityFruitPress extends TileEntityCellarDevice implements ITil
 	}
 
 	@Override
-	protected void updateDevice()
+	public void update()
 	{
-		fruitPress.update();
+		if (!worldObj.isRemote)
+		{
+			fruitPress.update();
+		}
 	}
 
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side)
+	public int[] getSlotsForFace(EnumFacing side)
 	{
 		// 0 = raw item
 		// 1 = residue
@@ -78,7 +82,7 @@ public class TileEntityFruitPress extends TileEntityCellarDevice implements ITil
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack stack, int side)
+	public boolean canInsertItem(int index, ItemStack stack, EnumFacing side)
 	{
 		// allow the insertion of a raw item from ANY side
 		if (index == 0) return true;
@@ -86,7 +90,7 @@ public class TileEntityFruitPress extends TileEntityCellarDevice implements ITil
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, int side)
+	public boolean canExtractItem(int index, ItemStack stack, EnumFacing side)
 	{
 		// if this is the raw item slow
 		if (index == 0)

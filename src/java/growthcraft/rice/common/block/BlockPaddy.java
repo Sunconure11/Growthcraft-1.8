@@ -8,39 +8,40 @@ import growthcraft.api.core.util.BlockFlags;
 import growthcraft.core.common.block.BlockPaddyBase;
 import growthcraft.rice.GrowthCraftRice;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockPaddy extends BlockPaddyBase
 {
-	private final int paddyFieldMax = GrowthCraftRice.getConfig().paddyFieldMax;
-
 	public BlockPaddy()
 	{
 		super(Material.ground);
 		this.setHardness(0.5F);
 		this.setStepSound(soundTypeGravel);
-		this.setBlockName("grc.paddyField");
+		this.setUnlocalizedName("grc.paddyField");
 		this.setCreativeTab(null);
 	}
 
 	@Override
-	public void fillWithRain(World world, int x, int y, int z)
+	public void fillWithRain(World world, BlockPos pos)
 	{
 		if (world.rand.nextInt(20) == 0)
 		{
-			final int meta = world.getBlockMetadata(x, y, z);
-			if (meta < paddyFieldMax)
+			final IBlockState state = world.getBlockState(pos);
+			final int level = state.getValue(FLUID_LEVEL);
+			if (level < getPaddyMaxFluidLevel(world, pos, state))
 			{
-				world.setBlockMetadataWithNotify(x, y, z, meta + 1, BlockFlags.UPDATE_AND_SYNC);
+				world.setBlockState(pos, state.withProperty(FLUID_LEVEL, level + 1), BlockFlags.UPDATE_AND_SYNC);
 			}
 		}
 	}
@@ -63,30 +64,18 @@ public class BlockPaddy extends BlockPaddyBase
 	}
 
 	@Override
-	public int getMaxPaddyMeta(IBlockAccess world, int x, int y, int z)
+	public boolean isBelowFillingFluid(IBlockAccess world, BlockPos pos, IBlockState state)
 	{
-		return paddyFieldMax;
+		return world.getBlockState(pos.up()).getBlock().getMaterial() == Material.water;
 	}
 
-	@Override
-	public boolean isBelowFillingFluid(IBlockAccess world, int x, int y, int z)
-	{
-		return world.getBlock(x, y + 1, z).getMaterial() == Material.water;
-	}
-
-	/************
-	 * STUFF
-	 ************/
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item getItem(World world, int x, int y, int z)
+	public Item getItem(World world, BlockPos pos)
 	{
 		return Item.getItemFromBlock(Blocks.dirt);
 	}
 
-	/************
-	 * DROPS
-	 ************/
 	@Override
 	public Item getItemDropped(IBlockState state, Random random, int fortune)
 	{

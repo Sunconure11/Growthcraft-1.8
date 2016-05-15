@@ -55,7 +55,6 @@ import growthcraft.core.common.definition.ItemTypeDefinition;
 import growthcraft.core.common.GrcModuleBase;
 import growthcraft.core.common.item.ItemFoodBottleFluid;
 import growthcraft.core.eventhandler.EventHandlerBucketFill;
-import growthcraft.core.integration.forestry.ForestryFluids;
 import growthcraft.core.util.FluidFactory;
 import growthcraft.milk.common.effect.EffectMilk;
 import growthcraft.milk.common.effect.EffectEvilBoozeMilk;
@@ -210,7 +209,6 @@ public class GrcMilkFluids extends GrcModuleBase
 	{
 		final List<Fluid> milks = new ArrayList<Fluid>();
 		if (milk != null) milks.add(milk.getFluid());
-		if (ForestryFluids.MILK.exists()) milks.add(ForestryFluids.MILK.getFluid());
 		return milks;
 	}
 

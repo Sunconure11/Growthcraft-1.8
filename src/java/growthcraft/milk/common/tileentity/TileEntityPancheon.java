@@ -29,10 +29,11 @@ import growthcraft.core.common.tileentity.ITileProgressiveDevice;
 import growthcraft.milk.common.tileentity.device.Pancheon;
 
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
-public class TileEntityPancheon extends GrcTileEntityDeviceBase implements ITileProgressiveDevice, IPancheonTile
+public class TileEntityPancheon extends GrcTileEntityDeviceBase implements ITickable, ITileProgressiveDevice, IPancheonTile
 {
 	private Pancheon pancheon = new Pancheon(this, 0, 2, 1);
 
@@ -97,9 +98,12 @@ public class TileEntityPancheon extends GrcTileEntityDeviceBase implements ITile
 	}
 
 	@Override
-	protected void updateDevice()
+	public void update()
 	{
-		pancheon.update();
+		if (!worldObj.isRemote)
+		{
+			pancheon.update();
+		}
 	}
 
 	@Override

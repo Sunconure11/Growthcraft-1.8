@@ -32,7 +32,7 @@ public class BlockBambooLeaves extends BlockLeavesBase implements IShearable
 		setStepSound(soundTypeGrass);
 		setHardness(0.2F);
 		setTickRandomly(true);
-		setBlockName("grc.bambooLeaves");
+		setUnlocalizedName("grc.bambooLeaves");
 		setCreativeTab(GrowthCraftBamboo.creativeTab);
 	}
 
@@ -268,7 +268,7 @@ public class BlockBambooLeaves extends BlockLeavesBase implements IShearable
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int colorMultiplier(IBlockAccess world, BlockPos pos)
+	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass)
 	{
 		final int meta = world.getBlockState(pos);
 		int r = 0;

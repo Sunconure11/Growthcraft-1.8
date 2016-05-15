@@ -54,7 +54,7 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 		setTickRandomly(true);
 		setHardness(0.0F);
 		setStepSound(soundTypeGrass);
-		setBlockName("grc.hopVine");
+		setUnlocalizedName("grc.hopVine");
 		setCreativeTab(null);
 	}
 
@@ -64,7 +64,7 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 		return meta >= HopsStage.FRUIT;
 	}
 
-	public float getGrowthProgress(IBlockAccess world, BlockPos pos, int meta)
+	public float getGrowthProgress(IBlockAccess world, BlockPos pos, IBlockState state)
 	{
 		return (float)meta / (float)HopsStage.FRUIT;
 	}
@@ -340,9 +340,9 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 	}
 
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, BlockPos pos, int metadata, int fortune)
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
-		final ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		final List<ItemStack> ret = new ArrayList<ItemStack>();
 		ret.add(GrowthCraftCore.items.rope.asStack());
 		if (world.getBlockMetadata(x, y, z) >= HopsStage.BIG)
 		{
@@ -378,7 +378,7 @@ public class BlockHops extends Block implements IBlockRope, IPlantable, ICropDat
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int colorMultiplier(IBlockAccess world, BlockPos pos)
+	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass)
 	{
 		final int meta = world.getBlockMetadata(x, y, z);
 

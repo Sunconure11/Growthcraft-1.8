@@ -1,5 +1,7 @@
 package growthcraft.fishtrap.common.tileentity;
 
+import growthcraft.core.common.tileentity.GrcTileEntityBase;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -7,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityFishTrap extends TileEntity implements IInventory
+public class TileEntityFishTrap extends GrcTileEntityBase implements IInventory
 {
 	// Constants
 	private ItemStack[] invSlots   = new ItemStack[5];
@@ -92,7 +94,7 @@ public class TileEntityFishTrap extends TileEntity implements IInventory
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int index)
+	public ItemStack removeStackFromSlot(int index)
 	{
 		if (this.invSlots[index] != null)
 		{
@@ -199,11 +201,8 @@ public class TileEntityFishTrap extends TileEntity implements IInventory
 		}
 	}
 
-	/************
-	 * NAMES
-	 ************/
 	@Override
-	public String getInventoryName()
+	public String getDisplayName()
 	{
 		return this.hasCustomInventoryName() ? this.name : "container.grc.fishTrap";
 	}
@@ -214,6 +213,7 @@ public class TileEntityFishTrap extends TileEntity implements IInventory
 		return this.name != null && this.name.length() > 0;
 	}
 
+	@Override
 	public void setGuiDisplayName(String string)
 	{
 		this.name = string;

@@ -39,18 +39,19 @@ import growthcraft.core.util.ItemUtils;
 
 import io.netty.buffer.ByteBuf;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityButterChurn extends GrcTileEntityDeviceBase implements IItemHandler
+public class TileEntityButterChurn extends GrcTileEntityDeviceBase implements ITickable, IItemHandler
 {
 	public static enum WorkState
 	{
@@ -109,24 +110,20 @@ public class TileEntityButterChurn extends GrcTileEntityDeviceBase implements II
 	}
 
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side)
+	public int[] getSlotsForFace(EnumFacing side)
 	{
 		return accessibleSlots.slotsAt(side);
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, int side)
+	public boolean canExtractItem(int index, ItemStack stack, EnumFacing side)
 	{
 		return accessibleSlots.sideContains(side, index);
 	}
 
 	@Override
-	protected void updateDevice() {}
-
-	@Override
-	public void updateEntity()
+	public void update()
 	{
-		super.updateEntity();
 		if (worldObj.isRemote)
 		{
 			final float step = 1.0f / 5.0f;

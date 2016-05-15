@@ -38,6 +38,7 @@ import growthcraft.core.util.ItemUtils;
 import growthcraft.core.Utils;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -73,22 +74,55 @@ public abstract class GrcBlockContainer extends GrcBlockBase implements IDroppab
 	}
 
 	@Override
-	public void onBlockAdded(World world, BlockPos pos)
+	public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int eventID, int eventParam)
 	{
-		super.onBlockAdded(world, pos);
-	}
-
-	@Override
-	public boolean onBlockEventReceived(World world, BlockPos pos, int code, int value)
-	{
-		super.onBlockEventReceived(world, pos, code, value);
+		super.onBlockEventReceived(world, pos, state, eventID, eventParam);
 		final TileEntity te = getTileEntity(world, pos);
-		return te != null ? te.receiveClientEvent(code, value) : false;
+		return te != null ? te.receiveClientEvent(eventID, eventParam) : false;
 	}
 
 	protected void setTileEntityType(Class<? extends TileEntity> klass)
 	{
 		this.tileEntityType = klass;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends TileEntity> T getTileEntity(IBlockAccess world, BlockPos pos)
+	{
+		final TileEntity te = world.getTileEntity(pos);
+		if (te != null)
+		{
+			if (tileEntityType.isInstance(te))
+			{
+				return (T)te;
+			}
+			else
+			{
+				// warn
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world, int unused)
+	{
+		if (tileEntityType != null)
+		{
+			try
+			{
+				return tileEntityType.newInstance();
+			}
+			catch (InstantiationException e)
+			{
+				throw new IllegalStateException("Failed to create a new instance of an illegal class " + this.tileEntityType, e);
+			}
+			catch (IllegalAccessException e)
+			{
+				throw new IllegalStateException("Failed to create a new instance of " + this.tileEntityType + ", because lack of permissions", e);
+			}
+		}
+		return null;
 	}
 
 	/* IRotatableBlock */
@@ -373,7 +407,7 @@ public abstract class GrcBlockContainer extends GrcBlockBase implements IDroppab
 		}
 	}
 
-	protected void getTileItemStackDrops(List<ItemStack> ret, World world, BlockPos pos, int metadata, int fortune)
+	protected void getTileItemStackDrops(List<ItemStack> ret, World world, BlockPos pos, IBlockState state, int fortune)
 	{
 		final TileEntity te = getTileEntity(world, pos);
 		if (te instanceof INBTItemSerializable)
@@ -386,20 +420,20 @@ public abstract class GrcBlockContainer extends GrcBlockBase implements IDroppab
 		}
 		else
 		{
-			getDefaultDrops(ret, world, pos, metadata, fortune);
+			getDefaultDrops(ret, world, pos, state, fortune);
 		}
 	}
 
-	public ArrayList<ItemStack> getDrops(World world, BlockPos pos, int metadata, int fortune)
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
-		final ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		if (shouldDropTileStack(world, pos, metadata, fortune))
+		final List<ItemStack> ret = new ArrayList<ItemStack>();
+		if (shouldDropTileStack(world, pos, state, fortune))
 		{
-			getTileItemStackDrops(ret, world, pos, metadata, fortune);
+			getTileItemStackDrops(ret, world, pos, state, fortune);
 		}
 		else
 		{
-			getDefaultDrops(ret, world, pos, metadata, fortune);
+			getDefaultDrops(ret, world, pos, state, fortune);
 		}
 		return ret;
 	}
@@ -495,44 +529,5 @@ public abstract class GrcBlockContainer extends GrcBlockBase implements IDroppab
 		if (handleIFluidHandler(world, pos, player, meta)) return true;
 		if (handleOnUseItem(world, pos, player, meta)) return true;
 		return false;
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T extends TileEntity> T getTileEntity(IBlockAccess world, BlockPos pos)
-	{
-		final TileEntity te = world.getTileEntity(pos);
-		if (te != null)
-		{
-			if (tileEntityType.isInstance(te))
-			{
-				return (T)te;
-			}
-			else
-			{
-				// warn
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World world, int unused)
-	{
-		if (tileEntityType != null)
-		{
-			try
-			{
-				return tileEntityType.newInstance();
-			}
-			catch (InstantiationException e)
-			{
-				throw new IllegalStateException("Failed to create a new instance of an illegal class " + this.tileEntityType, e);
-			}
-			catch (IllegalAccessException e)
-			{
-				throw new IllegalStateException("Failed to create a new instance of " + this.tileEntityType + ", because lack of permissions", e);
-			}
-		}
-		return null;
 	}
 }

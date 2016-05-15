@@ -28,6 +28,7 @@ import java.util.Random;
 import growthcraft.api.core.util.FXHelper;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
@@ -44,7 +45,7 @@ public class GrcBlockFluid extends BlockFluidClassic
 	public GrcBlockFluid(Fluid fluid, Material material)
 	{
 		super(fluid, material);
-		setBlockName(fluid.getUnlocalizedName());
+		setUnlocalizedName(fluid.getUnlocalizedName());
 	}
 
 	public GrcBlockFluid refreshSettings()
@@ -75,54 +76,42 @@ public class GrcBlockFluid extends BlockFluidClassic
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta)
-	{
-		return side != 0 && side != 1 ? this.icons[1] : this.icons[0];
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister)
-	{
-		this.icons = new IIcon[2];
-		this.icons[0] = iconRegister.registerIcon(getTextureName() + "_still");
-		this.icons[1] = iconRegister.registerIcon(getTextureName() + "_flow");
-	}
-
-	@Override
 	public boolean canDisplace(IBlockAccess world, BlockPos pos)
 	{
-		if (world.getBlock(pos).getMaterial().isLiquid()) return false;
+		final IBlockState state = world.getBlockState(pos);
+		if (state.getBlock().getMaterial().isLiquid()) return false;
 		return super.canDisplace(world, pos);
 	}
 
 	@Override
 	public boolean displaceIfPossible(World world, BlockPos pos)
 	{
-		if (world.getBlock(pos).getMaterial().isLiquid()) return false;
+		final IBlockState state = world.getBlockState(pos);
+		if (state.getBlock().getMaterial().isLiquid()) return false;
 		return super.displaceIfPossible(world, pos);
 	}
 
 	@Override
-	public int colorMultiplier(IBlockAccess world, BlockPos pos)
+	@SideOnly(Side.CLIENT)
+	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass)
 	{
 		return color;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(World world, BlockPos pos, Random rand)
+	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand)
 	{
 		super.randomDisplayTick(world, pos, rand);
 
+		final IBlockState belowState = world.getBlockState(pos.down(2));
 		if (rand.nextInt(10) == 0 &&
-			World.doesBlockHaveSolidTopSurface(world, x, y - 1, z) &&
-			!world.getBlock(x, y - 2, z).getMaterial().blocksMovement())
+			World.doesBlockHaveSolidTopSurface(world, pos.down()) &&
+			!belowState.getBlock().getMaterial().blocksMovement())
 		{
-			final double px = x + rand.nextFloat();
-			final double py = y - 1.05D;
-			final double pz = z + rand.nextFloat();
+			final double px = pos.getX() + rand.nextFloat();
+			final double py = pos.getY() - 1.05D;
+			final double pz = pos.getZ() + rand.nextFloat();
 			FXHelper.dropParticle(world, px, py, pz, color);
 		}
 	}

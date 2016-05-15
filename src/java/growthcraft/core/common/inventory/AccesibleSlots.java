@@ -25,6 +25,8 @@ package growthcraft.core.common.inventory;
 
 import java.util.Arrays;
 
+import net.minecraft.util.EnumFacing;
+
 public class AccesibleSlots
 {
 	private int[][] accessibleSlots;
@@ -34,22 +36,22 @@ public class AccesibleSlots
 		this.accessibleSlots = accs;
 	}
 
-	public boolean sideEnabled(int side)
+	public boolean sideEnabled(EnumFacing side)
 	{
-		return accessibleSlots[side].length > 0;
+		return accessibleSlots[side.ordinal()].length > 0;
 	}
 
-	public boolean sideContains(int side, int index)
+	public boolean sideContains(EnumFacing side, int index)
 	{
 		if (sideEnabled(side))
 		{
-			return Arrays.binarySearch(accessibleSlots[side], index) >= 0;
+			return Arrays.binarySearch(accessibleSlots[side.ordinal()], index) >= 0;
 		}
 		return false;
 	}
 
-	public int[] slotsAt(int side)
+	public int[] slotsAt(EnumFacing side)
 	{
-		return accessibleSlots[side];
+		return accessibleSlots[side.ordinal()];
 	}
 }

@@ -1,12 +1,10 @@
 package growthcraft.apples.common.block;
 
 import java.util.Random;
-
 import growthcraft.apples.common.world.WorldGenAppleTree;
 import growthcraft.apples.GrowthCraftApples;
 import growthcraft.core.GrowthCraftCore;
 import growthcraft.api.core.util.BlockFlags;
-
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
@@ -26,7 +24,7 @@ public class BlockAppleSapling extends BlockBush implements IGrowable
 		super(Material.plants);
 		setHardness(0.0F);
 		setStepSound(soundTypeGrass);
-		setBlockName("grc.appleSapling");
+		setUnlocalizedName("grc.appleSapling");
 		setTickRandomly(true);
 		setCreativeTab(GrowthCraftCore.creativeTab);
 		final float f = 0.4F;
@@ -35,15 +33,15 @@ public class BlockAppleSapling extends BlockBush implements IGrowable
 
 	public void markOrGrowMarked(World world, BlockPos pos, Random random)
 	{
-		final int meta = world.getBlockMetadata(x, y, z);
+		final int meta = world.getBlockMetadata(pos);
 
 		if ((meta & 8) == 0)
 		{
-			world.setBlockMetadataWithNotify(x, y, z, meta | 8, BlockFlags.SUPRESS_RENDER);
+			world.setBlockMetadataWithNotify(pos, meta | 8, BlockFlags.SUPRESS_RENDER);
 		}
 		else
 		{
-			this.growTree(world, x, y, z, random);
+			this.growTree(world, pos, random);
 		}
 	}
 
@@ -54,7 +52,7 @@ public class BlockAppleSapling extends BlockBush implements IGrowable
 		{
 			super.updateTick(world, pos, random);
 
-			if (world.getBlockLightValue(pos.up()) >= 9 && random.nextInt(growthRate) == 0)
+			if (getLightValue(world, pos.up()) >= 9 && random.nextInt(growthRate) == 0)
 			{
 				this.markOrGrowMarked(world, pos, random);
 			}
@@ -63,23 +61,23 @@ public class BlockAppleSapling extends BlockBush implements IGrowable
 
 	public void growTree(World world, BlockPos pos, Random random)
 	{
-		if (!TerrainGen.saplingGrowTree(world, random, x, y, z)) return;
+		if (!TerrainGen.saplingGrowTree(world, random, pos)) return;
 
-		final int meta = world.getBlockMetadata(x, y, z) & 3;
+		final int meta = world.getBlockMetadata(pos) & 3;
 		final WorldGenerator generator = new WorldGenAppleTree(true);
 
 		world.setBlockToAir(pos);
 
-		if (!generator.generate(world, random, x, y, z))
+		if (!generator.generate(world, random, pos))
 		{
-			world.setBlock(x, y, z, this, meta, BlockFlags.ALL);
+			world.setBlock(pos, this, meta, BlockFlags.ALL);
 		}
 	}
 
 	@Override
 	public boolean canGrow(World world, BlockPos pos, boolean isClient)
 	{
-		return (world.getBlockMetadata(x, y, z) & 8) == 0;
+		return (world.getBlockMetadata(pos) & 8) == 0;
 	}
 
 	@Override
@@ -93,7 +91,7 @@ public class BlockAppleSapling extends BlockBush implements IGrowable
 	{
 		if (random.nextFloat() < 0.45D)
 		{
-			growTree(world, x, y, z, random);
+			growTree(world, pos, random);
 		}
 	}
 }

@@ -39,7 +39,7 @@ public class BlockBeeBoxBiomesOPlenty extends BlockBeeBox
 	{
 		super();
 		setHardness(2f);
-		setBlockName("grc.BeeBox.BiomesOPlenty");
+		setUnlocalizedName("grc.BeeBox.BiomesOPlenty");
 	}
 
 	@Override
